@@ -1,6 +1,6 @@
 [project]
 name = "fixcompliance"
-version = "0.4.1"
+version = "0.4.2"
 authors = [{name="Some Engineering Inc."}]
 description = "Fix Inventory Compliance Benchmarks and Checks"
 license = { text="AGPLv3" }
@@ -61,4 +61,3 @@ Source = "https://github.com/someengineering/fix/tree/main/fixmetrics"
 [build-system]
 requires = ["setuptools>=67.8.0", "wheel>=0.40.0", "build>=0.10.0"]
 build-backend = "setuptools.build_meta"
-
