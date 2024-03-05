@@ -3,7 +3,8 @@ import json
 import time
 import threading
 from typing import Any, Dict
-from pkg_resources import resource_filename
+from importlib.resources import files as resource_filename
+from pathlib import Path
 
 __version__ = "0.4.1"
 
@@ -22,20 +23,23 @@ def checks_from_files() -> Dict[str, Json]:
 
 
 def _from_files(json_path: str, add_id: bool = False) -> dict[str, Json]:
-    static_path = os.path.abspath(resource_filename(__package__, json_path))
+    package_dir = resource_filename(__package__)
+    static_path: Path = package_dir.joinpath(json_path)
+    static_path = static_path.resolve()
+
     result = {}
     if os.path.exists(static_path):
         for provider in (d.path for d in os.scandir(static_path) if d.is_dir()):
             for path in (d.path for d in os.scandir(provider) if d.is_file() and d.name.endswith(".json")):
                 item_id = os.path.basename(path).rsplit(".", maxsplit=1)[0]
-                item = cached_json_loads(path)
+                item = cached_json_load(path)
                 if add_id:
                     item["id"] = item_id
                 result[item_id] = item
     return result
 
 
-def cached_json_loads(file_path: str) -> Json:
+def cached_json_load(file_path: str) -> Json:
     global _cache
     now = time.time()
     mtime = os.path.getmtime(file_path)

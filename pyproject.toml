@@ -26,15 +26,29 @@ classifiers = [
 ]
 readme = {file="README.md", content-type="text/markdown"}
 
-dependencies = [
-    "setuptools",
-]
+dependencies = []
 
 [pyproject.optional-dependencies]
-test = ["pytest", "pytest-cov"]
+test = [
+    "black",
+    "coverage",
+    "flake8",
+    "hypothesis",
+    "mypy",
+    "pep8-naming",
+    "pip-tools",
+    "pylint",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "fixinventoryclient>=2.0.0",
+    "toml",
+    "tox",
+    "types-aiofiles",
+]
 
-[project.scripts]
-fixcompliance = "fixcompliance.__main__:main"
+[tool.setuptools.package-data]
+fixcompliance = ["py.typed"]
 
 [project.urls]
 Documentation = "https://inventory.fix.security"

@@ -1,0 +1,15 @@
+black
+coverage
+flake8
+hypothesis
+mypy
+pep8-naming
+pip-tools
+pylint
+pytest
+pytest-asyncio
+pytest-cov
+fixinventoryclient>=2.0.0
+toml
+tox
+types-aiofiles
