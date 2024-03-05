@@ -47,6 +47,10 @@ test = [
     "types-aiofiles",
 ]
 
+dev = [
+    "pip-tools",
+]
+
 [tool.setuptools.package-data]
 fixcompliance = ["py.typed"]
 
