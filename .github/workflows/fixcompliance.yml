@@ -11,7 +11,7 @@ on:
       - '.github/**'
 
 jobs:
-  fixinventorydata:
+  fixcompliance:
     name: "fixcompliance"
     runs-on: ubuntu-latest
     steps:
