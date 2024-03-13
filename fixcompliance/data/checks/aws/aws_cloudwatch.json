@@ -72,7 +72,7 @@
                 "fix": "is(aws_cloudwatch_log_group) and group_retention_in_days<{{log_group_retention_days}}"
             },
             "default_values": {
-                "log_group_retention_days": "365d"
+                "log_group_retention_days": 365
             },
             "remediation": {
                 "text": "Apply a log retention policy of at least 365 days to CloudWatch Log Groups. This ensures the continuity of logs and traces to aid in security analysis and regulatory obligations.",

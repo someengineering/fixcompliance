@@ -865,7 +865,7 @@
             "risk": "Unused access keys pose a security risk and should be removed to prevent unauthorized access.",
             "severity": "medium",
             "detect": {
-                "fix": "is(aws_iam_access_key) and age>{{access_key_too_old_age}} and (last_used==null or last_used<{{access_key_too_old_age.ago}})"
+                "fix": "is(aws_iam_access_key) and age>{{access_key_too_old_age}} and (access_key_last_used.last_used==null or access_key_last_used.last_used<{{access_key_too_old_age.ago}})"
             },
             "default_values": {
                 "access_key_too_old_age": "90d"
@@ -900,7 +900,7 @@
                 "fix": "is(aws_account) and (expire_passwords!=true or max_password_age>{{password_age}})"
             },
             "default_values": {
-                "password_age": "90d"
+                "password_age": 90
             },
             "remediation": {
                 "text": "To fix this issue, configure IAM policies to enforce password expiration within 90 days. Ensure the 'expire_passwords' setting is enabled and set 'max_password_age' to 90 days or less. Regularly rotating passwords helps maintain account security by reducing the risk of compromised credentials being used for extended periods.",
