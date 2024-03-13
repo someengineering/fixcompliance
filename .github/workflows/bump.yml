@@ -26,7 +26,7 @@ jobs:
         run: |
           git config --global user.email "ci@some.engineering"
           git config --global user.name "Some CI"
-          gh auth login --with-token <<< "$GITHUB_TOKEN"
+          gh auth login --with-token <<< "${{ secrets.SOME_CI_PAT }}"
           version=$(python tools/get-version.py)
           git add pyproject.toml fixcompliance/__init__.py
           git commit -m "Bump version to $version"
