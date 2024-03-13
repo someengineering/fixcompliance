@@ -20,17 +20,14 @@ jobs:
         run: |
           python -m pip install -U pip
           pip install -r requirements-dev.txt
-      - name: Authenticate with GitHub CLI
-        run: |
-          git config --global user.email "ci@some.engineering"
-          git config --global user.name "Some CI"
-          gh auth login --with-token <<< "${{ secrets.SOME_CI_PAT }}"
       - name: Bump version
         run: python tools/bump-version.py
       - name: Push changes
         env:
           GITHUB_TOKEN: ${{ secrets.SOME_CI_PAT }}
         run: |
+          git config --global user.email "ci@some.engineering"
+          git config --global user.name "Some CI"
           version=$(python tools/get-version.py)
           git add pyproject.toml fixcompliance/__init__.py
           git commit -m "Bump version to $version"
