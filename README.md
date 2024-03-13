@@ -1,2 +1,2 @@
 # `fixcompliance`
-Fix Inventory Compliance Benchmarks and Checks
+Fix Inventory Compliance Benchmarks and Checks.
