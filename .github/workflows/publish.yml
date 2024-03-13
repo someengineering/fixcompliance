@@ -1,4 +1,4 @@
-name: fixcompliance
+name: Publish fixcompliance
 on:
   push:
     tags:
