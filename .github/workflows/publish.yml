@@ -53,6 +53,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.SOME_CI_PAT }}
         run: |
+          sleep 300
           curl \
           -X POST \
           -H "Accept: application/vnd.github+json" \
