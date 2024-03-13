@@ -5,7 +5,7 @@ on:
       - main
 jobs:
   version-bump:
-    if: github.actor != 'someci'
+    if: github.actor != 'some-ci'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
