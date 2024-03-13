@@ -47,3 +47,15 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_FIXCOMPLIANCE }}
           packages_dir: ./dist/
+
+      - name: Trigger workflow in fixinventory repo
+        if: ${{ github.actor != 'someci' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.SOME_CI_PAT }}
+        run: |
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          https://api.github.com/repos/someengineering/fixinventory/dispatches \
+          -d '{"event_type": "bump_fixcompliance"}'
