@@ -34,3 +34,14 @@ jobs:
           git commit -m "Bump version to $version"
           git tag -a "$version" -m "$version"
           git push && git push --tags
+      - name: Trigger workflow in fixinventory repo
+        if: ${{ github.actor != 'someci' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.SOME_CI_PAT }}
+        run: |
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          https://api.github.com/repos/someengineering/fixinventory/dispatches \
+          -d '{"event_type": "bump_fixcompliance"}'
