@@ -24,7 +24,7 @@ jobs:
         run: |
           git config --global user.email "ci@some.engineering"
           git config --global user.name "Some CI"
-          echo "${{ secrets.SOME_CI_PAT }}" | gh auth login --with-token
+          gh auth login --with-token <<< "${{ secrets.SOME_CI_PAT }}"
       - name: Bump version
         run: python tools/bump-version.py
       - name: Push changes
