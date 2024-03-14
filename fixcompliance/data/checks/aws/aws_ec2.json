@@ -1243,7 +1243,7 @@
                 "compliance"
             ],
             "risk": "If EC2 instances are not managed by AWS Systems Manager, there is a risk of misconfigured or non-compliant instances, leading to potential security vulnerabilities.",
-            "severity": "medium",
+            "severity": "low",
             "detect": {
                 "fix": "is(aws_ec2_instance) with(empty, <-- is(aws_ssm_instance))"
             },

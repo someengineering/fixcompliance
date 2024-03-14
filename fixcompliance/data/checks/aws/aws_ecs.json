@@ -71,7 +71,7 @@
             "risk": "Allowing writable root filesystems in ECS task definitions can pose a significant security risk. If a container is compromised, attackers can manipulate system files, install malicious software, and perform unauthorized activities.",
             "severity": "medium",
             "detect": {
-                "fix": "search is(aws_ecs_task_definition) and container_definitions[*].readonly_root_filesystem!=true"
+                "fix": "search is(aws_ecs_task_definition) and container_definitions[*].readonly_root_filesystem==false"
             },
             "remediation": {
                 "text": "To fix this issue, modify ECS task definitions and set 'readonly_root_filesystem' to 'true' for each container. This ensures that containers operate with a read-only root filesystem, enhancing security by preventing unauthorized changes to system files. If necessary, use attached volumes for directories that require write access. For more information, refer to the [AWS documentation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#container_definitions) on configuring container definitions in ECS task definitions.",
