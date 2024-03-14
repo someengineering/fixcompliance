@@ -42,7 +42,7 @@
                 "compliance"
             ],
             "risk": "Lambda functions without established controls via security groups in a VPC, are vulnerable to unauthorized access. This exposure threatens data security and compliance standards.",
-            "severity": "medium",
+            "severity": "info",
             "detect": {
                 "fix": "is(aws_lambda_function) with (empty, <-- is(aws_vpc))"
             },

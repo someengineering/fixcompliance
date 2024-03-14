@@ -73,7 +73,7 @@
             "risk": "If lifecycle policies are not enabled for Amazon ECR repositories, there is a risk of retaining a large number of images, which can result in unnecessary costs.",
             "severity": "medium",
             "detect": {
-                "fix": "is(aws_ecr_repository) and lifecycle_policy!=null"
+                "fix": "is(aws_ecr_repository) and lifecycle_policy==null"
             },
             "remediation": {
                 "text": "To fix this issue, open the Amazon ECR console and create a lifecycle policy for each repository.",

@@ -72,7 +72,7 @@
             "risk": "Without enabling logging, you compromise on the visibility and traceability of your service usage, potentially missing crucial operational insights, security vulnerabilities, and debugging information.",
             "severity": "medium",
             "detect": {
-                "fix": "is(aws_apigateway_stage) and stage_method_settings!={}"
+                "fix": "is(aws_apigateway_stage) and stage_method_settings in [{}, null]"
             },
             "remediation": {
                 "text": "To remediate, ensure you enable monitoring in all parts of your AWS solution. Particularly, ensure CloudTrail is active for logging API Gateway actions, which can offer insights like the nature of requests, originating IP address, the executor of the request, and more.",
