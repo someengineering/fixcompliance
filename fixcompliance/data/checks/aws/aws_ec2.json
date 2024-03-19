@@ -991,13 +991,13 @@
                 "de": {
                     "title": "Stellen Sie sicher, dass keine Sicherheitsgruppen den Zugriff von 0.0.0.0/0 oder ::/0 auf Telnet-Ports erlauben",
                     "risk": "Eine falsche Konfiguration von Sicherheitsgruppen erhöht die Angriffsfläche.",
-                    "remediation": "Um das Problem zu beheben, verwenden Sie einen Zero-Trust-Ansatz, indem Sie einen Prozess implementieren, um nicht eingeschränkte oder zu großzügige Netzwerk-ACLs zu überprüfen und zu beheben. Es wird empfohlen, die Definition der erforderlichen Mindest-Ports zu verengen."
+                    "remediation": "Um das Problem zu beheben, verwenden Sie einen Zero-Trust-Ansatz, indem Sie einen Prozess implementieren, um nicht eingeschränkte oder zu großzügige Netzwerk-ACLs zu überprüfen und zu beheben. Es wird empfohlen, die Definition der erforderlichen Mindest-Ports zu reduzieren."
                 }
             }
         },
         {
             "name": "wide_open_ipv4_security_group",
-            "title": "Ensure Security Group Is Properly Configured to Reduce Attack Surface",
+            "title": "Ensure Security Group Is Properly Configured And Does Not Allow Ingress From Large IP Ranges",
             "result_kinds": [
                 "aws_ec2_security_group"
             ],
@@ -1005,13 +1005,13 @@
                 "security",
                 "compliance"
             ],
-            "risk": "Improperly configured security groups increase the attack surface, making the AWS cloud infrastructure vulnerable.",
+            "risk": "Improperly configured security groups increase the attack surface, making the AWS cloud infrastructure vulnerable. The security group detected allows ingress from a wide range of public IP addresses, which can lead to unauthorized access and potential data breaches.",
             "severity": "high",
             "detect": {
                 "fix": "is(aws_ec2_security_group) and group_ip_permissions[*].ip_ranges[*].{cidr_ip!=\"0.0.0.0/0\" and cidr_ip!~\"^(10\\.|^172\\.(1[6-9]|2[0-9]|3[0-1])\\.|^192\\.168\\.)\" and cidr_ip!~\"/(2[4-9]|[3][0-2])$\"}"
             },
             "remediation": {
-                "text": "To fix the issue, implement a Zero Trust approach and establish a process to regularly scan and remediate unrestricted or overly permissive network access control lists. It is recommended to narrow the definition of the minimum required ports.",
+                "text": "To fix the issue, implement a Zero Trust approach and establish a process to regularly scan and remediate unrestricted or overly permissive network access control lists. It is recommended to narrow the definition of the minimum required ports and source IPs.",
                 "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
                 "complexity": "high"
             },
@@ -1019,8 +1019,8 @@
             "localizations": {
                 "de": {
                     "title": "Sicherheitsgruppe korrekt konfigurieren, um die Angriffsfläche zu reduzieren.",
-                    "risk": "Falsch konfigurierte Sicherheitsgruppen erhöhen die Angriffsfläche und machen die AWS Cloud-Infrastruktur anfällig.",
-                    "remediation": "Um das Problem zu beheben, implementieren Sie einen Zero-Trust-Ansatz und etablieren Sie einen Prozess, um uneingeschränkte oder übermäßig freizügige Netzwerkzugriffskontrolllisten regelmäßig zu überprüfen und zu beheben. Es wird empfohlen, die Definition der erforderlichen Ports zu verengen."
+                    "risk": "Falsch konfigurierte Sicherheitsgruppen erhöhen die Angriffsfläche und machen die AWS Cloud-Infrastruktur anfällig. Die Sicherheitsgruppe erlaubt den Zugriff von einem weiten Bereich öffentlicher IP-Adressen, was zu unbefugtem Zugriff und potenziellen Datenverletzungen führen kann.",
+                    "remediation": "Um das Problem zu beheben, implementieren Sie einen Zero-Trust-Ansatz und etablieren Sie einen Prozess, um uneingeschränkte oder übermäßig freizügige Netzwerkzugriffskontrolllisten regelmäßig zu überprüfen und zu beheben. Es wird empfohlen, die Definition der erforderlichen Ports zu reduzieren."
                 }
             }
         },
