@@ -32,35 +32,6 @@
             }
         },
         {
-            "name": "function_in_vpc",
-            "title": "Ensure That AWS Lambda Functions Are Deployed within a VPC and Configured with Appropriate Security Groups for Precise and Compliant Network Access Controls",
-            "result_kinds": [
-                "aws_lambda_function"
-            ],
-            "categories": [
-                "security",
-                "compliance"
-            ],
-            "risk": "Lambda functions without established controls via security groups in a VPC, are vulnerable to unauthorized access. This exposure threatens data security and compliance standards.",
-            "severity": "info",
-            "detect": {
-                "fix": "is(aws_lambda_function) with (empty, <-- is(aws_vpc))"
-            },
-            "remediation": {
-                "text": "Modify your Lambda function configuration to deploy within a VPC. This requires setting up necessary security groups and network access controls.",
-                "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html",
-                "complexity": "medium"
-            },
-            "url": "https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/",
-            "localizations": {
-                "de": {
-                    "title": "Stellen Sie sicher, dass AWS Lambda-Funktionen innerhalb einer VPC bereitgestellt werden und mit geeigneten Sicherheitsgruppen für präzise und konforme Netzwerkzugriffskontrollen konfiguriert sind.",
-                    "risk": "Lambda-Funktionen ohne etablierte Kontrollen über Sicherheitsgruppen in einer VPC sind anfällig für unbefugten Zugriff. Diese Exposition bedroht die Datensicherheit und Konformitätsstandards.",
-                    "remediation": "Ändern Sie die Konfiguration Ihrer Lambda-Funktion, um sie innerhalb einer VPC bereitzustellen. Dies erfordert das Einrichten der erforderlichen Sicherheitsgruppen und Netzwerkzugriffskontrollen."
-                }
-            }
-        },
-        {
             "name": "cors_policy",
             "title": "Ensure Appropriate CORS Configuration for AWS Lambda Functions URL",
             "result_kinds": [

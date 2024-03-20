@@ -231,7 +231,6 @@
                                 "aws_glacier_vaults_policy_public_access",
                                 "aws_kms_cmk_policy_prohibit_public_access",
                                 "aws_lambda_cors_policy",
-                                "aws_lambda_function_in_vpc",
                                 "aws_lambda_function_restrict_public_access",
                                 "aws_opensearch_domain_is_not_publicly_accessible",
                                 "aws_redshift_cluster_publicly_accessible",
@@ -251,7 +250,6 @@
                             "checks": [
                                 "aws_dms_public_ip_address",
                                 "aws_ec2_instance_in_vpc",
-                                "aws_lambda_function_in_vpc",
                                 "aws_lambda_publicly_accessible_permissions",
                                 "aws_opensearch_domain_is_not_publicly_accessible",
                                 "aws_sagemaker_notebook_with_direct_internet_access",
@@ -420,7 +418,6 @@
                                 "aws_ecr_image_scan_on_push",
                                 "aws_ecs_ecs_cluster_container_insights_enabled",
                                 "aws_ecs_ecs_service_fargate_using_latest_platform_version",
-                                "aws_lambda_function_in_vpc",
                                 "aws_lambda_publicly_accessible_permissions"
                             ]
                         },
