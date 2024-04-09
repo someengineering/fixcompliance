@@ -133,7 +133,7 @@
             "risk": "If the issue is not solved, non-intended users can put objects in a given bucket, leading to unauthorized data modifications or leaks.",
             "severity": "critical",
             "detect": {
-                "fix": "is(aws_s3_bucket) and bucket_policy.Statement[*].{Effect==Allow and (Principal==\"*\" or Principal.AWS=\"*\" or Principal.CanonicalUser=\"*\") and Action in [\"s3:PutObject\", \"s3:*\", \"*\"]} and bucket_public_access_block_configuration.restrict_public_buckets==false {account_access: <-[0:]- is(account) --> is(aws_s3_account_settings)} account_access.reported.bucket_public_access_block_configuration.restrict_public_buckets==false"
+                "fix": "is(aws_s3_bucket) and (bucket_policy.Statement[*].{Effect==Allow and (Principal==\"*\" or Principal.AWS=\"*\" or Principal.CanonicalUser=\"*\") and (Action in [\"s3:PutObject\", \"s3:*\", \"*\"] or Action[*] in [\"s3:PutObject\", \"s3:*\", \"*\"])} or (bucket_acl.grants[*].{permission in [WRITE, WRITE_ACP, FULL_CONTROL] and grantee.uri = \"http://acs.amazonaws.com/groups/global/AllUsers\"})) and bucket_public_access_block_configuration.restrict_public_buckets!=true {account_access: <-[0:]- is(account) --> is(aws_s3_account_settings)} account_access.reported.bucket_public_access_block_configuration.restrict_public_buckets!=true"
             },
             "remediation": {
                 "text": "To fix the issue, ensure that a proper bucket policy is in place with the principle of least privilege applied.",
