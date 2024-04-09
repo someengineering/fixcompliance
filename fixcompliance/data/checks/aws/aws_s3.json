@@ -122,7 +122,7 @@
         },
         {
             "name": "bucket_policy_public_write_access",
-            "title": "Ensure S3 Buckets Do Not Have Policies That Allow Public Write Access",
+            "title": "Ensure S3 Buckets Can Not Have Policies That Allow Public Write Access",
             "result_kinds": [
                 "aws_s3_bucket"
             ],
@@ -143,7 +143,7 @@
             "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_s3_rw-bucket.html",
             "localizations": {
                 "de": {
-                    "title": "Sicherstellen, dass S3 Buckets keine Richtlinien haben, die öffentlichen Schreibzugriff erlauben.",
+                    "title": "Sicherstellen, dass S3 Buckets keine Richtlinien haben können, die öffentlichen Schreibzugriff erlauben.",
                     "risk": "Wenn das Problem nicht behoben wird, können nicht beabsichtigte Benutzer Objekte in einen bestimmten Bucket ablegen, was zu unbefugten Datenänderungen oder Lecks führen kann.",
                     "remediation": "Um das Problem zu beheben, stellen Sie sicher, dass eine angemessene Bucket-Richtlinie mit dem Prinzip des geringsten Privilegs vorhanden ist."
                 }
