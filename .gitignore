@@ -33,3 +33,4 @@ out/
 **/.hypothesis/
 .sandbox/*
 .env
+documents/
