@@ -49,7 +49,7 @@ jobs:
           packages_dir: ./dist/
 
       - name: Trigger workflow in fixinventory repo
-        if: github.ref_type == 'tag' && github.actor != 'someci'
+        if: ${{ github.actor != 'someci' }}
         env:
           GITHUB_TOKEN: ${{ secrets.SOME_CI_PAT }}
         run: |
