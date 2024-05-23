@@ -1,0 +1,77 @@
+{
+    "provider": "aws",
+    "service": "elbv2",
+    "checks": [
+        {
+            "name": "has_no_listeners",
+            "title": "Ensure That Elastic Load Balancers V2 Have Listeners Configured",
+            "result_kinds": ["aws_alb"],
+            "categories": ["unused"],
+            "risk": "If no listeners are configured for an Application Load Balancer, it will not be able to receive traffic from clients and route requests to registered targets.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_alb) and alb_listener in [null, []]"
+            },
+            "remediation": {
+                "text": "To fix this issue, add listeners to the Elastic Load Balancers V2.",
+                "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html",
+                "complexity": "low"
+            },
+            "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Elastic Load Balancers V2 konfigurierte Listener haben.",
+                    "risk": "Wenn keine Listener für einen Application Load Balancer konfiguriert sind, kann er keinen Datenverkehr von Clients empfangen und Anfragen an registrierte Ziele weiterleiten.",
+                    "remediation": "Um dieses Problem zu beheben, fügen Sie Listener zu den Elastic Load Balancers V2 hinzu."
+                }
+            }
+        },
+        {
+            "name": "waf_enabled",
+            "title": "Ensure That Application Load Balancer Has Web Application Firewall (WAF) Enabled for Enhanced Security",
+            "result_kinds": ["aws_alb"],
+            "categories": ["security", "compliance"],
+            "risk": "Enabling WAF on an Application Load Balancer provides a layer of protection against common web exploits and attacks. It filters, monitors, and blocks harmful traffic before reaching applications, enhancing overall security.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_alb) with (empty, <-- is(aws_waf_web_acl))"
+            },
+            "remediation": {
+                "text": "Open the AWS WAF & Shield console, and go to 'Web ACLs'. Create or select an existing Web ACL for the Load Balancer.",
+                "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html",
+                "complexity": "medium"
+            },
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Application Load Balancer die Web Application Firewall (WAF) für eine verbesserte Sicherheit aktiviert hat",
+                    "risk": "Die Aktivierung von WAF auf einem Application Load Balancer bietet eine Schutzschicht gegen häufige Web-Exploits und Angriffe. Es filtert, überwacht und blockiert schädlichen Datenverkehr, bevor er die Anwendungen erreicht und somit die Gesamtsicherheit verbessert.",
+                    "remediation": "Öffnen Sie die AWS WAF & Shield-Konsole und gehen Sie zu 'Web ACLs'. Erstellen Sie eine neue Web ACL oder wählen Sie eine vorhandene Web ACL für den Load Balancer aus."
+                }
+            }
+        },
+        {
+            "name": "insecure_ssl_ciphers",
+            "title": "Ensure Elastic Load Balancers Do Not Use Insecure SSL Ciphers",
+            "result_kinds": ["aws_alb"],
+            "categories": ["security", "compliance"],
+            "risk": "Using outdated or weak SSL/TLS ciphers exposes transmitted data to increased risk of decryption and unauthorized access. Ensuring robust encryption practices are in place is essential to protect sensitive information from potential security breaches.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_alb) and alb_listener[*].{protocol==HTTPS and ssl_policy not in [\"ELBSecurityPolicy-TLS-1-2-2017-01\", \"ELBSecurityPolicy-TLS-1-2-Ext-2018-06\", \"ELBSecurityPolicy-FS-1-2-2019-08\", \"ELBSecurityPolicy-FS-1-2-Res-2019-08\", \"ELBSecurityPolicy-FS-1-2-Res-2020-10\", \"ELBSecurityPolicy-TLS13-1-2-2021-06\", \"ELB\nSecurityPolicy-TLS13-1-3-2021-06\", \"ELBSecurityPolicy-TLS13-1-2-Res-2021-06\", \"ELBSecurityPolicy-TLS13-1-2-Ext1-2021-06\", \"ELBSecurityPolicy-TLS13-1-2-Ext2-2021-06\"]}"
+            },
+            "remediation": {
+                "text": "Update the SSL/TLS policies of your Elastic Load Balancers to include only secure cipher suites.",
+                "cli": "aws elb set-load-balancer-policies-of-listener --load-balancer-name <lb_name> --load-balancer-port 443 --policy-names ELBSecurityPolicy-TLS-1-2-2017-01",
+                "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies",
+                "complexity": "medium"
+            },
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Elastic Load Balancer keine unsicheren SSL-Ziffern verwenden",
+                    "risk": "Die Verwendung veralteter oder schwacher SSL/TLS-Ziffern erhöht das Risiko, dass übertragene Daten entschlüsselt und unbefugt zugegriffen werden können. Es ist wesentlich, robuste Verschlüsselungspraktiken zu implementieren, um sensible Informationen vor potenziellen Sicherheitsverletzungen zu schützen.",
+                    "remediation": "Aktualisieren Sie die SSL/TLS-Richtlinien Ihrer Elastic Load Balancer, um nur sichere Zifferngruppen einzuschließen."
+                }
+            }
+        }
+    ]
+}

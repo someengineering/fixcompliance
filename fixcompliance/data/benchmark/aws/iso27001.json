@@ -1,0 +1,214 @@
+{
+    "title": "ISO 27001",
+    "framework": "ISO 27001",
+    "clouds": ["aws"],
+    "version": "2022",
+    "description": "This document details the international standards for information security management systems, developed collaboratively by international organizations and member bodies through established technical committees.",
+    "children": [
+        {
+            "title": "A.5 Organizational Controls",
+            "description": "Not automated. Organizational controls necessary for an effective information security management system (ISMS). It outlines the need for clearly defined and approved information security policies, the assignment of specific security roles and responsibilities, and the segregation of duties to prevent conflicts of interest. Management is tasked with enforcing these policies and integrating security into all aspects of project management. The section also highlights the importance of maintaining connections with relevant authorities and special interest groups, the collection and analysis of threat intelligence, and the requirement to manage information security consistently across all organizational projects and assets. This section ensures that organizational structures support and enhance information security measures.",
+            "children": []
+        },
+        {
+            "title": "A.6 People Controls",
+            "description": "Not automated. This section focus on the human elements of information security within an organization. It mandates thorough background checks for all potential and current employees, adjusted according to the sensitivity of the information they will access and associated risks. Employment agreements must clearly delineate both the employees' and the organization's information security responsibilities. The section also emphasizes the importance of ongoing information security awareness, education, and training for all personnel, tailored to their specific job functions. Furthermore, it establishes the need for a formal disciplinary process for security violations, continued security obligations post-employment, and the requirement for confidentiality or non-disclosure agreements. Additionally, the section addresses security protocols for remote working and the procedures for reporting information security events.",
+            "children": []
+        },
+        {
+            "title": "A.7 Physical Controls",
+            "description": "Not automated. This section requires the establishment of clearly defined security perimeters to protect areas housing sensitive information and assets. It stipulates stringent entry controls and secure access mechanisms to prevent unauthorized physical access. Additionally, the section demands that offices, rooms, and facilities be designed with robust physical security measures and continuously monitored to detect and respond to unauthorized access attempts.",
+            "children": []
+        },
+        {
+            "title": "A.8 Technology Controls",
+            "description": "Focuses on safeguarding user endpoint devices, managing access rights, and integrating secure practices such as authentication, malware protection, and vulnerability management. Additionally, it emphasizes the importance of secure configurations, data protection protocols like masking and leakage prevention, and the reliable backup and recovery of data to ensure operational continuity and security compliance.\n\n\n\n\n",
+            "children": [
+                [
+                    {
+                        "title": "A.8.1 User End Point Devices:",
+                        "description": "Protects data stored on, processed by, or accessed via user endpoint devices by implementing security measures.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.2 Privileged Access Rights:",
+                        "description": "Manages and restricts the allocation and use of privileged access rights to prevent unauthorized access.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.3 Information Access Restriction:",
+                        "description": "Access to information and assets is restricted according to the organization's access control policy to ensure data confidentiality and integrity.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.4 Access to Source Code:",
+                        "description": "Access to source code, development tools, and software libraries is controlled and managed to safeguard intellectual property.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.5 Secure Authentication:",
+                        "description": "Implements secure authentication technologies and procedures to validate identities and control access to information systems.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.6 Capacity Management:",
+                        "description": "Monitors and adjusts the use of IT resources to align with current and forecasted capacity demands, ensuring efficient operation.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.7 Protection Against Malware:",
+                        "description": "Protective measures against malware are implemented, complemented by user awareness to mitigate risks.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.8 Management of Technical Vulnerabilities:",
+                        "description": "Identifies, evaluates, and mitigates technical vulnerabilities in information systems to minimize security risks.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.9 Configuration Management:",
+                        "description": "Ensures that configurations of systems and networks, including security settings, are documented, implemented, and maintained.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.10 Information Deletion:",
+                        "description": "Ensures the secure deletion of data from systems and storage media when no longer needed to prevent unauthorized access.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.11 Data Masking:",
+                        "description": "Data masking is employed to protect sensitive information, ensuring that data exposure is minimized and compliant with privacy regulations.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.12 Data Leakage Prevention:",
+                        "description": "Implements measures to prevent data leakage from systems and networks to protect sensitive information.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.13 Information Backup:",
+                        "description": "Regularly creates and tests backup copies of information, software, and systems to ensure data recovery and continuity.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.14 Redundancy of Information Processing Facilities:",
+                        "description": "Implements redundancy in information processing facilities to maintain service availability.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.15 Logging:",
+                        "description": "Produces and maintains logs of activities, exceptions, and other significant events to aid in security monitoring and forensic analysis.",
+                        "checks": [
+                            "aws_cloudwatch_disable_or_scheduled_deletion_of_kms_cmk",
+                            "aws_cloudwatch_changes_to_vpcs_alarm_configured",
+                            "aws_cloudwatch_changes_to_route_table_alarm_configured",
+                            "aws_cloudwatch_changes_to_internet_gateway_alarm_configured",
+                            "aws_cloudwatch_changes_to_network_acl_alarm_configured"
+
+                        ]
+                    },
+                    {
+                        "title": "A.8.16 Monitoring Activities:",
+                        "description": "Monitors networks, systems, and applications for unusual activities to quickly identify potential security incidents.",
+                        "checks": [
+                        ]
+                    },
+                    {
+                        "title": "A.8.17 Clock Synchronization:",
+                        "description": "Ensures the synchronization of system clocks across all information processing systems for accurate logging and compliance.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.18 Use of Privileged Utility Programs:",
+                        "description": "Controls and restricts the use of utility programs that could bypass system controls to maintain system integrity.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.19 Installation of Software on Operational Systems:",
+                        "description": "Manages and secures the installation of software on operational systems to prevent security compromises.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.20 Network Security:",
+                        "description": "Secures networks and network devices to protect information within systems and applications from unauthorized access and attacks.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.21 Security of Network Services:",
+                        "description": "Identifies and implements security mechanisms and service levels for network services to ensure reliable and secure network operations.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.22 Segregation of Networks:",
+                        "description": "Segregates groups of information services, users, and systems within networks to reduce risks and enhance security.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.23 Web Filtering:",
+                        "description": "Manages access to external websites to reduce exposure to potentially harmful content and enhance web security.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.24 Use of Cryptography:",
+                        "description": "Defines and implements rules for effective cryptography use, including key management, to secure data during storage and transmission.",
+                        "checks": [
+                            "aws_rds_storage_encrypted",
+                            "aws_elb_insecure_ssl_ciphers",
+                            "aws_elbv2_insecure_ssl_ciphers"
+                        ]
+                    },
+                    {
+                        "title": "A.8.25 Secure Development Lifecycle:",
+                        "description": "Establishes rules for a secure development lifecycle to ensure that software and systems are developed with security in mind.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.26 Application Security Requirements:",
+                        "description": "Specifies and approves security requirements during the development or acquisition of applications to safeguard functionalities and data.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.27 Secure System Architecture and Engineering Principles:",
+                        "description": "Applies secure engineering principles to system development to enhance the security posture of information systems.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.28 Secure Coding:",
+                        "description": "Employs secure coding principles during software development to prevent vulnerabilities and enhance application security.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.29 Security Testing in Development and Acceptance:",
+                        "description": "Implements security testing processes in the software development and acceptance phases to identify and rectify security weaknesses.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.30 Outsourced Development:",
+                        "description": "Directs, monitors, and reviews outsourced system development activities to ensure compliance with security requirements.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.31 Separation of Development, Test, and Production Environments:",
+                        "description": "Maintains separate and secure environments for development, testing, and production to manage risks effectively.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.32 Change Management:",
+                        "description": "Applies change management procedures to information processing facilities and systems to control and document changes securely.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.33 Test Information:",
+                        "description": "Manages and protects test information used in development and testing environments to prevent data leakage and misuse.",
+                        "checks": []
+                    },
+                    {
+                        "title": "A.8.34 Protection of Information Systems During Audit Testing:",
+                        "description": "Plans and coordinates audit tests to ensure that operational systems are protected during assurance activities.",
+                        "checks": []
+                    }
+                ]
+            ]
+        }
+    ]
+}

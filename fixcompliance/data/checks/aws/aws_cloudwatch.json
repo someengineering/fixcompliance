@@ -86,6 +86,144 @@
                     "remediation": "Legen Sie eine Protokollbewahrungspolitik von mindestens 365 Tagen für CloudWatch-Log-Gruppen fest. Dadurch wird die Fortführung von Protokollen und Traces sichergestellt, um bei Sicherheitsanalysen und regulatorischen Verpflichtungen zu helfen."
                 }
             }
+        },
+        {
+            "name": "disable_or_scheduled_deletion_of_kms_cmk",
+            "title": "Ensure Log Metric Filters and Alarms Are Set for Disabling or Scheduled Deletion of Customer-Created KMS CMKs",
+            "result_kinds": [ "aws_region" ],
+            "categories": [ "security" ],
+            "risk": "Lack of monitoring for API calls related to the disabling or deletion of AWS KMS Customer Master Keys (CMKs) can leave unintended and malicious activities undetected. Effective monitoring not only helps in detecting unauthorized attempts to manipulate encryption keys, thereby protecting against potential data security breaches, but it also aids in identifying configuration errors that may lead to data exposure.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_kms_key) and kms_key_manager=CUSTOMER <-- is(region) with(empty, --> is(aws_cloudwatch_metric_filter) and filter_pattern~\"\\$\\.eventSource\\s*=\\s*kms\\.amazonaws\\.com.*(DisableKey.*ScheduleKeyDeletion|ScheduleKeyDeletion.*DisableKey)\" with(any, --> is(aws_cloudwatch_alarm)))"
+            },
+            "remediation": {
+                "text": "To safeguard against unauthorized disabling or deletion of AWS KMS Customer Master Keys (CMKs), configure CloudWatch log metric filters and alarms for these events. Set CloudTrail to log all management events, and use CloudWatch to alert on patterns indicating DisableKey or ScheduleKeyDeletion events. Regularly review logs and test alarms to ensure continuous protection and compliance.",
+                "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html",
+                "complexity": "low"
+            },
+            "localizations": {
+                "de": {
+                    "title": "Sicherstellen, dass Log-Metrikfilter und Alarme für das Deaktivieren oder planmäßige Löschen von benutzererstellten KMS-CMKs eingerichtet sind",
+                    "risk": "Das Fehlen von Überwachung für API-Aufrufe, die mit dem Deaktivieren oder Löschen von AWS KMS Customer Master Keys (CMKs) zusammenhängen, kann unbeabsichtigte und bösartige Aktivitäten unentdeckt lassen. Eine effektive Überwachung hilft nicht nur dabei, unbefugte Versuche zur Manipulation von Verschlüsselungsschlüsseln zu erkennen und somit potenzielle Sicherheitsverletzungen der Daten zu verhindern, sondern unterstützt auch bei der Identifizierung von Konfigurationsfehlern, die zu Datenexposition führen können.",
+                    "remediation": "Um sich gegen unbefugtes Deaktivieren oder Löschen von AWS KMS Customer Master Keys (CMKs) zu schützen, konfigurieren Sie CloudWatch-Log-Metrikfilter und Alarme für diese Ereignisse. Stellen Sie sicher, dass CloudTrail alle Managementereignisse protokolliert, und nutzen Sie CloudWatch, um auf Muster zu reagieren, die auf DisableKey oder ScheduleKeyDeletion hinweisen. Überprüfen Sie regelmäßig die Protokolle und testen Sie die Alarme, um kontinuierlichen Schutz und Compliance zu gewährleisten."
+                }
+            }
+        },
+        {
+            "name": "changes_to_vpcs_alarm_configured",
+            "title": "Ensure Monitoring and Alerting on VPC Changes",
+            "result_kinds": [ "aws_vpc" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Inadequate monitoring of changes within Virtual Private Clouds (VPCs) can leave your network vulnerable to unauthorized modifications, potentially leading to security breaches. Proper monitoring of API calls related to VPC changes can quickly uncover unauthorized access or misconfigurations, thereby enhancing the security and stability of your network infrastructure.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_vpc) and vpc_is_default=false with(empty, <-- is(region) with(empty, --> is(aws_cloudwatch_metric_filter) and filter_pattern~\"ModifyVpcAttribute\" and filter_pattern~\"VpcPeeringConnection\" with(any, --> is(aws_cloudwatch_alarm))))"
+            },
+            "remediation": {
+                "text": "To effectively detect and respond to unauthorized VPC changes, establish CloudWatch log metric filters and alarms for critical VPC-related API events such as Configuration and Security Group Changes, Network ACL and Security Group Modifications and VPC Peering and Connections. Configure these tools to alert your security team via AWS SNS or another notification service when suspicious activities are detected. Regularly review these configurations and the alerts generated to ensure they remain effective and appropriately tuned to evolving security needs.",
+                "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html",
+                "complexity": "low"
+            },
+            "localizations": {
+                "de": {
+                    "title": "Sicherstellung der Einrichtung von Log-Metrikfiltern und Alarmen zur Überwachung von VPC-Änderungen",
+                    "risk": "Unzureichende Überwachung von Änderungen in Virtual Private Clouds (VPCs) kann Ihr Netzwerk für unbefugte Modifikationen anfällig machen und möglicherweise zu Sicherheitsverletzungen führen. Eine ordnungsgemäße Überwachung von API-Aufrufen, die mit VPC-Änderungen zusammenhängen, kann unbefugten Zugriff oder Fehlkonfigurationen schnell aufdecken und so die Sicherheit und Stabilität Ihrer Netzwerkinfrastruktur erhöhen.",
+                    "remediation": "Um unbefugte VPC-Änderungen effektiv zu erkennen und darauf zu reagieren, richten Sie CloudWatch Log-Metrikfilter und Alarme für kritische VPC-bezogene API-Ereignisse ein. Konfigurieren Sie diese Tools so, dass sie Ihr Sicherheitsteam über AWS SNS oder einen anderen Benachrichtigungsdienst alarmieren, wenn verdächtige Aktivitäten erkannt werden. Überprüfen Sie regelmäßig diese Konfigurationen und die generierten Alarme, um sicherzustellen, dass sie effektiv bleiben und an die sich entwickelnden Sicherheitsanforderungen angepasst sind."
+                }
+            }
+        },
+        {
+            "name": "changes_to_route_table_alarm_configured",
+            "title": "Ensure Monitoring and Alerting on EC2 Route Table Changes",
+            "result_kinds": [ "aws_ec2_route_table" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Unmonitored changes to AWS EC2 Route Tables can lead to misconfigurations that potentially expose the network to security risks or disrupt services by misrouting traffic. These changes can compromise the integrity and security of the entire VPC, impacting all connected services and applications.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_ec2_route_table) with(empty, <-- is(region) with(empty, --> is(aws_cloudwatch_metric_filter) and filter_pattern~CreateRoute and filter_pattern~CreateRouteTable and filter_pattern~ReplaceRoute and filter_pattern~ReplaceRouteTableAssociation and filter_pattern~DeleteRouteTable and filter_pattern~DeleteRoute and filter_pattern~DisassociateRouteTable with(any, --> is(aws_cloudwatch_alarm))))"
+            },
+            "remediation": {
+                "text": "Implement monitoring for all changes to EC2 Route Tables using AWS CloudTrail and AWS CloudWatch. Set up alerts to notify the network administration team of any modifications, such as route additions, deletions, or changes to route table associations. Regular audits and reviews of route table configurations should be conducted to ensure they comply with your organization’s security policies and best practices.",
+                "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html",
+                "complexity": "low"
+            },
+            "localizations": {
+                "de": {
+                    "title": "Überwachung und Alarmierung bei Änderungen an AWS EC2-Routentabellen sicherstellen",
+                    "risk": "Unüberwachte Änderungen an AWS EC2-Routentabellen können zu Fehlkonfigurationen führen, die das Netzwerk Sicherheitsrisiken aussetzen oder den Dienst durch fehlerhafte Verkehrsumleitungen stören könnten. Diese Änderungen können die Integrität und Sicherheit des gesamten VPC beeinträchtigen, was sich auf alle verbundenen Dienste und Anwendungen",
+                    "remediation": "Implementieren Sie die Überwachung aller Änderungen an EC2-Routentabellen mit Hilfe von AWS CloudTrail und AWS CloudWatch. Richten Sie Alarme ein, um das Netzwerkadministratorenteam über jegliche Modifikationen zu informieren, wie zum Beispiel das Hinzufügen, Löschen oder Ändern von Routentabellenzuordnungen. Regelmäßige Überprüfungen und Audits der Routentabellenkonfigurationen sollten durchgeführt werden, um sicherzustellen, dass diese den Sicherheitsrichtlinien und Best Practices Ihrer Organisation entsprechen."
+                }
+            }
+        },
+        {
+            "name": "changes_to_internet_gateway_alarm_configured",
+            "title": "Ensure Monitoring and Alerting on AWS EC2 Internet Gateway Changes",
+            "result_kinds": [ "aws_ec2_internet_gateway" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Unmonitored changes to AWS EC2 Internet Gateways can lead to network vulnerabilities, potentially exposing your infrastructure to unauthorized access or data leaks. Such changes could inadvertently alter public access settings, impacting the security and availability of services connected to the Internet.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_ec2_internet_gateway) with(empty, <-- is(region) with(empty, --> is(aws_cloudwatch_metric_filter) and filter_pattern~CreateCustomerGateway and filter_pattern~DeleteCustomerGateway and filter_pattern~AttachInternetGateway and filter_pattern~CreateInternetGateway and filter_pattern~DeleteInternetGateway and filter_pattern~DetachInternetGateway with(any, --> is(aws_cloudwatch_alarm))))"
+            },
+            "remediation": {
+                "text": "Set up monitoring for all changes to EC2 Internet Gateways using AWS CloudTrail and AWS CloudWatch. Configure alerts to immediately inform the network security team of any modifications, including attachment or detachment from VPCs, or changes to route tables affecting the gateway. Conduct regular security reviews and audits of Internet Gateway configurations to ensure compliance with organizational security standards and practices.\n\n",
+                "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html",
+                "complexity": "low"
+            },
+            "localizations": {
+                "de": {
+                    "title": "Überwachung und Alarmierung bei Änderungen an AWS EC2 Internet Gateways sicherstellen",
+                    "risk": "Unüberwachte Änderungen an AWS EC2 Internet Gateways können Netzwerkschwachstellen verursachen und Ihre Infrastruktur unbefugtem Zugriff oder Datenlecks aussetzen. Solche Änderungen könnten unbeabsichtigt die öffentlichen Zugangseinstellungen verändern, was die Sicherheit und Verfügbarkeit der mit dem Internet verbundenen Dienste beeinträchtigt.",
+                    "remediation": "Richten Sie eine Überwachung für alle Änderungen an EC2 Internet Gateways mit AWS CloudTrail und AWS CloudWatch ein. Konfigurieren Sie Alarme, um das Netzwerksicherheitsteam sofort über jegliche Modifikationen zu informieren, einschließlich An- und Abkoppeln von VPCs oder Änderungen an den Routentabellen, die das Gateway betreffen. Führen Sie regelmäßige Sicherheitsüberprüfungen und Audits der Konfigurationen der Internet Gateways durch, um die Einhaltung der organisatorischen Sicherheitsstandards und -praktiken zu gewährleisten."
+                }
+            }
+        },
+        {
+            "name": "changes_to_network_acl_alarm_configured",
+            "title": "Ensure Monitoring and Alerting on AWS EC2 Network ACL Changes",
+            "result_kinds": [ "aws_ec2_network_acl" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Unmonitored changes to AWS EC2 Network ACLs can lead to security vulnerabilities by improperly exposing or restricting network traffic. Such changes might disrupt service operations or allow unauthorized data access, impacting the security posture and compliance of your cloud environment.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_ec2_network_acl) with(empty, <-- is(region) with(empty, --> is(aws_cloudwatch_metric_filter) and filter_pattern~CreateNetworkAcl and filter_pattern~CreateNetworkAclEntry and filter_pattern~DeleteNetworkAcl and filter_pattern~DeleteNetworkAclEntry and filter_pattern~ReplaceNetworkAclEntry and filter_pattern~ReplaceNetworkAclAssociation with(any, --> is(aws_cloudwatch_alarm))))"
+            },
+            "remediation": {
+                "text": "Implement monitoring for all changes to EC2 Network ACLs using AWS CloudTrail and AWS CloudWatch. Configure alerts to notify the security team of any modifications, such as updates to inbound or outbound rules, or changes in associations with subnets. Regularly review and audit Network ACL configurations to ensure they adhere to established security policies and best practices.",
+                "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html",
+                "complexity": "low"
+            },
+            "localizations": {
+                "de": {
+                    "title": "Überwachung und Alarmierung bei Änderungen an AWS EC2 Network ACLs sicherstellen",
+                    "risk": "Unüberwachte Änderungen an AWS EC2 Network ACLs (Netzwerk-Zugriffskontrolllisten) können Sicherheitsschwachstellen verursachen, indem sie Netzwerkverkehr unangemessen freigeben oder einschränken. Solche Änderungen könnten den Betrieb von Diensten stören oder unbefugten Datenzugriff ermöglichen, was die Sicherheitslage und Compliance Ihrer Cloud-Umgebung beeinträchtigt.\n\n",
+                    "remediation": "Richten Sie eine Überwachung für alle Änderungen an EC2 Network ACLs mit AWS CloudTrail und AWS CloudWatch ein. Konfigurieren Sie Alarme, um das Sicherheitsteam über jegliche Modifikationen zu informieren, einschließlich Aktualisierungen der ein- und ausgehenden Regeln oder Änderungen in den Verknüpfungen mit Subnetzen. Führen Sie regelmäßige Überprüfungen und Audits der Konfigurationen der Network ACLs durch, um sicherzustellen, dass diese den festgelegten Sicherheitsrichtlinien und bewährten Verfahren entsprechen."
+                }
+            }
+        },
+        {
+            "name": "changes_to_security_groups_alarm_configured",
+            "title": "Ensure Monitoring and Alerting on AWS EC2 Security Group Changes",
+            "result_kinds": [ "aws_ec2_network_acl" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Unmonitored changes to AWS EC2 Security Groups can expose your instances to security risks, such as unauthorized access or data breaches. Modifications to security group rules can alter the intended access controls, potentially allowing traffic that should be blocked or blocking traffic that is required for operations.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_ec2_security_group) with(empty, <-- is(region) with(empty, --> is(aws_cloudwatch_metric_filter) and filter_pattern~AuthorizeSecurityGroupIngress and filter_pattern~AuthorizeSecurityGroupEgress and filter_pattern~RevokeSecurityGroupIngress and filter_pattern~RevokeSecurityGroupEgress and filter_pattern~CreateSecurityGroup and filter_pattern~DeleteSecurityGroup with(any, --> is(aws_cloudwatch_alarm))))"
+            },
+            "remediation": {
+                "text": "Set up monitoring for all changes to EC2 Security Groups using AWS CloudTrail and AWS CloudWatch. Configure alerts to notify the security team immediately of any modifications, including additions, removals, or updates to security group rules. Regularly review and audit Security Group configurations to ensure they align with your organization’s security policies and best practices.",
+                "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html",
+                "complexity": "low"
+            },
+            "localizations": {
+                "de": {
+                    "title": "Überwachung und Alarmierung bei Änderungen an AWS EC2 Security Groups sicherstellen",
+                    "risk": "Unüberwachte Änderungen an AWS EC2 Security Groups können Ihre Instanzen Sicherheitsrisiken aussetzen, wie unbefugten Zugriff oder Datenverletzungen. Modifikationen an den Regeln der Security Groups können die vorgesehenen Zugriffskontrollen verändern und potenziell Verkehr zulassen, der blockiert werden sollte, oder notwendigen Verkehr blockieren.",
+                    "remediation": "Richten Sie eine Überwachung für alle Änderungen an EC2 Security Groups mit AWS CloudTrail und AWS CloudWatch ein. Konfigurieren Sie Alarme, um das Sicherheitsteam sofort über jegliche Modifikationen zu informieren, einschließlich Hinzufügungen, Entfernungen oder Aktualisierungen der Security Group Regeln. Führen Sie regelmäßige Überprüfungen und Audits der Konfigurationen der Security Groups durch, um sicherzustellen, dass diese den Sicherheitsrichtlinien und Best Practices Ihrer Organisation entsprechen."
+                }
+            }
         }
     ]
 }
