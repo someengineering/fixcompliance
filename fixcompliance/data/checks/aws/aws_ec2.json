@@ -1025,7 +1025,7 @@
             }
         },
         {
-            "name": "default_restrict_traffic",
+            "name": "default_security_group_restrict_traffic",
             "title": "Ensure That the Default Security Group of Every VPC Restricts All Traffic",
             "result_kinds": [
                 "aws_vpc"

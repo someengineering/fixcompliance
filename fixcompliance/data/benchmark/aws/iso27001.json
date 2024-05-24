@@ -99,15 +99,16 @@
                         "title": "A.8.15 Logging:",
                         "description": "Produces and maintains logs of activities, exceptions, and other significant events to aid in security monitoring and forensic analysis.",
                         "checks": [
+                            "aws_cloudtrail_logging_in_all_regions_enabled",
+                            "aws_cloudtrail_s3_bucket_logging_enabled",
+                            "aws_cloudtrail_no_recent_log_event",
+                            "aws_cloudtrail_logs_s3_bucket_is_not_publicly_accessible",
                             "aws_cloudwatch_disable_or_scheduled_deletion_of_kms_cmk",
                             "aws_cloudwatch_changes_to_vpcs_alarm_configured",
                             "aws_cloudwatch_changes_to_route_table_alarm_configured",
                             "aws_cloudwatch_changes_to_internet_gateway_alarm_configured",
                             "aws_cloudwatch_changes_to_network_acl_alarm_configured",
                             "aws_cloudwatch_changes_to_s3_bucket_policy_alarm_configured",
-                            "aws_cloudtrail_s3_bucket_logging_enabled",
-                            "aws_cloudtrail_no_recent_log_event",
-                            "aws_cloudtrail_logs_s3_bucket_is_not_publicly_accessible",
                             "aws_config_enabled_in_all_regions",
                             "aws_ec2_vpc_flow_logs_enabled"
 
@@ -137,7 +138,9 @@
                     {
                         "title": "A.8.20 Network Security:",
                         "description": "Secures networks and network devices to protect information within systems and applications from unauthorized access and attacks.",
-                        "checks": []
+                        "checks": [
+                            "aws_ec2_default_security_group_restrict_traffic"
+                        ]
                     },
                     {
                         "title": "A.8.21 Security of Network Services:",
