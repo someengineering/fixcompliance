@@ -103,7 +103,13 @@
                             "aws_cloudwatch_changes_to_vpcs_alarm_configured",
                             "aws_cloudwatch_changes_to_route_table_alarm_configured",
                             "aws_cloudwatch_changes_to_internet_gateway_alarm_configured",
-                            "aws_cloudwatch_changes_to_network_acl_alarm_configured"
+                            "aws_cloudwatch_changes_to_network_acl_alarm_configured",
+                            "aws_cloudwatch_changes_to_s3_bucket_policy_alarm_configured",
+                            "aws_cloudtrail_s3_bucket_logging_enabled",
+                            "aws_cloudtrail_no_recent_log_event",
+                            "aws_cloudtrail_logs_s3_bucket_is_not_publicly_accessible",
+                            "aws_config_enabled_in_all_regions",
+                            "aws_ec2_vpc_flow_logs_enabled"
 
                         ]
                     },

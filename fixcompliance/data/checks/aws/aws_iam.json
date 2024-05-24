@@ -130,7 +130,7 @@
             "risk": "The root account is the most privileged user in an AWS account. Without MFA, the root account is vulnerable to unauthorized access, increasing the risk of security breaches. Enabling MFA adds an extra layer of protection, ensuring that only authorized individuals can access the account.",
             "severity": "critical",
             "detect": {
-                "fix": "is(aws_root_user) and mfa_active!=true"
+                "fix": "is(aws_root_user) and password_enabled=true and mfa_active!=true"
             },
             "remediation": {
                 "text": "To fix this issue, navigate to the AWS Identity and Access Management (IAM) console, access the Dashboard, and activate MFA on the root account.",
