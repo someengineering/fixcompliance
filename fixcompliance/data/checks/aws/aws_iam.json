@@ -371,13 +371,13 @@
                 "password_used_since": "45d"
             },
             "remediation": {
-                "text": "To fix the issue, generate a credential report from the IAM console and disable unnecessary keys.",
+                "text": "To remove console access from a user in AWS, you can delete the user's password in the AWS Management Console under the IAM (Identity and Access Management) service. Simply navigate to the IAM dashboard, select \"Users,\" choose the specific user, and then click on \"Manage password\" to either delete or disable the password, effectively revoking their console access. Additionally, ensure the user does not have permissions to attach or change their own password policy to maintain security.",
                 "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html",
                 "complexity": "low"
             },
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass nicht genutzte Anmeldeinformationen nach 45 Tagen deaktiviert werden",
+                    "title": "Um einem Benutzer den Konsolenzugriff in AWS zu entziehen, können Sie das Passwort des Benutzers im AWS Management Console unter dem IAM-Dienst (Identity and Access Management) löschen. Navigieren Sie einfach zum IAM-Dashboard, wählen Sie \"Benutzer\", wählen Sie den spezifischen Benutzer aus und klicken Sie dann auf \"Passwort verwalten\", um das Passwort zu löschen oder zu deaktivieren, wodurch der Konsolenzugriff effektiv entzogen wird. Stellen Sie zusätzlich sicher, dass der Benutzer keine Berechtigungen hat, seine eigene Passwortrichtlinie anzuhängen oder zu ändern, um die Sicherheit zu gewährleisten.",
                     "risk": "Das Versäumnis, nicht genutzte IAM-Benutzeranmeldeinformationen (Passwörter und Zugriffsschlüssel) zu deaktivieren, stellt ein Sicherheitsrisiko für Ihr AWS-Konto dar. Dies betrifft die Anmeldeinformationen von Benutzern, die die Organisation verlassen haben oder keinen AWS-Zugriff mehr benötigen.",
                     "remediation": "Um das Problem zu beheben, generieren Sie einen Bericht über Anmeldeinformationen in der IAM-Konsole und deaktivieren Sie unnötige Schlüssel."
                 }

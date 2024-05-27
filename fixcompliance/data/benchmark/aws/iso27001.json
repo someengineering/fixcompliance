@@ -33,7 +33,24 @@
                     {
                         "title": "A.8.2 Privileged Access Rights:",
                         "description": "Manages and restricts the allocation and use of privileged access rights to prevent unauthorized access.",
-                        "checks": []
+                        "checks": [
+                            "aws_iam_avoid_root_usage",
+                            "aws_iam_disable_old_credentials",
+                            "aws_iam_no_root_access_key",
+                            "aws_iam_password_policy_expire_90",
+                            "aws_iam_password_policy_lowercase",
+                            "aws_iam_password_policy_minimum_length_14",
+                            "aws_iam_password_policy_number",
+                            "aws_iam_password_policy_reuse_24",
+                            "aws_iam_password_policy_symbol",
+                            "aws_iam_password_policy_uppercase",
+                            "aws_iam_policy_attached_only_to_group_or_roles",
+                            "aws_iam_root_mfa_enabled",
+                            "aws_iam_rotate_access_keys_after_90_days",
+                            "aws_iam_unused_access_keys",
+                            "aws_iam_user_mfa_enabled_console_access"
+
+                        ]
                     },
                     {
                         "title": "A.8.3 Information Access Restriction:",
@@ -63,7 +80,14 @@
                     {
                         "title": "A.8.8 Management of Technical Vulnerabilities:",
                         "description": "Identifies, evaluates, and mitigates technical vulnerabilities in information systems to minimize security risks.",
-                        "checks": []
+                        "checks": [
+                            "aws_ec2_image_public",
+                            "aws_ec2_snapshot_encrypted",
+                            "aws_redshift_cluster_publicly_accessible",
+                            "aws_rds_snapshot_not_publicly_accessible",
+                            "aws_rds_no_public_access",
+                            "aws_cloudtrail_logs_s3_bucket_is_not_publicly_accessible"
+                        ]
                     },
                     {
                         "title": "A.8.9 Configuration Management:",
@@ -140,8 +164,10 @@
                         "description": "Secures networks and network devices to protect information within systems and applications from unauthorized access and attacks.",
                         "checks": [
                             "aws_ec2_default_security_group_restrict_traffic",
-                            "aws_ec2_acl_allow_ingress_rdp_port_3389_ipv4",
-                            "aws_ec2_acl_allow_ingress_rdp_port_3389_ipv6"
+                            "aws_ec2_allow_ingress_from_internet_to_any_port",
+                            "aws_ec2_allow_ingress_from_internet_to_ssh_port_22",
+                            "aws_ec2_allow_ingress_from_internet_to_rdp_port_3389",
+                            "aws_ec2_default_security_group_restrict_traffic"
                         ]
                     },
                     {
