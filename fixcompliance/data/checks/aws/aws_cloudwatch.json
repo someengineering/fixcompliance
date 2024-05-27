@@ -118,7 +118,7 @@
             "risk": "Inadequate monitoring of changes within Virtual Private Clouds (VPCs) can leave your network vulnerable to unauthorized modifications, potentially leading to security breaches. Proper monitoring of API calls related to VPC changes can quickly uncover unauthorized access or misconfigurations, thereby enhancing the security and stability of your network infrastructure.",
             "severity": "medium",
             "detect": {
-                "fix": "is(aws_vpc) and vpc_is_default=false <-[2]- is(account) with(empty, -[1:2]-> is(aws_cloudwatch_metric_filter) and filter_pattern~\"ModifyVpcAttribute\" and filter_pattern~\"VpcPeeringConnection\" with(any, --> is(aws_cloudwatch_alarm)))"
+                "fix": "is(aws_vpc) and vpc_in_use=true <-[2]- is(account) with(empty, -[1:2]-> is(aws_cloudwatch_metric_filter) and filter_pattern~\"ModifyVpcAttribute\" and filter_pattern~\"VpcPeeringConnection\" with(any, --> is(aws_cloudwatch_alarm)))"
             },
             "remediation": {
                 "text": "To effectively detect and respond to unauthorized VPC changes, establish CloudWatch log metric filters and alarms for critical VPC-related API events such as Configuration and Security Group Changes, Network ACL and Security Group Modifications and VPC Peering and Connections. Configure these tools to alert your security team via AWS SNS or another notification service when suspicious activities are detected. Regularly review these configurations and the alerts generated to ensure they remain effective and appropriately tuned to evolving security needs.",
