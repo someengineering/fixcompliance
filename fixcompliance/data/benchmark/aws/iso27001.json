@@ -140,8 +140,8 @@
                         "description": "Secures networks and network devices to protect information within systems and applications from unauthorized access and attacks.",
                         "checks": [
                             "aws_ec2_default_security_group_restrict_traffic",
-                            "aws_ec2_allow_ingress_rdp_port_3389_ipv4",
-                            "aws_ec2_allow_ingress_rdp_port_3389_ipv6"
+                            "aws_ec2_acl_allow_ingress_rdp_port_3389_ipv4",
+                            "aws_ec2_acl_allow_ingress_rdp_port_3389_ipv6"
                         ]
                     },
                     {

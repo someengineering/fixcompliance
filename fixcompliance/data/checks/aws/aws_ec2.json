@@ -208,7 +208,7 @@
             }
         },
         {
-            "name": "allow_ingress_any_port_ipv4",
+            "name": "acl_allow_ingress_any_port_ipv4",
             "title": "Ensure No Network ACLs Allow Ingress from 0.0.0.0/0 to Every Port",
             "result_kinds": [
                 "aws_ec2_network_acl"
@@ -238,7 +238,7 @@
             }
         },
         {
-            "name": "allow_ingress_any_port_ipv6",
+            "name": "acl_allow_ingress_any_port_ipv6",
             "title": "Ensure That Network ACLs Do Not Permit Ingress from ::/0 to Every Port",
             "result_kinds": [
                 "aws_ec2_network_acl"
@@ -268,7 +268,7 @@
             }
         },
         {
-            "name": "allow_ingress_ssh_port_22_ipv4",
+            "name": "acl_allow_ingress_ssh_port_22_ipv4",
             "title": "Ensure Network ACLs Do Not Allow Ingress from 0.0.0.0/0 to SSH Port 22",
             "result_kinds": [
                 "aws_ec2_network_acl"
@@ -298,7 +298,7 @@
             }
         },
         {
-            "name": "allow_ingress_ssh_port_22_ipv6",
+            "name": "acl_allow_ingress_ssh_port_22_ipv6",
             "title": "Ensure No Network ACLs Allow Ingress from ::/0 to SSH Port 22",
             "result_kinds": [
                 "aws_ec2_network_acl"
@@ -328,7 +328,7 @@
             }
         },
         {
-            "name": "allow_ingress_rdp_port_3389_ipv4",
+            "name": "acl_allow_ingress_rdp_port_3389_ipv4",
             "title": "Ensure That Network ACLs Do Not Allow Ingress from 0.0.0.0/0 to Microsoft RDP Port 3389",
             "result_kinds": [
                 "aws_ec2_network_acl"
@@ -358,7 +358,7 @@
             }
         },
         {
-            "name": "allow_ingress_rdp_port_3389_ipv6",
+            "name": "acl_allow_ingress_rdp_port_3389_ipv6",
             "title": "Ensure That Network ACLs Do Not Permit Inbound Traffic from ::/0 to Microsoft RDP Port 3389",
             "result_kinds": [
                 "aws_ec2_network_acl"
