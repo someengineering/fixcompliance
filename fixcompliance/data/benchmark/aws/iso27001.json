@@ -37,18 +37,7 @@
                             "aws_iam_avoid_root_usage",
                             "aws_iam_disable_old_credentials",
                             "aws_iam_no_root_access_key",
-                            "aws_iam_password_policy_expire_90",
-                            "aws_iam_password_policy_lowercase",
-                            "aws_iam_password_policy_minimum_length_14",
-                            "aws_iam_password_policy_number",
-                            "aws_iam_password_policy_reuse_24",
-                            "aws_iam_password_policy_symbol",
-                            "aws_iam_password_policy_uppercase",
-                            "aws_iam_policy_attached_only_to_group_or_roles",
-                            "aws_iam_root_mfa_enabled",
-                            "aws_iam_rotate_access_keys_after_90_days",
-                            "aws_iam_unused_access_keys",
-                            "aws_iam_user_mfa_enabled_console_access"
+                            "aws_iam_policy_attached_only_to_group_or_roles"
 
                         ]
                     },
@@ -65,7 +54,19 @@
                     {
                         "title": "A.8.5 Secure Authentication:",
                         "description": "Implements secure authentication technologies and procedures to validate identities and control access to information systems.",
-                        "checks": []
+                        "checks": [
+                            "aws_iam_password_policy_expire_90",
+                            "aws_iam_password_policy_lowercase",
+                            "aws_iam_password_policy_minimum_length_14",
+                            "aws_iam_password_policy_number",
+                            "aws_iam_password_policy_reuse_24",
+                            "aws_iam_password_policy_symbol",
+                            "aws_iam_password_policy_uppercase",
+                            "aws_iam_root_mfa_enabled",
+                            "aws_iam_rotate_access_keys_after_90_days",
+                            "aws_iam_unused_access_keys",
+                            "aws_iam_user_mfa_enabled_console_access"
+                        ]
                     },
                     {
                         "title": "A.8.6 Capacity Management:",
@@ -127,12 +128,6 @@
                             "aws_cloudtrail_s3_bucket_logging_enabled",
                             "aws_cloudtrail_no_recent_log_event",
                             "aws_cloudtrail_logs_s3_bucket_is_not_publicly_accessible",
-                            "aws_cloudwatch_disable_or_scheduled_deletion_of_kms_cmk",
-                            "aws_cloudwatch_changes_to_vpcs_alarm_configured",
-                            "aws_cloudwatch_changes_to_route_table_alarm_configured",
-                            "aws_cloudwatch_changes_to_internet_gateway_alarm_configured",
-                            "aws_cloudwatch_changes_to_network_acl_alarm_configured",
-                            "aws_cloudwatch_changes_to_s3_bucket_policy_alarm_configured",
                             "aws_config_enabled_in_all_regions",
                             "aws_ec2_vpc_flow_logs_enabled"
 
@@ -142,6 +137,12 @@
                         "title": "A.8.16 Monitoring Activities:",
                         "description": "Monitors networks, systems, and applications for unusual activities to quickly identify potential security incidents.",
                         "checks": [
+                            "aws_cloudwatch_disable_or_scheduled_deletion_of_kms_cmk",
+                            "aws_cloudwatch_changes_to_vpcs_alarm_configured",
+                            "aws_cloudwatch_changes_to_route_table_alarm_configured",
+                            "aws_cloudwatch_changes_to_internet_gateway_alarm_configured",
+                            "aws_cloudwatch_changes_to_network_acl_alarm_configured",
+                            "aws_cloudwatch_changes_to_s3_bucket_policy_alarm_configured"
                         ]
                     },
                     {
@@ -152,7 +153,10 @@
                     {
                         "title": "A.8.18 Use of Privileged Utility Programs:",
                         "description": "Controls and restricts the use of utility programs that could bypass system controls to maintain system integrity.",
-                        "checks": []
+                        "checks": [
+                            "aws_iam_avoid_root_usage",
+                            "aws_iam_no_root_access_key"
+                        ]
                     },
                     {
                         "title": "A.8.19 Installation of Software on Operational Systems:",
@@ -163,11 +167,23 @@
                         "title": "A.8.20 Network Security:",
                         "description": "Secures networks and network devices to protect information within systems and applications from unauthorized access and attacks.",
                         "checks": [
-                            "aws_ec2_default_security_group_restrict_traffic",
                             "aws_ec2_allow_ingress_from_internet_to_any_port",
-                            "aws_ec2_allow_ingress_from_internet_to_ssh_port_22",
+                            "aws_ec2_allow_ingress_from_internet_to_cassandra_ports",
+                            "aws_ec2_allow_ingress_from_internet_to_ftp_port_20_21",
+                            "aws_ec2_allow_ingress_from_internet_to_kafka_ports",
+                            "aws_ec2_allow_ingress_from_internet_to_kibana_ports",
+                            "aws_ec2_allow_ingress_from_internet_to_memcached_ports",
+                            "aws_ec2_allow_ingress_from_internet_to_mysql_ports",
+                            "aws_ec2_allow_ingress_from_internet_to_oracledb",
+                            "aws_ec2_allow_ingress_from_internet_to_port_mongodb_27017_27018",
+                            "aws_ec2_allow_ingress_from_internet_to_postgresql_ports",
                             "aws_ec2_allow_ingress_from_internet_to_rdp_port_3389",
-                            "aws_ec2_default_security_group_restrict_traffic"
+                            "aws_ec2_allow_ingress_from_internet_to_redis_ports",
+                            "aws_ec2_allow_ingress_from_internet_to_sql_server_ports",
+                            "aws_ec2_allow_ingress_from_internet_to_ssh_port_22",
+                            "aws_ec2_allow_ingress_from_internet_to_telnet_ports",
+                            "aws_ec2_default_security_group_restrict_traffic",
+                            "aws_ec2_internet_facing_with_instance_profile"
                         ]
                     },
                     {
@@ -232,7 +248,10 @@
                     {
                         "title": "A.8.32 Change Management:",
                         "description": "Applies change management procedures to information processing facilities and systems to control and document changes securely.",
-                        "checks": []
+                        "checks": [
+                            "aws_iam_account_maintain_current_contact_details",
+                            "aws_iam_account_security_contact_information_is_registered"
+                        ]
                     },
                     {
                         "title": "A.8.33 Test Information:",
