@@ -88,6 +88,30 @@
                     "remediation": "Um dieses Risiko zu minimieren, aktivieren Sie automatische Upgrades in der AWS Management Console im 'Maintenance'-Tab für jeden Redshift-Cluster. Dadurch gewährleisten Sie, dass Ihre Redshift-Cluster immer mit der neuesten Version, einschließlich Sicherheitspatches, betrieben werden."
                 }
             }
+        },
+        {
+            "name": "cluster_encrypted",
+            "title": "Ensure Redshift Clusters are encrypted",
+            "result_kinds": [ "aws_redshift_cluster" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Storing data in Redshift without encryption poses a significant security risk. Unencrypted data is vulnerable to unauthorized access and breaches, which can lead to data theft, regulatory non-compliance, and potential reputational damage. Encryption helps protect data at rest by making it unreadable without the appropriate decryption keys.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(aws_redshift_cluster) and redshift_encrypted=false"
+            },
+            "remediation": {
+                "text": "You can enable encryption for new Redshift clusters during their creation by specifying the encryption options in the AWS Console or through the AWS CLI. For existing clusters, encryption must be enabled by creating a snapshot, copying it with encryption enabled, and then restoring the cluster from the encrypted snapshot.",
+                "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/changing-cluster-encryption.html",
+                "complexity": "low"
+            },
+            "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/security-server-side-encryption.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Redshift-Cluster verschlüsselt sind",
+                    "risk": "Das Speichern von Daten in Redshift ohne Verschlüsselung stellt ein erhebliches Sicherheitsrisiko dar. Unverschlüsselte Daten sind anfällig für unbefugten Zugriff und Sicherheitsverletzungen, die zu Datendiebstahl, Nichteinhaltung von Vorschriften und potenziellem Reputationsverlust führen können. Die Verschlüsselung hilft, Daten im Ruhezustand zu schützen, indem sie ohne die entsprechenden Entschlüsselungsschlüssel unlesbar gemacht werden.",
+                    "remediation": "Sie können die Verschlüsselung für neue Redshift-Cluster während ihrer Erstellung aktivieren, indem Sie die Verschlüsselungsoptionen in der AWS-Konsole oder über die AWS CLI angeben. Für bestehende Cluster muss die Verschlüsselung aktiviert werden, indem ein Snapshot erstellt, dieser mit aktivierter Verschlüsselung kopiert und anschließend der Cluster aus dem verschlüsselten Snapshot wiederhergestellt wird."
+                }
+            }
         }
     ]
 }

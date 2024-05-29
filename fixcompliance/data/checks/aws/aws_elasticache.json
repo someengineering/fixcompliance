@@ -1,0 +1,30 @@
+{
+    "provider": "aws",
+    "service": "elasticache",
+    "checks": [
+        {
+            "name": "encryption_at_rest_enabled",
+            "title": "Ensure AWS ElastiCache Clusters Have Encryption at Rest Enabled",
+            "result_kinds": ["aws_elasticache_cache_cluster"],
+            "categories": ["security", "compliance"],
+            "risk": "Failing to enable encryption at rest for AWS ElastiCache clusters can lead to potential exposure of sensitive data stored within the caching layer. Unencrypted data at rest is vulnerable to unauthorized access, especially in scenarios where the underlying storage infrastructure is compromised.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_elasticache_cache_cluster) and cluster_at_rest_encryption_enabled==false"
+            },
+            "remediation": {
+                "text": "Enable encryption at rest for all new and existing AWS ElastiCache clusters. This can be achieved through the AWS Management Console, AWS CLI, or via AWS CloudFormation templates. For existing clusters that do not support enabling encryption post-creation, you will need to create a new cluster with encryption at rest enabled and migrate your data securely.",
+                "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/encryption-at-rest.html",
+                "complexity": "medium"
+            },
+            "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/redis-security.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Verschlüsselung der Daten bei Nichtgebrauch für AWS ElastiCache-Cluster aktiviert ist",
+                    "risk": "Das Nichtaktivieren der Verschlüsselung der Daten bei Nichtgebrauch für AWS ElastiCache-Cluster kann dazu führen, dass sensible Daten, die innerhalb der Caching-Schicht gespeichert sind, potenziell freigelegt werden. Nicht verschlüsselte Daten bei Nichtgebrauch sind anfällig für unbefugten Zugriff, insbesondere in Szenarien, in denen die zugrunde liegende Speicherinfrastruktur kompromittiert ist.",
+                    "remediation": "Um dieses Risiko zu beheben, aktivieren Sie die Verschlüsselung der Daten bei Nichtgebrauch für alle neuen und bestehenden AWS ElastiCache-Cluster. Dies kann über die AWS Management Console, die AWS CLI oder über AWS CloudFormation-Vorlagen erreicht werden. Für bestehende Cluster, bei denen das Aktivieren der Verschlüsselung nach der Erstellung nicht unterstützt wird, müssen Sie einen neuen Cluster mit aktivierter Verschlüsselung der Daten bei Nichtgebrauch erstellen und Ihre Daten sicher migrieren."
+                }
+            }
+        }
+    ]
+}

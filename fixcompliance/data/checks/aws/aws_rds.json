@@ -147,6 +147,105 @@
                     "remediation": "Um das Problem zu beheben, deaktivieren Sie die öffentliche Verfügbarkeit für alle RDS-Snapshots. Stellen Sie sicher, dass nur notwendige und autorisierte AWS-Konten Berechtigungen zum Freigeben von Snapshots haben."
                 }
             }
+        },
+        {
+            "name": "deletion_protection_enabled",
+            "title": "Ensure DB Clusters and Instances Have Deletion Protection Enabled",
+            "result_kinds": [ "aws_rds_instance", "aws_rds_cluster" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Allowing Amazon Aurora DB clusters and instances to operate without deletion protection can lead to accidental or malicious deletions, resulting in significant data loss and potential service disruptions. Deletion protection is crucial to prevent unauthorized or inadvertent database drops, which could severely impact business operations and data integrity.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_rds_instance, aws_rds_cluster) and rds_deletion_protection=false"
+            },
+            "remediation": {
+                "text": "Enable deletion protection on all Aurora DB clusters and instances. This can be done during the database creation phase through the AWS Management Console or modified on existing instances via the AWS CLI using the modify-db-instance command with the --deletion-protection parameter set to true.",
+                "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Modifying.html",
+                "complexity": "low"
+            },
+            "url": "https://aws.amazon.com/about-aws/whats-new/2018/09/amazon-rds-now-provides-database-deletion-protection/",
+            "localizations": {
+                "de": {
+                    "title": "Sicherstellen, dass bei Aurora DB Cluster und Instanzen der Löschschutz aktiviert ist",
+                    "risk": "Wenn Amazon Aurora DB Cluster und Instanzen ohne Löschschutz betrieben werden, kann dies zu unbeabsichtigten oder böswilligen Löschungen führen, was zu erheblichem Datenverlust und potenziellen Dienstunterbrechungen führen kann. Der Löschschutz ist entscheidend, um die unbefugte oder versehentliche Löschung von Datenbanken zu verhindern, was schwerwiegende Auswirkungen auf den Geschäftsbetrieb und die Datenintegrität haben könnte.",
+                    "remediation": "Aktivieren Sie den Löschschutz bei allen Aurora DB Clustern und Instanzen. Dies kann während der Erstellungsphase der Datenbank über die AWS Management Console erfolgen oder bei bestehenden Instanzen über die AWS CLI mit dem Befehl modify-db-instance und dem Parameter --deletion-protection auf true gesetzt werden. "
+                }
+            }
+        },
+        {
+            "name": "backup_enabled",
+            "title": "Ensure AWS RDS Clusters and Instances Have Backup Enabled",
+            "result_kinds": [ "aws_rds_instance", "aws_rds_cluster" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Operating AWS RDS instances without enabled backups poses significant risks of data loss in cases of system failures, data corruption, or human errors. Without regular backups, restoring data to a previous state becomes impossible, potentially leading to severe business disruptions and loss of critical data.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(aws_rds_instance, aws_rds_cluster) and (rds_backup_retention_period==null or rds_backup_retention_period<{{rds_backup_minimum_retention_days}})"
+            },
+            "default_values": {
+                "rds_backup_minimum_retention_days": 7
+            },
+            "remediation": {
+                "text": "Enable automatic backups for all AWS RDS instances to ensure data durability and recoverability. This can be configured via the AWS Management Console or the AWS CLI. Set a suitable backup retention period and define a backup window that minimizes impact on system performance.",
+                "url": "https://asecure.cloud/a/cfgrule_db-instance-backup-enabled",
+                "complexity": "low"
+            },
+            "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html",
+            "localizations": {
+                "de": {
+                    "title": "Sicherstellen, dass Backups für AWS RDS-Instanzen aktiviert sind",
+                    "risk": "Der Betrieb von AWS RDS-Instanzen ohne aktivierte Backups birgt erhebliche Risiken eines Datenverlusts bei Systemausfällen, Datenkorruption oder Bedienfehlern. Ohne regelmäßige Backups ist eine Wiederherstellung der Daten auf einen früheren Zeitpunkt unmöglich, was zu schwerwiegenden Unterbrechungen des Geschäftsbetriebs und zum Verlust kritischer Daten führen kann.",
+                    "remediation": "Aktivieren Sie automatische Backups für alle AWS RDS-Instanzen, um die Datenhaltbarkeit und Wiederherstellbarkeit zu gewährleisten. Dies kann über die AWS Management Console oder die AWS CLI konfiguriert werden. Legen Sie eine geeignete Aufbewahrungsfrist für Backups fest und definieren Sie ein Backup-Fenster, das die Auswirkungen auf die Systemleistung minimiert."
+                }
+            }
+        },
+        {
+            "name": "multi_az_enabled",
+            "title": "Ensure All Amazon RDS Instances and Clusters Have Multi-AZ Deployments Enabled",
+            "result_kinds": [ "aws_rds_instance", "aws_rds_cluster" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Not enabling Multi-AZ deployments for Amazon RDS instances and clusters exposes applications to higher risk of downtime and data loss in the event of an AZ failure. Single-AZ deployments do not provide the high availability needed for critical systems, resulting in potential service interruptions and operational disruptions that could affect business continuity.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(aws_rds_instance, aws_rds_cluster) and rds_multi_az=false"
+            },
+            "remediation": {
+                "text": "To minimize the risk of downtime and ensure data redundancy, enable Multi-AZ deployments for all existing and new Amazon RDS instances and clusters. For RDS instances, modify the instance settings to enable Multi-AZ deployments. For Amazon Aurora, ensure that clusters are designed with multiple instances across different AZs.",
+                "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html",
+                "complexity": "medium"
+            },
+            "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass alle Amazon RDS-Instanzen und -Cluster Multi-AZ-Bereitstellungen aktiviert haben",
+                    "risk": "Das Nichtaktivieren von Multi-AZ-Bereitstellungen für Amazon RDS-Instanzen und -Cluster setzt Anwendungen einem höheren Risiko von Ausfallzeiten und Datenverlust im Falle eines AZ-Ausfalls aus. Einzelne AZ-Bereitstellungen bieten nicht die hohe Verfügbarkeit, die für kritische Systeme benötigt wird, was zu potenziellen Serviceunterbrechungen und betrieblichen Störungen führen kann, die die Geschäftskontinuität beeinträchtigen.",
+                    "remediation": "Um das Risiko von Ausfallzeiten zu minimieren und Datenredundanz sicherzustellen, aktivieren Sie Multi-AZ-Bereitstellungen für alle bestehenden und neuen Amazon RDS-Instanzen und -Cluster. Für RDS-Instanzen ändern Sie die Einstellungen der Instanz, um Multi-AZ-Bereitstellungen zu ermöglichen. Für Amazon Aurora stellen Sie sicher, dass Cluster mit mehreren Instanzen in verschiedenen AZs konzipiert sind."
+                }
+            }
+        },
+        {
+            "name": "snapshot_encrypted",
+            "title": "Ensure All AWS RDS Cluster and Instance Snapshots Are Encrypted",
+            "result_kinds": [ "aws_rds_snapshot", "aws_rds_cluster_snapshot" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Unencrypted RDS snapshots pose a significant security risk as they contain complete copies of database contents which can include sensitive or regulated data. If these snapshots are intercepted or accessed by unauthorized parties, it can lead to data breaches, financial loss, and damage to an organization’s reputation.",
+            "severity": "critical",
+            "detect": {
+                "fix": "(is(aws_rds_snapshot) and rds_encrypted=false) or (is(aws_rds_cluster_snapshot) and rds_storage_encrypted=false)"
+            },
+            "remediation": {
+                "text": "To mitigate these risks, encrypt all existing and future RDS snapshots using AWS Key Management Service (KMS) keys. For existing unencrypted snapshots, create a new snapshot with encryption enabled.",
+                "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CreateSnapshot.html",
+                "complexity": "medium"
+            },
+            "url": "https://aws.amazon.com/blogs/aws/amazon-rds-update-share-encrypted-snapshots-encrypt-existing-instances/",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass alle AWS RDS Cluster- und Instanz-Snapshots verschlüsselt sind",
+                    "risk": "Unverschlüsselte RDS-Snapshots stellen ein erhebliches Sicherheitsrisiko dar, da sie vollständige Kopien des Datenbankinhalts enthalten, die sensible oder regulierte Daten umfassen können. Wenn diese Snapshots von unbefugten Parteien abgefangen oder zugegriffen werden, kann dies zu Datenverlusten, finanziellen Verlusten und Schäden am Ruf einer Organisation führen.",
+                    "remediation": "Um diese Risiken zu mindern, verschlüsseln Sie alle bestehenden und zukünftigen RDS-Snapshots mit AWS Key Management Service (KMS) Keys. Für bestehende unverschlüsselte Snapshots erstellen Sie einen neuen Snapshot mit aktivierter Verschlüsselung."
+                }
+            }
         }
     ]
 }

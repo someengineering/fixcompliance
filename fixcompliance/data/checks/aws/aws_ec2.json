@@ -1176,6 +1176,35 @@
             }
         },
         {
+            "name": "launch_configuration_has_public_ip",
+            "title": "Ensure EC2 Auto-Scaling Launch Configurations Do Not Assign Public IPs",
+            "result_kinds": [
+                "aws_ec2_launch_template"
+            ],
+            "categories": [
+                "security",
+                "compliance"
+            ],
+            "risk": "Assigning public IP addresses to EC2 instances in Auto-Scaling groups increases the risk of unintended exposure to the internet, making them potential targets for cyber-attacks. This configuration can lead to vulnerabilities if the security groups and network access controls are not strictly managed.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_ec2_launch_template) and launch_template_data.network_interfaces[*].associate_public_ip_address==True"
+            },
+            "remediation": {
+                "text": "To mitigate this risk, ensure that the Auto Scaling launch configurations are set with --no-associate-public-ip-address when created. For existing configurations, create a new launch configuration with this setting and update the Auto Scaling group to use the new configuration. This change will prevent instances from being directly accessible from the internet, reducing the attack surface.",
+                "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchConfiguration.html",
+                "complexity": "low"
+            },
+            "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass EC2 Auto-Scaling Launch-Konfigurationen keine öffentlichen IPs zuweisen",
+                    "risk": "Das Zuweisen öffentlicher IP-Adressen zu EC2-Instanzen in Auto-Scaling-Gruppen erhöht das Risiko einer unbeabsichtigten Exposition gegenüber dem Internet und macht sie zu potenziellen Zielen für Cyberangriffe. Diese Konfiguration kann zu Schwachstellen führen, wenn die Sicherheitsgruppen und Netzwerkzugangskontrollen nicht streng verwaltet werden.",
+                    "remediation": "Um dieses Risiko zu mindern, stellen Sie sicher, dass die Launch-Konfigurationen des Auto-Scalings mit --no-associate-public-ip-address erstellt werden. Für bestehende Konfigurationen erstellen Sie eine neue Launch-Konfiguration mit dieser Einstellung und aktualisieren Sie die Auto-Scaling-Gruppe, um die neue Konfiguration zu verwenden. Diese Änderung verhindert, dass Instanzen direkt aus dem Internet zugänglich sind und reduziert die Angriffsfläche."
+                }
+            }
+        },
+        {
             "name": "no_secrets_in_launch_template_user_data",
             "title": "Ensure There Are No Secrets in EC2 Launch Template User Data",
             "result_kinds": [

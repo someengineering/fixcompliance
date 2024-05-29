@@ -26,12 +26,12 @@
             "children": [
                 [
                     {
-                        "title": "A.8.1 User End Point Devices:",
+                        "title": "A.8.1 User End Point Devices",
                         "description": "Protects data stored on, processed by, or accessed via user endpoint devices by implementing security measures.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.2 Privileged Access Rights:",
+                        "title": "A.8.2 Privileged Access Rights",
                         "description": "Manages and restricts the allocation and use of privileged access rights to prevent unauthorized access.",
                         "checks": [
                             "aws_iam_avoid_root_usage",
@@ -42,17 +42,17 @@
                         ]
                     },
                     {
-                        "title": "A.8.3 Information Access Restriction:",
+                        "title": "A.8.3 Information Access Restriction",
                         "description": "Access to information and assets is restricted according to the organization's access control policy to ensure data confidentiality and integrity.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.4 Access to Source Code:",
+                        "title": "A.8.4 Access to Source Code",
                         "description": "Access to source code, development tools, and software libraries is controlled and managed to safeguard intellectual property.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.5 Secure Authentication:",
+                        "title": "A.8.5 Secure Authentication",
                         "description": "Implements secure authentication technologies and procedures to validate identities and control access to information systems.",
                         "checks": [
                             "aws_iam_password_policy_expire_90",
@@ -69,59 +69,66 @@
                         ]
                     },
                     {
-                        "title": "A.8.6 Capacity Management:",
+                        "title": "A.8.6 Capacity Management",
                         "description": "Monitors and adjusts the use of IT resources to align with current and forecasted capacity demands, ensuring efficient operation.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.7 Protection Against Malware:",
+                        "title": "A.8.7 Protection Against Malware",
                         "description": "Protective measures against malware are implemented, complemented by user awareness to mitigate risks.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.8 Management of Technical Vulnerabilities:",
+                        "title": "A.8.8 Management of Technical Vulnerabilities",
                         "description": "Identifies, evaluates, and mitigates technical vulnerabilities in information systems to minimize security risks.",
                         "checks": [
                             "aws_ec2_image_public",
                             "aws_ec2_snapshot_encrypted",
                             "aws_redshift_cluster_publicly_accessible",
+                            "aws_redshift_cluster_encrypted",
                             "aws_rds_snapshot_not_publicly_accessible",
                             "aws_rds_no_public_access",
-                            "aws_cloudtrail_logs_s3_bucket_is_not_publicly_accessible"
+                            "aws_rds_deletion_protection_enabled",
+                            "aws_cloudtrail_logs_s3_bucket_is_not_publicly_accessible",
+                            "aws_elasticache_encryption_at_rest_enabled"
                         ]
                     },
                     {
-                        "title": "A.8.9 Configuration Management:",
+                        "title": "A.8.9 Configuration Management",
                         "description": "Ensures that configurations of systems and networks, including security settings, are documented, implemented, and maintained.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.10 Information Deletion:",
+                        "title": "A.8.10 Information Deletion",
                         "description": "Ensures the secure deletion of data from systems and storage media when no longer needed to prevent unauthorized access.",
-                        "checks": []
+                        "checks": [
+                        ]
                     },
                     {
-                        "title": "A.8.11 Data Masking:",
+                        "title": "A.8.11 Data Masking",
                         "description": "Data masking is employed to protect sensitive information, ensuring that data exposure is minimized and compliant with privacy regulations.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.12 Data Leakage Prevention:",
+                        "title": "A.8.12 Data Leakage Prevention",
                         "description": "Implements measures to prevent data leakage from systems and networks to protect sensitive information.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.13 Information Backup:",
+                        "title": "A.8.13 Information Backup",
                         "description": "Regularly creates and tests backup copies of information, software, and systems to ensure data recovery and continuity.",
-                        "checks": []
+                        "checks": [
+                            "aws_dynamodb_continuous_backup_enabled",
+                            "aws_rds_backup_enabled"
+                        ]
                     },
                     {
-                        "title": "A.8.14 Redundancy of Information Processing Facilities:",
+                        "title": "A.8.14 Redundancy of Information Processing Facilities",
                         "description": "Implements redundancy in information processing facilities to maintain service availability.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.15 Logging:",
+                        "title": "A.8.15 Logging",
                         "description": "Produces and maintains logs of activities, exceptions, and other significant events to aid in security monitoring and forensic analysis.",
                         "checks": [
                             "aws_cloudtrail_logging_in_all_regions_enabled",
@@ -134,9 +141,10 @@
                         ]
                     },
                     {
-                        "title": "A.8.16 Monitoring Activities:",
+                        "title": "A.8.16 Monitoring Activities",
                         "description": "Monitors networks, systems, and applications for unusual activities to quickly identify potential security incidents.",
                         "checks": [
+                            "aws_config_enabled_in_all_regions",
                             "aws_cloudwatch_disable_or_scheduled_deletion_of_kms_cmk",
                             "aws_cloudwatch_changes_to_vpcs_alarm_configured",
                             "aws_cloudwatch_changes_to_route_table_alarm_configured",
@@ -146,12 +154,12 @@
                         ]
                     },
                     {
-                        "title": "A.8.17 Clock Synchronization:",
+                        "title": "A.8.17 Clock Synchronization",
                         "description": "Ensures the synchronization of system clocks across all information processing systems for accurate logging and compliance.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.18 Use of Privileged Utility Programs:",
+                        "title": "A.8.18 Use of Privileged Utility Programs",
                         "description": "Controls and restricts the use of utility programs that could bypass system controls to maintain system integrity.",
                         "checks": [
                             "aws_iam_avoid_root_usage",
@@ -159,12 +167,12 @@
                         ]
                     },
                     {
-                        "title": "A.8.19 Installation of Software on Operational Systems:",
+                        "title": "A.8.19 Installation of Software on Operational Systems",
                         "description": "Manages and secures the installation of software on operational systems to prevent security compromises.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.20 Network Security:",
+                        "title": "A.8.20 Network Security",
                         "description": "Secures networks and network devices to protect information within systems and applications from unauthorized access and attacks.",
                         "checks": [
                             "aws_ec2_allow_ingress_from_internet_to_any_port",
@@ -187,66 +195,84 @@
                         ]
                     },
                     {
-                        "title": "A.8.21 Security of Network Services:",
+                        "title": "A.8.21 Security of Network Services",
                         "description": "Identifies and implements security mechanisms and service levels for network services to ensure reliable and secure network operations.",
-                        "checks": []
+                        "checks": [
+                            "aws_ec2_instance_in_vpc",
+                            "aws_ec2_launch_configuration_has_public_ip"
+                        ]
                     },
                     {
-                        "title": "A.8.22 Segregation of Networks:",
+                        "title": "A.8.22 Segregation of Networks",
                         "description": "Segregates groups of information services, users, and systems within networks to reduce risks and enhance security.",
-                        "checks": []
+                        "checks": [
+                            "aws_rds_multi_az_enabled"
+                        ]
                     },
                     {
-                        "title": "A.8.23 Web Filtering:",
+                        "title": "A.8.23 Web Filtering",
                         "description": "Manages access to external websites to reduce exposure to potentially harmful content and enhance web security.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.24 Use of Cryptography:",
+                        "title": "A.8.24 Use of Cryptography",
                         "description": "Defines and implements rules for effective cryptography use, including key management, to secure data during storage and transmission.",
                         "checks": [
-                            "aws_rds_storage_encrypted",
+                            "aws_cloudtrail_uses_encryption_at_rest",
+                            "aws_dynamodb_table_kms_encryption_enabled",
+                            "aws_ec2_snapshot_encrypted",
+                            "aws_ec2_volume_not_encrypted",
+                            "aws_efs_storage_encrypted",
                             "aws_elb_insecure_ssl_ciphers",
-                            "aws_elbv2_insecure_ssl_ciphers"
+                            "aws_elbv2_insecure_ssl_ciphers",
+                            "aws_rds_snapshot_encrypted",
+                            "aws_rds_storage_encrypted",
+                            "aws_s3_bucket_default_encryption"
                         ]
                     },
                     {
-                        "title": "A.8.25 Secure Development Lifecycle:",
+                        "title": "A.8.25 Secure Development Lifecycle",
                         "description": "Establishes rules for a secure development lifecycle to ensure that software and systems are developed with security in mind.",
-                        "checks": []
+                        "checks": [
+                            "aws_ecr_image_scan_on_push"
+                        ]
                     },
                     {
-                        "title": "A.8.26 Application Security Requirements:",
+                        "title": "A.8.26 Application Security Requirements",
                         "description": "Specifies and approves security requirements during the development or acquisition of applications to safeguard functionalities and data.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.27 Secure System Architecture and Engineering Principles:",
+                        "title": "A.8.27 Secure System Architecture and Engineering Principles",
                         "description": "Applies secure engineering principles to system development to enhance the security posture of information systems.",
-                        "checks": []
+                        "checks": [
+                            "aws_ec2_instance_stopped_since_30d",
+                            "aws_eks_cluster_uses_a_supported_k8s_version",
+                            "aws_rds_auto_minor_version_upgrade"
+                        ]
                     },
                     {
-                        "title": "A.8.28 Secure Coding:",
+                        "title": "A.8.28 Secure Coding",
                         "description": "Employs secure coding principles during software development to prevent vulnerabilities and enhance application security.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.29 Security Testing in Development and Acceptance:",
+                        "title": "A.8.29 Security Testing in Development and Acceptance",
                         "description": "Implements security testing processes in the software development and acceptance phases to identify and rectify security weaknesses.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.30 Outsourced Development:",
+                        "title": "A.8.30 Outsourced Development",
                         "description": "Directs, monitors, and reviews outsourced system development activities to ensure compliance with security requirements.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.31 Separation of Development, Test, and Production Environments:",
+                        "title": "A.8.31 Separation of Development, Test, and Production Environments",
                         "description": "Maintains separate and secure environments for development, testing, and production to manage risks effectively.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.32 Change Management:",
+                        "title": "A.8.32 Change Management",
                         "description": "Applies change management procedures to information processing facilities and systems to control and document changes securely.",
                         "checks": [
                             "aws_iam_account_maintain_current_contact_details",
@@ -254,12 +280,12 @@
                         ]
                     },
                     {
-                        "title": "A.8.33 Test Information:",
+                        "title": "A.8.33 Test Information",
                         "description": "Manages and protects test information used in development and testing environments to prevent data leakage and misuse.",
                         "checks": []
                     },
                     {
-                        "title": "A.8.34 Protection of Information Systems During Audit Testing:",
+                        "title": "A.8.34 Protection of Information Systems During Audit Testing",
                         "description": "Plans and coordinates audit tests to ensure that operational systems are protected during assurance activities.",
                         "checks": []
                     }
