@@ -1188,7 +1188,7 @@
             "risk": "Assigning public IP addresses to EC2 instances in Auto-Scaling groups increases the risk of unintended exposure to the internet, making them potential targets for cyber-attacks. This configuration can lead to vulnerabilities if the security groups and network access controls are not strictly managed.",
             "severity": "medium",
             "detect": {
-                "fix": "is(aws_ec2_launch_template) and launch_template_data.network_interfaces[*].associate_public_ip_address==True"
+                "fix": "is(aws_ec2_launch_template) and launch_template_data.network_interfaces[*].associate_public_ip_address==true"
             },
             "remediation": {
                 "text": "To mitigate this risk, ensure that the Auto Scaling launch configurations are set with --no-associate-public-ip-address when created. For existing configurations, create a new launch configuration with this setting and update the Auto Scaling group to use the new configuration. This change will prevent instances from being directly accessible from the internet, reducing the attack surface.",
