@@ -193,7 +193,7 @@
             "risk": "Failure to secure S3 buckets can lead to unauthorized access and potential security breaches in operations.",
             "severity": "high",
             "detect": {
-                "fix": "is(aws_s3_bucket) and bucket_public_access_block_configuration.{block_public_acls!=true or ignore_public_acls!=true or block_public_policy!=true or restrict_public_buckets!=true} or bucket_acl.grants[*].{permission in [READ, READ_ACP] and grantee.uri==\"http://acs.amazonaws.com/groups/global/AllUsers\"}"
+                "fix": "is(aws_s3_bucket) and (bucket_public_access_block_configuration.{block_public_acls!=true or ignore_public_acls!=true or block_public_policy!=true or restrict_public_buckets!=true} or bucket_acl.grants[*].{permission in [READ, READ_ACP] and grantee.uri==\"http://acs.amazonaws.com/groups/global/AllUsers\"})"
             },
             "remediation": {
                 "text": "To fix this issue, update the S3 bucket configurations to disable public settings and ensure bucket policies do not grant all permissions.",
