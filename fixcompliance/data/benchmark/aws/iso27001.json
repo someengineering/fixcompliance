@@ -44,7 +44,9 @@
                     {
                         "title": "A.8.3 Information Access Restriction",
                         "description": "Access to information and assets is restricted according to the organization's access control policy to ensure data confidentiality and integrity.",
-                        "checks": []
+                        "checks": [
+                            "aws_s3_account_level_public_access_blocks"
+                        ]
                     },
                     {
                         "title": "A.8.4 Access to Source Code",
@@ -90,7 +92,8 @@
                             "aws_rds_no_public_access",
                             "aws_rds_deletion_protection_enabled",
                             "aws_cloudtrail_logs_s3_bucket_is_not_publicly_accessible",
-                            "aws_elasticache_encryption_at_rest_enabled"
+                            "aws_elasticache_encryption_at_rest_enabled",
+                            "aws_sns_encryption_at_rest_enabled"
                         ]
                     },
                     {
@@ -120,13 +123,16 @@
                         "checks": [
                             "aws_dynamodb_continuous_backup_enabled",
                             "aws_rds_backup_enabled",
-                            "aws_redshift_retain_backup"
+                            "aws_redshift_retain_backup",
+                            "aws_s3_bucket_versioning_enabled"
                         ]
                     },
                     {
                         "title": "A.8.14 Redundancy of Information Processing Facilities",
                         "description": "Implements redundancy in information processing facilities to maintain service availability.",
-                        "checks": []
+                        "checks": [
+                            "aws_s3_bucket_is_zone_redundant"
+                        ]
                     },
                     {
                         "title": "A.8.15 Logging",
@@ -213,7 +219,10 @@
                     {
                         "title": "A.8.23 Web Filtering",
                         "description": "Manages access to external websites to reduce exposure to potentially harmful content and enhance web security.",
-                        "checks": []
+                        "checks": [
+                            "aws_elbv2_waf_enabled",
+                            "aws_cloudfront_distribution_waf_enabled"
+                        ]
                     },
                     {
                         "title": "A.8.24 Use of Cryptography",

@@ -34,6 +34,35 @@
             }
         },
         {
+            "name": "bucket_versioning_enabled",
+            "title": "Ensure S3 Buckets Have Versioning Enabled",
+            "result_kinds": [
+                "aws_s3_bucket"
+            ],
+            "categories": [
+                "security",
+                "compliance"
+            ],
+            "risk": "Without versioning, accidental deletions or overwrites of objects in an S3 bucket cannot be easily undone, leading to potential data loss. Enabling versioning allows for the recovery of previous versions of objects, thereby providing a fail-safe against unintended data modifications and deletions.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_s3_bucket) and bucket_versioning=false"
+            },
+            "remediation": {
+                "text": "Enable versioning on each S3 bucket by navigating to the Amazon S3 console, selecting the specific bucket, and modifying the bucket settings to enable versioning. This can also be achieved using the AWS CLI command: aws s3api put-bucket-versioning --bucket BUCKET-NAME --versioning-configuration Status=Enabled. Replace BUCKET-NAME with the name of your bucket.",
+                "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/manage-versioning-examples.html",
+                "complexity": "low"
+            },
+            "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html",
+            "localizations": {
+                "de": {
+                    "title": "Sicherstellen, dass Versionierung in S3-Buckets aktiviert ist",
+                    "risk": "Ohne Versionierung können versehentliche Löschungen oder Überschreibungen von Objekten in einem S3-Bucket nicht einfach rückgängig gemacht werden, was zu potenziellem Datenverlust führen kann. Die Aktivierung der Versionierung ermöglicht die Wiederherstellung früherer Versionen von Objekten und bietet so einen Schutz gegen unbeabsichtigte Datenänderungen und -löschungen.",
+                    "remediation": "Aktivieren Sie die Versionierung für jeden S3-Bucket, indem Sie zur Amazon S3-Konsole navigieren, den spezifischen Bucket auswählen und die Bucket-Einstellungen so ändern, dass die Versionierung aktiviert wird. Dies kann auch mit dem AWS CLI-Befehl erreicht werden: aws s3api put-bucket-versioning --bucket BUCKET-NAME --versioning-configuration Status=Enabled. Ersetzen Sie BUCKET-NAME mit dem Namen Ihres Buckets."
+                }
+            }
+        },
+        {
             "name": "bucket_no_mfa_delete",
             "title": "Ensure S3 Bucket MFA Delete Is Enabled",
             "result_kinds": [
@@ -162,7 +191,7 @@
             "risk": "Failure to enable the S3 Account Level Public Access Block may lead to potential unauthorized access to sensitive data stored in S3 buckets.",
             "severity": "high",
             "detect": {
-                "fix": "is(aws_s3_bucket) {account_setting: <-[0:]- is(aws_account) --> is(aws_s3_account_settings)} (bucket_public_access_block_configuration.block_public_acls==false and account_setting.reported.bucket_public_access_block_configuration.block_public_acls==false) or (bucket_public_access_block_configuration.ignore_public_acls==false and account_setting.reported.bucket_public_access_block_configuration.ignore_public_acls==false) or (bucket_public_access_block_configuration.block_public_policy==false and account_setting.reported.bucket_public_access_block_configuration.block_public_policy==false) or (bucket_public_access_block_configuration.restrict_public_buckets==false and account_setting.reported.bucket_public_access_block_configuration.restrict_public_buckets==false)"
+                "fix": "is(aws_s3_bucket) {account_setting: <-[0:]- is(aws_account) --> is(aws_s3_account_settings)} ((bucket_public_access_block_configuration.block_public_acls==false and account_setting.reported.bucket_public_access_block_configuration.block_public_acls==false) or (bucket_public_access_block_configuration.ignore_public_acls==false and account_setting.reported.bucket_public_access_block_configuration.ignore_public_acls==false) or (bucket_public_access_block_configuration.block_public_policy==false and account_setting.reported.bucket_public_access_block_configuration.block_public_policy==false) or (bucket_public_access_block_configuration.restrict_public_buckets==false and account_setting.reported.bucket_public_access_block_configuration.restrict_public_buckets==false))"
             },
             "remediation": {
                 "text": "To fix this issue, ensure you enable Public Access Block at the account level to prevent the exposure of your data stored in S3. Follow the instructions in the AWS documentation.",
@@ -235,6 +264,30 @@
                     "title": "Stellen Sie sicher, dass die Protokollierung von Objekten in S3-Buckets aktiviert ist, um bei AWS S3-Sicherheitsverstößen zu helfen",
                     "risk": "Die Aktivierung der Protokollierung von Objekten in S3-Buckets ist für die Sicherheit und Compliance entscheidend, da sie Audit Trails für den Zugriff und Änderungen an Objekten bereitstellt und hilft, unbefugten Zugriff oder Datenverstöße zu identifizieren.",
                     "remediation": "Um das Problem zu beheben, wählen Sie 'Bearbeiten', wählen Sie einen Zielspeicherort für die Protokolle aus, legen Sie bei Bedarf einen Präfix fest und speichern Sie die Änderungen ab."
+                }
+            }
+        },
+        {
+            "name": "bucket_is_zone_redundant",
+            "title": "Ensure S3 Buckets Have Zone-Redundancy",
+            "result_kinds": [ "aws_s3_bucket" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Storing critical data in S3 buckets without zone-redundancy exposes the data to higher risks of loss in the event of a zone outage. Zone-redundant storage classes like STANDARD, INTELLIGENT_TIERING, and STANDARD_IA enhance data durability by storing copies across multiple availability zones, crucial for maintaining business continuity and data integrity.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(aws_s3_bucket) and /usage.one_zone_ia_storage_bucket_size_bytes.avg >= 1"
+            },
+            "remediation": {
+                "text": "Review the storage class of objects in your S3 buckets using the AWS CloudWatch BucketSizeBytes metric to monitor storage types. For any buckets identified as using the ONEZONE_IA storage class, transition the objects to a zone-redundant storage class such as STANDARD or STANDARD_IA to improve data resilience and compliance with best practices.",
+                "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html#sc-howtoset",
+                "complexity": "medium"
+            },
+            "url": "https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html",
+            "localizations": {
+                "de": {
+                    "title": "Sicherstellen, dass S3-Buckets Zonen-Redundanz besitzen",
+                    "risk": "Die Speicherung kritischer Daten in S3-Buckets ohne Zonen-Redundanz erhöht das Risiko eines Datenverlusts bei einem Ausfall der Zone. Zonen-redundante Speicherklassen wie STANDARD, INTELLIGENT_TIERING und STANDARD_IA erhöhen die Datenhaltbarkeit, indem sie Kopien in mehreren Verfügbarkeitszonen speichern, was für die Aufrechterhaltung der Geschäftskontinuität und Datenintegrität entscheidend ist.",
+                    "remediation": "Überprüfen Sie die Speicherklassen der Objekte in Ihren S3-Buckets anhand der AWS CloudWatch-Metrik BucketSizeBytes, um die Speichertypen zu überwachen. Überführen Sie die Objekte in zonen-redundante Speicherklassen wie STANDARD oder STANDARD_IA für jeden Bucket, der als ONEZONE_IA identifiziert wird, um die Datenresilienz und die Einhaltung von Best Practices zu verbessern."
                 }
             }
         }
