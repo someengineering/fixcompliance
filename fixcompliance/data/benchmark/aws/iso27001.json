@@ -119,7 +119,8 @@
                         "description": "Regularly creates and tests backup copies of information, software, and systems to ensure data recovery and continuity.",
                         "checks": [
                             "aws_dynamodb_continuous_backup_enabled",
-                            "aws_rds_backup_enabled"
+                            "aws_rds_backup_enabled",
+                            "aws_redshift_retain_backup"
                         ]
                     },
                     {

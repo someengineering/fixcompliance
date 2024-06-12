@@ -112,6 +112,30 @@
                     "remediation": "Sie können die Verschlüsselung für neue Redshift-Cluster während ihrer Erstellung aktivieren, indem Sie die Verschlüsselungsoptionen in der AWS-Konsole oder über die AWS CLI angeben. Für bestehende Cluster muss die Verschlüsselung aktiviert werden, indem ein Snapshot erstellt, dieser mit aktivierter Verschlüsselung kopiert und anschließend der Cluster aus dem verschlüsselten Snapshot wiederhergestellt wird."
                 }
             }
+        },
+        {
+            "name": "retain_backup",
+            "title": "Ensure Redshift Clusters Retain Backups for at Least 7 Days",
+            "result_kinds": [ "aws_redshift_cluster" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Verify and adjust the backup retention settings of each Redshift cluster through the AWS Management Console or the AWS CLI, ensuring that the AutomatedSnapshotRetentionPeriod is set to at least 7 days for all clusters. Regularly review backup policies and retention settings to maintain alignment with organizational data protection standards.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_redshift_cluster) and redshift_automated_snapshot_retention_period<=7"
+            },
+            "remediation": {
+                "text": "To fix the issue, access the AWS Management Console and navigate to the Amazon Redshift console. Select the cluster you wish to configure, and under the “Configuration” tab, find the “Modify Cluster” button. In the modification settings, locate the AutomatedSnapshotRetentionPeriod and set it to a value of at least 7 days. Confirm and apply the changes. These steps can also be performed using the AWS CLI by executing the command: aws redshift modify-cluster --cluster-identifier <your-cluster-id> --automated-snapshot-retention-period 7. Replace <your-cluster-id> with the actual cluster identifier.",
+                "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/managing-clusters-console.html#modify-cluster",
+                "complexity": "low"
+            },
+            "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html",
+            "localizations": {
+                "de": {
+                    "title": "Sicherstellen, dass Redshift-Cluster Backups mindestens 7 Tage aufbewahren",
+                    "risk": "Das Nichtaufbewahren von Backups für einen ausreichenden Zeitraum setzt die Organisation dem Risiko eines Datenverlusts aus bei versehentlicher Löschung, Datenkorruption oder Katastrophenwiederherstellungsszenarien. Eine Mindestaufbewahrungsfrist von 7 Tagen wird empfohlen, um angemessene Wiederherstellungsoptionen zu ermöglichen.",
+                    "remediation": "Greifen Sie auf die AWS Management Console zu und navigieren Sie zur Amazon Redshift-Konsole. Wählen Sie den zu konfigurierenden Cluster aus und suchen Sie unter dem Tab „Konfiguration“ die Schaltfläche „Cluster ändern“. In den Änderungseinstellungen finden Sie die AutomatedSnapshotRetentionPeriod und setzen diese auf einen Wert von mindestens 7 Tagen. Bestätigen und wenden Sie die Änderungen an. Diese Schritte können auch über die AWS CLI ausgeführt werden, indem Sie den Befehl ausführen: aws redshift modify-cluster --cluster-identifier <Ihr-cluster-id> --automated-snapshot-retention-period 7. Ersetzen Sie <Ihr-cluster-id> mit dem tatsächlichen Cluster-Identifikator."
+                }
+            }
         }
     ]
 }
