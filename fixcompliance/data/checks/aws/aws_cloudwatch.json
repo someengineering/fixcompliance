@@ -92,21 +92,21 @@
             "title": "Ensure Log Metric Filters and Alarms Are Set for Disabling or Scheduled Deletion of Customer-Created KMS CMKs",
             "result_kinds": ["aws_account"],
             "categories": ["security"],
-            "risk": "Lack of monitoring for API calls related to the disabling or deletion of AWS KMS Customer Master Keys (CMKs) can leave unintended and malicious activities undetected. Effective monitoring not only helps in detecting unauthorized attempts to manipulate encryption keys, thereby protecting against potential data security breaches, but it also aids in identifying configuration errors that may lead to data exposure.",
+            "risk": "Lack of monitoring for API calls related to the disabling or deletion of AWS KMS Customer Managed Keys (CMKs) can leave unintended and malicious activities undetected. Effective monitoring not only helps in detecting unauthorized attempts to manipulate encryption keys, thereby protecting against potential data security breaches, but it also aids in identifying configuration errors that may lead to data exposure.",
             "severity": "medium",
             "detect": {
                 "fix": "is(aws_kms_key) and kms_key_manager=CUSTOMER <-[2]- is(account) with(empty, -[1:2]-> is(aws_cloudwatch_metric_filter) and filter_pattern~\"\\$\\.eventSource\\s*=\\s*kms\\.amazonaws\\.com.*(DisableKey.*ScheduleKeyDeletion|ScheduleKeyDeletion.*DisableKey)\" with(any, --> is(aws_cloudwatch_alarm)))"
             },
             "remediation": {
-                "text": "To safeguard against unauthorized disabling or deletion of AWS KMS Customer Master Keys (CMKs), configure CloudWatch log metric filters and alarms for these events. Set CloudTrail to log all management events, and use CloudWatch to alert on patterns indicating DisableKey or ScheduleKeyDeletion events. Regularly review logs and test alarms to ensure continuous protection and compliance.",
+                "text": "To safeguard against unauthorized disabling or deletion of AWS KMS Customer Managed Keys (CMKs), configure CloudWatch log metric filters and alarms for these events. Set CloudTrail to log all management events, and use CloudWatch to alert on patterns indicating DisableKey or ScheduleKeyDeletion events. Regularly review logs and test alarms to ensure continuous protection and compliance.",
                 "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html",
                 "complexity": "low"
             },
             "localizations": {
                 "de": {
                     "title": "Sicherstellen, dass Log-Metrikfilter und Alarme für das Deaktivieren oder planmäßige Löschen von benutzererstellten KMS-CMKs eingerichtet sind",
-                    "risk": "Das Fehlen von Überwachung für API-Aufrufe, die mit dem Deaktivieren oder Löschen von AWS KMS Customer Master Keys (CMKs) zusammenhängen, kann unbeabsichtigte und bösartige Aktivitäten unentdeckt lassen. Eine effektive Überwachung hilft nicht nur dabei, unbefugte Versuche zur Manipulation von Verschlüsselungsschlüsseln zu erkennen und somit potenzielle Sicherheitsverletzungen der Daten zu verhindern, sondern unterstützt auch bei der Identifizierung von Konfigurationsfehlern, die zu Datenexposition führen können.",
-                    "remediation": "Um sich gegen unbefugtes Deaktivieren oder Löschen von AWS KMS Customer Master Keys (CMKs) zu schützen, konfigurieren Sie CloudWatch-Log-Metrikfilter und Alarme für diese Ereignisse. Stellen Sie sicher, dass CloudTrail alle Managementereignisse protokolliert, und nutzen Sie CloudWatch, um auf Muster zu reagieren, die auf DisableKey oder ScheduleKeyDeletion hinweisen. Überprüfen Sie regelmäßig die Protokolle und testen Sie die Alarme, um kontinuierlichen Schutz und Compliance zu gewährleisten."
+                    "risk": "Das Fehlen von Überwachung für API-Aufrufe, die mit dem Deaktivieren oder Löschen von AWS KMS Customer Managed Keys (CMKs) zusammenhängen, kann unbeabsichtigte und bösartige Aktivitäten unentdeckt lassen. Eine effektive Überwachung hilft nicht nur dabei, unbefugte Versuche zur Manipulation von Verschlüsselungsschlüsseln zu erkennen und somit potenzielle Sicherheitsverletzungen der Daten zu verhindern, sondern unterstützt auch bei der Identifizierung von Konfigurationsfehlern, die zu Datenexposition führen können.",
+                    "remediation": "Um sich gegen unbefugtes Deaktivieren oder Löschen von AWS KMS Customer Managed Keys (CMKs) zu schützen, konfigurieren Sie CloudWatch-Log-Metrikfilter und Alarme für diese Ereignisse. Stellen Sie sicher, dass CloudTrail alle Managementereignisse protokolliert, und nutzen Sie CloudWatch, um auf Muster zu reagieren, die auf DisableKey oder ScheduleKeyDeletion hinweisen. Überprüfen Sie regelmäßig die Protokolle und testen Sie die Alarme, um kontinuierlichen Schutz und Compliance zu gewährleisten."
                 }
             }
         },

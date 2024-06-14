@@ -365,7 +365,7 @@
             "risk": "Inadequate configuration of Security Groups can significantly expand the attack surface, leaving vital resources vulnerable to unauthorized access and potential network intrusion.",
             "severity": "high",
             "detect": {
-                "fix": "is(aws_vpc) and vpc_in_use=true --> is(aws_ec2_security_group) and group_ip_permissions[*].{ip_protocol in [\"-1\", \"tcp\"] and from_port<=0 and to_port>=65535 and (ip_ranges[*].cidr_ip=\"0.0.0.0/0\" or ipv6_ranges[*].cidr_ipv6=\"::/0\")}"
+                "fix": "is(aws_vpc) and vpc_in_use=true --> is(aws_ec2_security_group) and group_ip_permissions[*].{ip_protocol in [\"-1\", \"tcp\"] and from_port==0 and to_port==65535 and (ip_ranges[*].cidr_ip=\"0.0.0.0/0\" or ipv6_ranges[*].cidr_ipv6=\"::/0\")}"
             },
             "remediation": {
                 "text": "Embrace the Zero Trust model. Consistently audit and rectify unrestricted or too lenient network Access Control Lists (ACLs). Ensure to define the minimum required ports with access to minimize potential breaches.",
@@ -389,7 +389,7 @@
             "risk": "An improperly configured security group can lead to exposure of all ports to the internet, vastly expanding the attack surface. Such positions can result in significant system vulnerability and potential breaches.",
             "severity": "high",
             "detect": {
-                "fix": "is(aws_vpc) and vpc_in_use=true --> is(aws_ec2_security_group) and group_ip_permissions[*].{ip_protocol in [\"-1\", \"tcp\"] and from_port<=0 and to_port>=65535 and ip_ranges[*].cidr_ip=\"0.0.0.0/0\"}"
+                "fix": "is(aws_vpc) and vpc_in_use=true --> is(aws_ec2_security_group) and group_ip_permissions[*].{ip_protocol in [\"-1\", \"tcp\"] and from_port==0 and to_port==65535 and ip_ranges[*].cidr_ip=\"0.0.0.0/0\"}"
             },
             "remediation": {
                 "text": "Adopt a Zero Trust network model. Implement regular scans and remediations for unrestricted or overly permissive network ACLs, and restrict ingress to minimum necessary ports. For outbound traffic, use whitelist approach to limit the exposed interfaces.",
@@ -413,7 +413,7 @@
             "risk": "A misconfigured security group, specifically allowing traffic from all IPv6 addresses (::/0) to any port, significantly widens your attack surface. This can lead to increased vulnerabilities, unwarranted access or potential data breaches.",
             "severity": "high",
             "detect": {
-                "fix": "is(aws_vpc) and vpc_in_use=true --> is(aws_ec2_security_group) and group_ip_permissions[*].{ip_protocol in [\"-1\", \"tcp\"] and from_port<=0 and to_port>=65535 and ipv6_ranges[*].cidr_ipv6=\"::/0\"}"
+                "fix": "is(aws_vpc) and vpc_in_use=true --> is(aws_ec2_security_group) and group_ip_permissions[*].{ip_protocol in [\"-1\", \"tcp\"] and from_port==0 and to_port==65535 and ipv6_ranges[*].cidr_ipv6=\"::/0\"}"
             },
             "remediation": {
                 "text": "Adapt a Zero Trust approach. Start by regularly auditing your security groups for overly permissive rules. Limit the traffic to the minimum required ports and restrict ingress from specific IP addresses or ranges.",
@@ -437,7 +437,7 @@
             "risk": "Improper configuration of Security groups can significantly increase the attack surface, potentially leading to unauthorized data access or system breaches.",
             "severity": "high",
             "detect": {
-                "fix": "is(aws_vpc) and vpc_in_use=true --> is(aws_ec2_security_group) and group_ip_permissions[*].{ip_protocol in [\"-1\", \"tcp\"] and (from_port<=27017 or to_port>=27018) and (ip_ranges[*].cidr_ip=\"0.0.0.0/0\" or ipv6_ranges[*].cidr_ipv6=\"::/0\")}"
+                "fix": "is(aws_vpc) and vpc_in_use=true --> is(aws_ec2_security_group) and group_ip_permissions[*].{ip_protocol in [\"-1\", \"tcp\"] and (from_port<=27017 and to_port>=27018) and (ip_ranges[*].cidr_ip=\"0.0.0.0/0\" or ipv6_ranges[*].cidr_ipv6=\"::/0\")}"
             },
             "remediation": {
                 "text": "Adopt a Zero Trust model. Regularly scan and rectify unrestricted or overly broad network acls. Best practice recommends defining the minimal necessary ports.",

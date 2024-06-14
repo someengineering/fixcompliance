@@ -89,7 +89,7 @@
             "risk": "Using outdated or weak SSL/TLS ciphers exposes transmitted data to increased risk of decryption and unauthorized access. Ensuring robust encryption practices are in place is essential to protect sensitive information from potential security breaches.",
             "severity": "medium",
             "detect": {
-                "fix": "is(aws_elb) and elb_listener_descriptions[*].{listener.protocol==HTTPS and policy_names[] all !=\"ELBSecurityPolicy-TLS-1-2-2017-01\"}"
+                "fix": "is(aws_elb) and elb_listener_descriptions[*].{listener.protocol==HTTPS and policy_names[] !=\"ELBSecurityPolicy-TLS-1-2-2017-01\"}"
             },
             "remediation": {
                 "text": "Update the SSL/TLS policies of your Elastic Load Balancers to include only secure cipher suites.",
