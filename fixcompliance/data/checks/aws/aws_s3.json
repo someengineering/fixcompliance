@@ -162,7 +162,7 @@
             "risk": "If the issue is not solved, non-intended users can put objects in a given bucket, leading to unauthorized data modifications or leaks.",
             "severity": "critical",
             "detect": {
-                "fix": "is(aws_s3_bucket) and (bucket_policy.Statement[*].{Effect==Allow and (Principal==\"*\" or Principal.AWS=\"*\" or Principal.CanonicalUser=\"*\") and (Action in [\"s3:PutObject\", \"s3:*\", \"*\"] or Action[*] in [\"s3:PutObject\", \"s3:*\", \"*\"])} or (bucket_acl.grants[*].{permission in [WRITE, WRITE_ACP, FULL_CONTROL] and grantee.uri = \"http://acs.amazonaws.com/groups/global/AllUsers\"})) and bucket_public_access_block_configuration.restrict_public_buckets!=true {account_access: <-[0:]- is(account) --> is(aws_s3_account_settings)} account_access.reported.bucket_public_access_block_configuration.restrict_public_buckets!=true"
+                "fix": "is(aws_s3_bucket) and (bucket_policy.Statement[*].{Effect==Allow and (Principal==\"*\" or Principal.AWS=\"*\" or Principal.CanonicalUser=\"*\") and (Action in [\"s3:PutObject\", \"s3:*\", \"*\"] or Action[*] in [\"s3:PutObject\", \"s3:*\", \"*\"])} or (bucket_acl.grants[*].{permission in [WRITE, WRITE_ACP, FULL_CONTROL] and grantee.uri = \"http://acs.amazonaws.com/groups/global/AllUsers\"})) and bucket_public_access_block_configuration.restrict_public_buckets!=true {account_access: <-- is(aws_s3_account_settings)} account_access.reported.bucket_public_access_block_configuration.restrict_public_buckets!=true"
             },
             "remediation": {
                 "text": "To fix the issue, ensure that a proper bucket policy is in place with the principle of least privilege applied.",
@@ -182,7 +182,7 @@
             "name": "account_level_public_access_blocks",
             "title": "Ensure S3 Account Level Public Access Block Is Enabled",
             "result_kinds": [
-                "aws_s3_bucket"
+                "aws_s3_account_settings"
             ],
             "categories": [
                 "security",
@@ -191,7 +191,7 @@
             "risk": "Failure to enable the S3 Account Level Public Access Block may lead to potential unauthorized access to sensitive data stored in S3 buckets.",
             "severity": "high",
             "detect": {
-                "fix": "is(aws_s3_bucket) {account_setting: <-[0:]- is(aws_account) --> is(aws_s3_account_settings)} ((bucket_public_access_block_configuration.block_public_acls==false and account_setting.reported.bucket_public_access_block_configuration.block_public_acls==false) or (bucket_public_access_block_configuration.ignore_public_acls==false and account_setting.reported.bucket_public_access_block_configuration.ignore_public_acls==false) or (bucket_public_access_block_configuration.block_public_policy==false and account_setting.reported.bucket_public_access_block_configuration.block_public_policy==false) or (bucket_public_access_block_configuration.restrict_public_buckets==false and account_setting.reported.bucket_public_access_block_configuration.restrict_public_buckets==false))"
+                "fix": "is(aws_s3_account_settings) and bucket_public_access_block_configuration.{restrict_public_buckets=false or ignore_public_acls=false or block_public_policy=false or block_public_acls=false}"
             },
             "remediation": {
                 "text": "To fix this issue, ensure you enable Public Access Block at the account level to prevent the exposure of your data stored in S3. Follow the instructions in the AWS documentation.",
