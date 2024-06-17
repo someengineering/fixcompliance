@@ -102,7 +102,6 @@
                                 "aws_iam_rotate_access_keys_after_90_days",
                                 "aws_iam_unused_access_keys",
                                 "aws_iam_user_has_two_active_access_keys",
-                                "aws_secretsmanager_secret_not_used_90d",
                                 "aws_secretsmanager_secret_not_changed_90d",
                                 "aws_secretsmanager_secret_not_used_90d",
                                 "aws_secretsmanager_secret_rotated_as_scheduled",
@@ -289,7 +288,6 @@
                             "title": "SEC04-BP02 Analyze logs, findings, and metrics centrally",
                             "description": "Security operations teams rely on the collection of logs and the use of search tools to discover potential events of interest, which might indicate unauthorized activity or unintentional change. However, simply analyzing collected data and manually processing information is insufficient to keep up with the volume of information flowing from complex architectures. Analysis and reporting alone don’t facilitate the assignment of the right resources to work an event in a timely fashion.",
                             "checks": [
-                                "aws_cloudtrail_logging_in_all_regions_enabled",
                                 "aws_rds_db_instance_cloudwatch_logs_enabled",
                                 "aws_ec2_vpc_flow_logs_enabled",
                                 "aws_wafv2_web_acl_logging_enabled",
@@ -302,7 +300,6 @@
                             "title": "SEC04-BP03 Automate response to events",
                             "description": "Using automation to investigate and remediate events reduces human effort and error, and allows you to scale investigation capabilities. Regular reviews will help you tune automation tools, and continuously iterate. In AWS, investigating events of interest and information on potentially unexpected changes into an automated workflow can be achieved using Amazon EventBridge. This service provides a scalable rules engine designed to broker both native AWS event formats (such as AWS CloudTrail events), as well as custom events you can generate from your application. Amazon GuardDuty also allows you to route events to a workflow system for those building incident response systems (AWS Step Functions), or to a central Security Account, or to a bucket for further analysis.",
                             "checks": [
-                                "aws_cloudtrail_logging_in_all_regions_enabled",
                                 "aws_cloudtrail_logging_in_all_regions_enabled",
                                 "aws_ec2_vpc_flow_logs_enabled",
                                 "aws_elb_logging_enabled",
@@ -359,7 +356,6 @@
                             "description": "Automate protection mechanisms to provide a self-defending network based on threat intelligence and anomaly detection. For example, intrusion detection and prevention tools that can adapt to current threats and reduce their impact. A web application firewall is an example of where you can automate network protection, for example, by using the AWS WAF Security Automations solution to automatically block requests originating from IP addresses associated with known threat actors.",
                             "checks": [
                                 "aws_ec2_allow_ingress_from_internet_to_any_port",
-                                "aws_ec2_allow_ingress_from_internet_to_port_mongodb_27017_27018",
                                 "aws_ec2_allow_ingress_from_internet_to_ssh_port_22",
                                 "aws_ec2_allow_ingress_from_internet_to_ftp_port_20_21",
                                 "aws_ec2_allow_ingress_from_internet_to_rdp_port_3389",
