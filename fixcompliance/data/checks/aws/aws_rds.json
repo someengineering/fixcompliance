@@ -195,7 +195,7 @@
                 "de": {
                     "title": "Sicherstellen, dass Backups für AWS RDS-Instanzen aktiviert sind",
                     "risk": "Der Betrieb von AWS RDS-Instanzen ohne aktivierte Backups birgt erhebliche Risiken eines Datenverlusts bei Systemausfällen, Datenkorruption oder Bedienfehlern. Ohne regelmäßige Backups ist eine Wiederherstellung der Daten auf einen früheren Zeitpunkt unmöglich, was zu schwerwiegenden Unterbrechungen des Geschäftsbetriebs und zum Verlust kritischer Daten führen kann.",
-                    "remediation": "Aktivieren Sie automatische Backups für alle AWS RDS-Instanzen, um die Datenhaltbarkeit und Wiederherstellbarkeit zu gewährleisten. Dies kann über die AWS Management Console oder die AWS CLI konfiguriert werden. Legen Sie eine geeignete Aufbewahrungsfrist für Backups fest und definieren Sie ein Backup-Fenster, das die Auswirkungen auf die Systemleistung minimiert."
+                    "remediation": "Aktivieren Sie automatische Backups für alle AWS RDS-Instanzen, um die Datenbeständigkeit und Wiederherstellbarkeit zu gewährleisten. Dies kann über die AWS Management Console oder die AWS CLI konfiguriert werden. Legen Sie eine geeignete Aufbewahrungsfrist für Backups fest und definieren Sie ein Backup-Fenster, das die Auswirkungen auf die Systemleistung minimiert."
                 }
             }
         },
