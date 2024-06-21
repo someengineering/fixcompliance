@@ -99,7 +99,7 @@
             },
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass Elastic Load Balancer keine unsicheren SSL-Ziffern verwenden",
+                    "title": "Stellen Sie sicher, dass Elastic Load Balancer keine unsicheren TLS-Chiffren verwenden",
                     "risk": "Die Verwendung veralteter oder schwacher SSL/TLS-Ziffern erhöht das Risiko, dass übertragene Daten entschlüsselt und unbefugt zugegriffen werden können. Es ist wesentlich, robuste Verschlüsselungspraktiken zu implementieren, um sensible Informationen vor potenziellen Sicherheitsverletzungen zu schützen.",
                     "remediation": "Aktualisieren Sie die SSL/TLS-Richtlinien Ihrer Elastic Load Balancer, um nur sichere Zifferngruppen einzuschließen."
                 }
