@@ -83,7 +83,7 @@
                 "de": {
                     "title": "Stellen Sie sicher, dass CloudWatch Log-Gruppen Daten für mindestens 365 Tage aufbewahren",
                     "risk": "Das Nichtvorhandensein einer Datenbewahrung von CloudWatch-Logs für mindestens 365 Tage kann zu Nichteinhaltung von Vorschriften für die langfristige Speicherung von Logs führen. Außerdem kann es die forensische Analyse und rückwirkende Erkennung von Sicherheitsverletzungen mit Langzeitmuster beeinträchtigen.",
-                    "remediation": "Legen Sie eine Protokollbewahrungspolitik von mindestens 365 Tagen für CloudWatch-Log-Gruppen fest. Dadurch wird die Fortführung von Protokollen und Traces sichergestellt, um bei Sicherheitsanalysen und regulatorischen Verpflichtungen zu helfen."
+                    "remediation": "Legen Sie eine Aufbewahrungsrichtlinie von mindestens 365 Tagen für CloudWatch-Log-Gruppen fest. Dadurch wird die Fortführung von Protokollen und Traces sichergestellt, um bei Sicherheitsanalysen und regulatorischen Verpflichtungen zu helfen."
                 }
             }
         },
