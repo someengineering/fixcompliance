@@ -168,7 +168,7 @@
                 "de": {
                     "title": "Sicherstellen, dass bei Aurora DB Cluster und Instanzen der Löschschutz aktiviert ist",
                     "risk": "Wenn Amazon Aurora DB Cluster und Instanzen ohne Löschschutz betrieben werden, kann dies zu unbeabsichtigten oder böswilligen Löschungen führen, was zu erheblichem Datenverlust und potenziellen Dienstunterbrechungen führen kann. Der Löschschutz ist entscheidend, um die unbefugte oder versehentliche Löschung von Datenbanken zu verhindern, was schwerwiegende Auswirkungen auf den Geschäftsbetrieb und die Datenintegrität haben könnte.",
-                    "remediation": "Aktivieren Sie den Löschschutz bei allen Aurora DB Clustern und Instanzen. Dies kann während der Erstellungsphase der Datenbank über die AWS Management Console erfolgen oder bei bestehenden Instanzen über die AWS CLI mit dem Befehl modify-db-instance und dem Parameter --deletion-protection auf true gesetzt werden. "
+                    "remediation": "Aktivieren Sie den Löschschutz bei allen Aurora DB Clustern und Instanzen. Dies kann während der Erstellungsphase der Datenbank über die AWS Management Console erfolgen oder bei bestehenden Instanzen über die AWS CLI mit dem Befehl modify-db-instance und dem Parameter --deletion-protection auf true gesetzt werden."
                 }
             }
         },
