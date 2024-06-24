@@ -15,7 +15,7 @@
             "risk": "Failure to enable AWS Config in all regions may result in the inability to capture the AWS configuration item history, leading to a lack of security analysis, resource change tracking, and compliance auditing.",
             "severity": "info",
             "detect": {
-                "fix": "is(aws_region) with(empty, --> is(aws_config_recorder) and recorder_status.recording=true and recorder_group.all_supported=true and recorder_status.last_status=SUCCESS)"
+                "fix": "is(aws_region) and region_in_use=true with(empty, --> is(aws_config_recorder) and recorder_status.recording=true and recorder_group.all_supported=true and recorder_status.last_status=SUCCESS)"
             },
             "remediation": {
                 "text": "To address this issue, it is recommended to enable AWS Config in all regions to ensure proper security analysis, resource change tracking, and compliance auditing.",
