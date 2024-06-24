@@ -6,7 +6,7 @@ from typing import Any
 from importlib.resources import files as resource_filename
 from pathlib import Path
 
-__version__ = "0.4.22"
+__version__ = "0.4.23"
 
 Json = dict[str, Any]
 CACHE_TIMEOUT = 3600
