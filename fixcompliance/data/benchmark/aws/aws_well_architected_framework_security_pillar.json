@@ -204,7 +204,7 @@
                                 "aws_dms_public_ip_address",
                                 "aws_ec2_unused_elastic_ip",
                                 "aws_ecr_repository_lifecycle_policy_enabled",
-                                "aws_elb_alb_has_no_listeners",
+                                "aws_elbv2_has_no_listeners",
                                 "aws_elb_elb_has_no_listeners",
                                 "aws_iam_password_policy_expire_90",
                                 "aws_iam_rotate_access_keys_after_90_days",
@@ -333,7 +333,7 @@
                                 "aws_sagemaker_model_vpc_settings_enabled",
                                 "aws_sagemaker_notebook_vpc_settings_enabled",
                                 "aws_sagemaker_training_job_vpc_settings_enabled",
-                                "aws_elb_waf_enabled"
+                                "aws_elbv2_waf_enabled"
                             ]
                         },
                         {
@@ -342,7 +342,7 @@
                             "checks": [
                                 "aws_apigateway_authorizers_enabled",
                                 "aws_dms_public_ip_address",
-                                "aws_ec2_default_restrict_traffic",
+                                "aws_ec2_default_security_group_restrict_traffic",
                                 "aws_ec2_public_ip_address",
                                 "aws_ec2_snapshot_encrypted",
                                 "aws_ec2_subnet_auto_assign_public_ip_disabled",
@@ -370,10 +370,10 @@
                                 "aws_ec2_allow_ingress_from_internet_to_redis_ports",
                                 "aws_ec2_allow_ingress_from_internet_to_sql_server_ports",
                                 "aws_ec2_allow_ingress_from_internet_to_telnet_ports",
-                                "aws_ec2_default_restrict_traffic",
+                                "aws_ec2_default_security_group_restrict_traffic",
                                 "aws_dms_public_ip_address",
                                 "aws_ec2_subnet_auto_assign_public_ip_disabled",
-                                "aws_elb_waf_enabled",
+                                "aws_elbv2_waf_enabled",
                                 "aws_apigateway_waf_acl_attached"
                             ]
                         },

@@ -25,9 +25,9 @@
             "url": "https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass die ECR-Bildscan beim Pushen aktiviert ist",
-                    "risk": "Ohne die Aktivierung des ECR-Bildscans beim Pushen können Software-Schwachstellen in Container-Bildern unentdeckt bleiben. Dadurch steigt das Risiko potenzieller Sicherheitsvorfälle. Der ECR-Bildscan liefert eine Liste von Scan-Ergebnissen, die auf der Common Vulnerabilities and Exposures (CVEs) Datenbank des Open-Source-Projekts Clair basieren.",
-                    "remediation": "Um dieses Problem zu beheben, aktivieren Sie den ECR-Bildscan und überprüfen Sie die Scan-Ergebnisse, um Informationen zur Sicherheit der bereitgestellten Container-Bilder zu erhalten."
+                    "title": "Stellen Sie sicher, dass ECR-Imagescan beim Pushen aktiviert ist",
+                    "risk": "Ohne die Aktivierung des ECR-Imagescans beim Pushen können Software-Schwachstellen in Container-Images unentdeckt bleiben. Dadurch steigt das Risiko potenzieller Sicherheitsvorfälle. Der ECR-Imagescan liefert eine Liste von Scan-Ergebnissen, die auf der Common Vulnerabilities and Exposures (CVEs) Datenbank des Open-Source-Projekts Clair basieren.",
+                    "remediation": "Um dieses Problem zu beheben, aktivieren Sie den ECR-Imagescan und überprüfen Sie die Scan-Ergebnisse, um Informationen zur Sicherheit der bereitgestellten Container-Images zu erhalten."
                 }
             }
         },

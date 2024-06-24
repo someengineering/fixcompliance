@@ -468,12 +468,12 @@
                     "title": "5.1 Ensure no Network ACLs allow ingress from 0.0.0.0/0 to remote server administration ports",
                     "description": "The Network Access Control List (NACL) function provide stateless filtering of ingress and egress network traffic to AWS resources. It is recommended that no NACL allows unrestricted ingress access to remote server administration ports, such as SSH to port 22 and RDP to port 3389.",
                     "checks": [
-                        "aws_ec2_allow_ingress_any_port_ipv4",
-                        "aws_ec2_allow_ingress_any_port_ipv6",
-                        "aws_ec2_allow_ingress_ssh_port_22_ipv4",
-                        "aws_ec2_allow_ingress_ssh_port_22_ipv6",
-                        "aws_ec2_allow_ingress_rdp_port_3389_ipv4",
-                        "aws_ec2_allow_ingress_rdp_port_3389_ipv6"
+                        "aws_ec2_acl_allow_ingress_any_port_ipv4",
+                        "aws_ec2_acl_allow_ingress_any_port_ipv6",
+                        "aws_ec2_acl_allow_ingress_ssh_port_22_ipv4",
+                        "aws_ec2_acl_allow_ingress_ssh_port_22_ipv6",
+                        "aws_ec2_acl_allow_ingress_rdp_port_3389_ipv4",
+                        "aws_ec2_acl_allow_ingress_rdp_port_3389_ipv6"
                     ]
                 },
                 {
@@ -498,7 +498,7 @@
                     "title": "5.4 Ensure the default security group of every VPC restricts all traffic",
                     "description": "A VPC comes with a default security group whose initial settings deny all inbound traffic, allow all outbound traffic, and allow all traffic between instances assigned to the security group. If you don't specify a security group when you launch an instance, the instance is automatically assigned to this default security group. Security groups provide stateful filtering of ingress/egress network traffic to AWS resources. It is recommended that the default security group restrict all traffic.",
                     "checks": [
-                        "aws_ec2_default_restrict_traffic"
+                        "aws_ec2_default_security_group_restrict_traffic"
                     ]
                 },
                 {

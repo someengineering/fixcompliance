@@ -6,7 +6,7 @@
             "name": "logging_in_all_regions_enabled",
             "title": "Ensure CloudTrail is Enabled and Set Up for Logging in All Regions",
             "result_kinds": [
-                "aws_region"
+                "aws_account"
             ],
             "categories": [
                 "security",
@@ -15,10 +15,10 @@
             "risk": "If CloudTrail is not enabled and set up for logging in all regions, critical information about API calls will not be recorded and delivered. This includes the identity of the API caller, the time of the API call, the source IP address of the API caller, the request parameters, and the response elements returned by the AWS service.",
             "severity": "high",
             "detect": {
-                "fix": "is(aws_region) with(empty, -[0:1]-> is(aws_cloud_trail) and trail_status.is_logging==true)"
+                "fix": "is(aws_account)  { region_not_logging: --> is(aws_region) with(empty, --> is(aws_cloud_trail) and trail_status.is_logging==true and trail_is_multi_region_trail==false), multi_region_trail: -[2]-> is(aws_cloud_trail) and trail_status.is_logging==true and trail_is_multi_region_trail==true} multi_region_trail==null and region_not_logging!=null"
             },
             "remediation": {
-                "text": "To fix this issue, ensure there is one trail in every region with logging enabled. Additionally, consider using multi-account/multi-region trails for your organization to enhance logging capabilities.",
+                "text": "To fix this issue, ensure there is one trail in every region with logging enabled or a multi-region trail for . Additionally, consider using multi-account/multi-region trails for your organization to enhance logging capabilities.",
                 "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrailconcepts.html#cloudtrail-concepts-management-events",
                 "complexity": "low"
             },
@@ -158,7 +158,7 @@
             "risk": "Failure to enable S3 bucket access logging on the CloudTrail S3 bucket can result in security breaches, hindered access audits, and limited understanding of Amazon S3 bill.",
             "severity": "medium",
             "detect": {
-                "fix": "is(aws_cloud_trail) --> is(aws_s3_bucket) and bucket_logging.target_bucket==null"
+                "fix": "is(aws_cloud_trail) with(any, --> is(aws_s3_bucket) and bucket_logging.target_bucket==null)"
             },
             "remediation": {
                 "text": "To fix this issue, ensure that S3 buckets have Logging enabled. If you are using CloudTrail data events, you can consider this finding a false positive.",

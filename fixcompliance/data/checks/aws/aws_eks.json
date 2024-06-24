@@ -87,6 +87,30 @@
                     "remediation": "Erstellen Sie einen Customer Master Key (CMK) im AWS Key Management Service (KMS). Geben Sie dann beim Erstellen eines neuen Amazon EKS-Clusters den Amazon Resource Name (ARN) dieses CMKs an."
                 }
             }
+        },
+        {
+            "name": "cluster_uses_a_supported_k8s_version",
+            "title": "Ensure EKS Clusters Use Supported Kubernetes Versions",
+            "result_kinds": [ "aws_eks_cluster" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Using unsupported Kubernetes versions in EKS clusters exposes your applications to potential security vulnerabilities, missed bug fixes, and compatibility issues with AWS services. Unsupported versions do not receive security patches or updates, increasing the risk of cyber-attacks and system failures.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_eks_cluster) and version in [\"1.26\", \"1.25\", \"1.24\", \"1.23\", \"1.22\", \"1.21\", \"1.20\", \"1.19\", \"1.18\", \"1.17\", \"1.16\", \"1.15\", \"1.14\", \"1.13\", \"1.12\", \"1.11\", \"1.10\"]"
+            },
+            "remediation": {
+                "text": "To mitigate this risk, regularly update your EKS clusters to a version of Kubernetes that is officially supported by AWS. Use the AWS Management Console or the AWS CLI to check and upgrade your cluster versions. Follow AWS best practices for updating Kubernetes versions to minimize downtime and ensure application stability.",
+                "url": "https://docs.aws.amazon.com/eks/latest/userguide/update-cluster.html",
+                "complexity": "medium"
+            },
+            "url": "https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass EKS-Cluster unterstützte Kubernetes-Versionen verwenden",
+                    "risk": "Die Verwendung nicht unterstützter Kubernetes-Versionen in EKS-Clustern setzt Ihre Anwendungen potenziellen Sicherheitsrisiken, ausbleibenden Fehlerkorrekturen und Kompatibilitätsproblemen mit AWS-Diensten aus. Nicht unterstützte Versionen erhalten keine Sicherheitspatches oder Updates, was das Risiko von Cyberangriffen und Systemausfällen erhöht.",
+                    "remediation": "Um dieses Risiko zu mindern, aktualisieren Sie Ihre EKS-Cluster regelmäßig auf eine von AWS offiziell unterstützte Kubernetes-Version. Verwenden Sie die AWS Management Console oder die AWS CLI, um Ihre Cluster-Versionen zu überprüfen und zu aktualisieren. Befolgen Sie die bewährten Verfahren von AWS für die Aktualisierung von Kubernetes-Versionen, um Ausfallzeiten zu minimieren und die Stabilität der Anwendung zu gewährleisten."
+                }
+            }
         }
     ]
 }
