@@ -922,7 +922,7 @@
             "risk": "By being highly selective in peering routing tables, the impact of a breach can be minimized as resources outside of these routes will be inaccessible to the peered VPC.",
             "severity": "medium",
             "detect": {
-                "fix_cmd": "search is(aws_vpc_peering_connection) {/vpc: <-- is(aws_vpc), /route_tables[]: <-- is(aws_vpc) --> is(aws_ec2_route_table)} | jq --no-rewrite 'if [.route_tables[]?.reported.route_table_routes[]? | select(.origin!=\"CreateRouteTable\") | (.destination_cidr_block==\"0.0.0.0/0\") or (.destination_cidr_block==.reported.connection_accepter_vpc_info.cidr_block) or (.destination_cidr_block==.reported.connection_requester_vpc_info.cidr_block)] | any then [.vpc] else [] end' | flatten"
+                "fix_cmd": "search is(aws_vpc_peering_connection) {/vpc: <-- is(aws_vpc), /route_tables[]: <-- is(aws_vpc) and vpc_in_use==true --> is(aws_ec2_route_table)} | jq --no-rewrite 'if [.route_tables[]?.reported.route_table_routes[]? | select(.origin!=\"CreateRouteTable\") | (.destination_cidr_block==\"0.0.0.0/0\") or (.destination_cidr_block==.reported.connection_accepter_vpc_info.cidr_block) or (.destination_cidr_block==.reported.connection_requester_vpc_info.cidr_block)] | any then [.vpc] else [] end' | flatten"
             },
             "remediation": {
                 "text": "To fix this issue, review the routing tables of the peered VPCs and determine whether they route all subnets of each VPC and whether such routing is necessary for the intended purposes of peering the VPCs.",
@@ -980,7 +980,7 @@
             "risk": "Failure to enable VPC Flow Logs may result in a lack of visibility into network traffic, making it difficult to detect and respond to anomalous activity, compromising security measures.",
             "severity": "medium",
             "detect": {
-                "fix": "is(aws_vpc) with(empty, --> is(aws_ec2_flow_log))"
+                "fix": "is(aws_vpc) and vpc_in_use==true with(empty, --> is(aws_ec2_flow_log))"
             },
             "remediation": {
                 "text": "To fix this issue, it is recommended to enable VPC Flow Logs for packet rejects in all VPCs.",

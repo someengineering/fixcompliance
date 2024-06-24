@@ -214,7 +214,7 @@
             "risk": "If Object-level logging is not enabled, monitoring of service use and threat analysis is not possible.",
             "severity": "low",
             "detect": {
-                "fix": "is(aws_region) with(empty, --> is(aws_cloud_trail) and trail_has_custom_event_selectors=true and (trail_event_selectors.event_selectors[*].{read_write_type in [All, WriteOnly] and data_resources[*].type=\"AWS::S3::Object\"} or trail_event_selectors.advanced_event_selectors[*].field_selectors[*].{selector_field==\"resources.type\" and equals[*]=\"AWS::S3::Object\"}))"
+                "fix": "is(aws_region) and region_in_use=true with(empty, --> is(aws_cloud_trail) and trail_has_custom_event_selectors=true and (trail_event_selectors.event_selectors[*].{read_write_type in [All, WriteOnly] and data_resources[*].type=\"AWS::S3::Object\"} or trail_event_selectors.advanced_event_selectors[*].field_selectors[*].{selector_field==\"resources.type\" and equals[*]=\"AWS::S3::Object\"}))"
             },
             "remediation": {
                 "text": "Enable Object-level logging for write events in CloudTrail. Create an S3 lifecycle policy. Define use cases, metrics, and automated responses where applicable.",
@@ -242,7 +242,7 @@
             "risk": "If Object-level logging for read events is not enabled in CloudTrail, monitoring of service use and threat analysis is not possible.",
             "severity": "low",
             "detect": {
-                "fix": "is(aws_region) with(empty, --> is(aws_cloud_trail) and trail_has_custom_event_selectors=true and (trail_event_selectors.event_selectors[*].{read_write_type in [All, ReadOnly] and data_resources[*].type=\"AWS::S3::Object\"} or trail_event_selectors.advanced_event_selectors[*].field_selectors[*].{selector_field==\"resources.type\" and equals[*]=\"AWS::S3::Object\"}))"
+                "fix": "is(aws_region) and region_in_use=true with(empty, --> is(aws_cloud_trail) and trail_has_custom_event_selectors=true and (trail_event_selectors.event_selectors[*].{read_write_type in [All, ReadOnly] and data_resources[*].type=\"AWS::S3::Object\"} or trail_event_selectors.advanced_event_selectors[*].field_selectors[*].{selector_field==\"resources.type\" and equals[*]=\"AWS::S3::Object\"}))"
             },
             "remediation": {
                 "text": "Enable Object-level logging for read events. Create an S3 lifecycle policy. Define use cases, metrics, and automated responses where applicable.",
@@ -270,7 +270,7 @@
             "risk": "If logs are not enabled, it will not be possible to monitor service use and perform threat analysis.",
             "severity": "low",
             "detect": {
-                "fix": "is(aws_region) with(empty, --> is(aws_cloud_trail) and trail_has_custom_event_selectors=true and (trail_event_selectors.event_selectors[*].{data_resources[*].type=\"AWS::Lambda::Function\"} or trail_event_selectors.advanced_event_selectors[*].field_selectors[*].{selector_field==\"resources.type\" and equals[*]=\"AWS::Lambda::Function\"}))"
+                "fix": "is(aws_region) and region_in_use=true with(empty, --> is(aws_cloud_trail) and trail_has_custom_event_selectors=true and (trail_event_selectors.event_selectors[*].{data_resources[*].type=\"AWS::Lambda::Function\"} or trail_event_selectors.advanced_event_selectors[*].field_selectors[*].{selector_field==\"resources.type\" and equals[*]=\"AWS::Lambda::Function\"}))"
             },
             "remediation": {
                 "text": "To fix this issue, enable logging and create an S3 lifecycle policy. Make sure to define use cases, metrics, and automated responses as applicable.",
