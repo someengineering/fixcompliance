@@ -1,6 +1,6 @@
 [project]
 name = "fixcompliance"
-version = "0.4.24"
+version = "0.4.25"
 authors = [
     { name = "Some Engineering Inc." },
 ]
