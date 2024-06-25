@@ -1246,7 +1246,7 @@
             "risk": "Disabling auto-assign public IP in subnets is crucial for security as it reduces the exposure of instances to the public internet, minimizing the risk of external attacks. This setting helps control the network accessibility of EC2 instances and maintain a secure environment within the VPC.",
             "severity": "medium",
             "detect": {
-                "fix": "is(aws_ec2_subnet) and subnet_map_public_ip_on_launch=true"
+                "fix": "is(aws_ec2_subnet) and subnet_map_public_ip_on_launch=true with(any, <-- is(aws_vpc) and vpc_in_use==true)"
             },
             "remediation": {
                 "text": "To fix this issue, select the subnet, click 'Actions', then 'Modify auto-assign IP settings', uncheck 'Auto-assign IPv4', and save.",
