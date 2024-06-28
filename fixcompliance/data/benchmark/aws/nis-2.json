@@ -1,0 +1,269 @@
+{
+    "children": [
+        {
+            "title": "CHAPTER I: General Provisions",
+            "children": [
+                {
+                    "title": "Article 1: Subject Matter",
+                    "description": "Not automated. Defines the purpose of the directive."
+                },
+                {
+                    "title": "Article 2: Scope",
+                    "description": "Not automated. Outlines the scope of application."
+                },
+                {
+                    "title": "Article 3: Essential and important entities",
+                    "description": "Not automated. Defines entities covered by the directive."
+                },
+                {
+                    "title": "Article 4: Sector-specific Union legal acts",
+                    "description": "Not automated. References to other relevant EU laws."
+                },
+                {
+                    "title": "Article 5: Minimum harmonisation",
+                    "description": "Not automated. Sets baseline for member state implementation."
+                },
+                {
+                    "title": "Article 6: Definitions",
+                    "description": "Not automated. Provides key terms and definitions."
+                }
+            ]
+        },
+        {
+            "title": "CHAPTER II: Coordinated Cybersecurity Frameworks",
+            "children": [
+                {
+                    "title": "Article 7: National cybersecurity strategy",
+                    "description": "Not automated. Requires member states to adopt national strategies."
+                },
+                {
+                    "title": "Article 8: Competent authorities and single points of contact",
+                    "description": "Not automated. Designates national authorities."
+                },
+                {
+                    "title": "Article 9: National cyber crisis management frameworks",
+                    "description": "Not automated. Establishes national crisis management frameworks."
+                },
+                {
+                    "title": "Article 10: Computer security incident response teams (CSIRTs)",
+                    "description": "Not automated. Establishes national CSIRTs."
+                },
+                {
+                    "title": "Article 11: Requirements, technical capabilities and tasks of CSIRTs",
+                    "description": "TODO: Incident detection systems\nSecure communication channels\nMonitoring tools for critical infrastructure",
+                    "checks": [
+                        "aws_cloudtrail_logging_in_all_regions_enabled",
+                        "aws_config_enabled_in_all_regions",
+                        "aws_cloudwatch_changes_to_vpcs_alarm_configured"
+                    ]
+                },
+                {
+                    "title": "Article 12: Coordinated vulnerability disclosure and a European vulnerability database",
+                    "description": "Not automated. Establishes vulnerability disclosure processes."
+                },
+                {
+                    "title": "Article 13: Cooperation at national level",
+                    "description": "Not automated. Promotes national-level cooperation."
+                }
+            ]
+        },
+        {
+            "title": "CHAPTER III: Cooperation At Union And International Level",
+            "children": [
+                {
+                    "title": "Article 14: Cooperation Group",
+                    "description": "Not automated. Establishes EU-level cooperation group."
+                },
+                {
+                    "title": "Article 15: CSIRTs network",
+                    "description": "Not automated. Creates network of national CSIRTs."
+                },
+                {
+                    "title": "Article 16: European cyber crisis liaison organisation network (EU-CyCLONe)",
+                    "description": "Not automated. Establishes EU-level crisis response network."
+                },
+                {
+                    "title": "Article 17: International Cooperation",
+                    "description": "Not automated. Promotes international cooperation."
+                },
+                {
+                    "title": "Article 18: Report on the state of cybersecurity in the Union",
+                    "description": "Not automated. Requires periodic EU-wide cybersecurity reports."
+                },
+                {
+                    "title": "Article 19: Peer reviews",
+                    "description": "Not automated. Establishes peer review mechanism."
+                }
+            ]
+        },
+        {
+            "title": "CHAPTER IV: Cybersecurity Risk-Management Measures And Reporting Obligations",
+            "children": [
+                {
+                    "title": "Article 20: Governance",
+                    "description": "Existence and implementation of cybersecurity policies\nRegular risk assessments\nManagement involvement in cybersecurity decisions",
+                    "checks": [
+                        "aws_iam_account_maintain_current_contact_details",
+                        "aws_iam_account_security_contact_information_is_registered"
+                    ]
+                },
+                {
+                    "title": "Article 21: Cybersecurity risk-management measures",
+                    "description": "Network security measures\nAccess control systems\nEncryption implementation\nPatch management processes\nBackup and recovery systems\nVulnerability management\nSecurity monitoring and logging",
+                    "checks": [
+                        "aws_ec2_allow_ingress_from_internet_to_any_port",
+                        "aws_ec2_default_security_group_restrict_traffic",
+                        "aws_iam_avoid_root_usage",
+                        "aws_iam_password_policy_expire_90",
+                        "aws_iam_root_mfa_enabled",
+                        "aws_cloudtrail_uses_encryption_at_rest",
+                        "aws_s3_bucket_default_encryption",
+                        "aws_rds_storage_encrypted",
+                        "aws_dynamodb_continuous_backup_enabled",
+                        "aws_s3_bucket_versioning_enabled",
+                        "aws_rds_backup_enabled",
+                        "aws_rds_multi_az_enabled",
+                        "aws_s3_bucket_is_zone_redundant",
+                        "aws_elbv2_waf_enabled",
+                        "aws_cloudfront_distribution_waf_enabled",
+                        "aws_rds_auto_minor_version_upgrade"
+                    ]
+                },
+                {
+                    "title": "Article 22: Union level coordinated security risk assessments of critical supply chains",
+                    "description": "Not automated. Establishes EU-level supply chain risk assessments."
+                },
+                {
+                    "title": "Article 23: Reporting obligations",
+                    "description": "Incident detection capabilities\nReporting mechanisms\nTimeliness of incident reporting",
+                    "checks": [
+                        "aws_cloudtrail_logging_in_all_regions_enabled",
+                        "aws_config_enabled_in_all_regions",
+                        "aws_cloudwatch_changes_to_vpcs_alarm_configured"
+                    ]
+                },
+                {
+                    "title": "Article 24: Use of European cybersecurity certification schemes",
+                    "description": "Not automated. Promotes use of EU certification schemes."
+                },
+                {
+                    "title": "Article 25: Standardisation",
+                    "description": "Not automated. Promotes use of relevant standards."
+                }
+            ]
+        },
+        {
+            "title": "CHAPTER V: Jurisdiction And Registration",
+            "children": [
+                {
+                    "title": "Article 26: Jurisdiction and territoriality",
+                    "description": "Not automated. Defines jurisdictional scope."
+                },
+                {
+                    "title": "Article 27: Registry of entities",
+                    "description": "Not automated. Requires registry of covered entities."
+                },
+                {
+                    "title": "Article 28: Database of domain name registration data",
+                    "description": "Not automated. Establishes domain registration database."
+                }
+            ]
+        },
+        {
+            "title": "CHAPTER VI: Information Sharing",
+            "children": [
+                {
+                    "title": "Article 29: Cybersecurity information-sharing arrangements",
+                    "description": "Not automated. Promotes information sharing arrangements."
+                },
+                {
+                    "title": "Article 30: Voluntary notification of relevant information",
+                    "description": "Not automated. Allows voluntary incident reporting."
+                }
+            ]
+        },
+        {
+            "title": "CHAPTER VII: Supervision And Enforcement",
+            "children": [
+                {
+                    "title": "Article 31: General aspects concerning supervision and enforcement",
+                    "description": "Not automated. Outlines supervision and enforcement principles."
+                },
+                {
+                    "title": "Article 32: Supervisory and enforcement measures in relation to essential entities",
+                    "description": "Not automated. Defines measures for essential entities."
+                },
+                {
+                    "title": "Article 33: Supervisory and enforcement measures in relation to important entities",
+                    "description": "Not automated. Defines measures for important entities."
+                },
+                {
+                    "title": "Article 34: General conditions for imposing administrative fines on essential and important entities",
+                    "description": "Not automated. Sets conditions for administrative fines."
+                },
+                {
+                    "title": "Article 35: Infringements entailing a personal data breach",
+                    "description": "Not automated. Addresses personal data breach infringements."
+                },
+                {
+                    "title": "Article 36: Penalties",
+                    "description": "Not automated. Establishes penalties for non-compliance."
+                },
+                {
+                    "title": "Article 37: Mutual assistance",
+                    "description": "Not automated. Promotes mutual assistance between member states."
+                }
+            ]
+        },
+        {
+            "title": "CHAPTER VIII: Delegated And Implementing Acts",
+            "children": [
+                {
+                    "title": "Article 38: Exercise of the delegation",
+                    "description": "Not automated. Defines delegation of powers to the Commission."
+                },
+                {
+                    "title": "Article 39: Committee procedure",
+                    "description": "Not automated. Establishes committee procedures."
+                }
+            ]
+        },
+        {
+            "title": "CHAPTER IX: FINAL PROVISIONS",
+            "children": [
+                {
+                    "title": "Article 40: Review",
+                    "description": "Not automated. Requires periodic review of the directive."
+                },
+                {
+                    "title": "Article 41: Transposition",
+                    "description": "Not automated. Sets timeline for national implementation."
+                },
+                {
+                    "title": "Article 42: Amendment of Regulation (EU) No 910/2014",
+                    "description": "Not automated. Amends related EU regulation."
+                },
+                {
+                    "title": "Article 43: Amendment of Directive (EU) 2018/1972",
+                    "description": "Not automated. Amends related EU directive."
+                },
+                {
+                    "title": "Article 44: Repeal",
+                    "description": "Not automated. Repeals previous NIS directive."
+                },
+                {
+                    "title": "Article 45: Entry into force",
+                    "description": "Not automated. Sets date for directive to take effect."
+                },
+                {
+                    "title": "Article 46: Addressees",
+                    "description": "Not automated. Specifies to whom the directive is addressed."
+                }
+            ]
+        }
+    ],
+    "description": "Structure of the Network and Information Systems (NIS) 2 Directive, with relevant automated checks mapped from ISO 27001.",
+    "framework": "NIS",
+    "title": "NIS-2 EU Directive",
+    "version": "2 (2022/2555)"
+}
