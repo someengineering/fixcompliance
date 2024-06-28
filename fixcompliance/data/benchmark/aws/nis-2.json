@@ -58,9 +58,10 @@
                     "checks": [
                         "aws_cloudtrail_logging_in_all_regions_enabled",
                         "aws_config_enabled_in_all_regions",
-                        "aws_cloudwatch_changes_to_vpcs_alarm_configured"
+                        "aws_cloudwatch_changes_to_vpcs_alarm_configured",
+                        "aws_iam_guardduty_enabled",
+                        "aws_ec2_vpc_flow_logs_enabled"
                     ]
-
                 },
                 {
                     "title": "Article 12: Coordinated vulnerability disclosure and a European vulnerability database",
@@ -109,9 +110,9 @@
                     "description": "Requires entities to have governance policies addressing cybersecurity risk management and incident reporting.",
                     "checks": [
                         "aws_iam_account_maintain_current_contact_details",
-                        "aws_iam_account_security_contact_information_is_registered"
+                        "aws_iam_account_security_contact_information_is_registered",
+                        "aws_organizations_account_part_of_organizations"
                     ]
-
                 },
                 {
                     "title": "Article 21: Cybersecurity risk-management measures",
@@ -132,9 +133,11 @@
                         "aws_s3_bucket_is_zone_redundant",
                         "aws_elbv2_waf_enabled",
                         "aws_cloudfront_distribution_waf_enabled",
-                        "aws_rds_auto_minor_version_upgrade"
+                        "aws_rds_auto_minor_version_upgrade",
+                        "aws_ec2_instance_managed_by_ssm",
+                        "aws_ecr_image_scan_on_push",
+                        "aws_kms_cmk_policy_prohibit_public_access"
                     ]
-
                 },
                 {
                     "title": "Article 22: Union level coordinated security risk assessments of critical supply chains",
@@ -146,9 +149,9 @@
                     "checks": [
                         "aws_cloudtrail_logging_in_all_regions_enabled",
                         "aws_config_enabled_in_all_regions",
-                        "aws_cloudwatch_changes_to_vpcs_alarm_configured"
+                        "aws_cloudwatch_changes_to_vpcs_alarm_configured",
+                        "aws_ec2_vpc_flow_logs_enabled"
                     ]
-
                 },
                 {
                     "title": "Article 24: Use of European cybersecurity certification schemes",
