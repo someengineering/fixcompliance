@@ -1,7 +1,7 @@
 {
     "framework": "NIS",
-    "title": "NIS-2 EU Directive",
-    "version": "2 (2022/2555)",
+    "title": "NIS-2",
+    "version": "2022/2555",
     "description": "The NIS-2 Directive, officially known as Directive (EU) 2022/2555, aims to establish a high common level of cybersecurity across the European Union by enhancing the existing legal framework on network and information systems security. \n\nThe directive mandates that Member States adopt national cybersecurity strategies, establish designated authorities, and develop incident response teams (CSIRTs). It emphasizes the importance of risk management measures, incident reporting, and information sharing both within Member States and across the EU. To support these efforts, the directive outlines structured cooperation frameworks, including the establishment of a Cooperation Group and networks for CSIRTs and other operational entities to enhance coordination and response to cyber threats and incidents.\n\n The NIS-2 Directive emphasizes placing cybersecurity at the core of organizational strategies across the EU, requiring entities to integrate robust technical and organizational measures. While certain aspects like monitoring infrastructures can be automated, the directive extensively covers processes and communication that must be managed at the organizational level. These include developing governance frameworks, training staff, and enhancing incident response capabilities, underscoring that effective cybersecurity is not just about technology but also about cultivating a culture of security awareness and responsiveness that automation alone cannot achieve.",
     "children": [
         {
