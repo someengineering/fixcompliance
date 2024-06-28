@@ -2,7 +2,7 @@
     "framework": "NIS",
     "title": "NIS-2",
     "version": "2022/2555",
-    "description": "The NIS-2 Directive aims to significantly raise the level of cybersecurity across the EU by mandating enhanced measures, expanded scopes, and stricter compliance requirements for essential and important entities.",
+    "description": "The NIS-2 Directive aims to significantly raise the level of cybersecurity across the EU by mandating enhanced measures, expanded scopes, and stricter compliance requirements for essential and important entities.\n\nThe NIS-2 Directive emphasizes placing cybersecurity at the core of organizational strategies across the EU, requiring entities to integrate robust technical and organizational measures. While certain aspects like monitoring infrastructures can be automated, the directive extensively covers processes and communication that must be managed at the organizational level. These include developing governance frameworks, training staff, and enhancing incident response capabilities, underscoring that effective cybersecurity is not just about technology but also about cultivating a culture of security awareness and responsiveness that automation alone cannot achieve.",
     "clouds": ["aws"],
     "children": [
         {
