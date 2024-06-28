@@ -57,10 +57,14 @@
                     "description": "Details the capabilities and responsibilities of CSIRTs, including monitoring, reporting, and responding to cybersecurity incidents.",
                     "checks": [
                         "aws_cloudtrail_logging_in_all_regions_enabled",
-                        "aws_config_enabled_in_all_regions",
+                        "aws_cloudwatch_changes_to_internet_gateway_alarm_configured",
+                        "aws_cloudwatch_changes_to_network_acl_alarm_configured",
+                        "aws_cloudwatch_changes_to_route_table_alarm_configured",
+                        "aws_cloudwatch_changes_to_s3_bucket_policy_alarm_configured",
                         "aws_cloudwatch_changes_to_vpcs_alarm_configured",
-                        "aws_iam_guardduty_enabled",
-                        "aws_ec2_vpc_flow_logs_enabled"
+                        "aws_config_enabled_in_all_regions",
+                        "aws_ec2_vpc_flow_logs_enabled",
+                        "aws_iam_guardduty_enabled"
                     ]
                 },
                 {
@@ -111,6 +115,10 @@
                     "checks": [
                         "aws_iam_account_maintain_current_contact_details",
                         "aws_iam_account_security_contact_information_is_registered",
+                        "aws_iam_disable_old_credentials",
+                        "aws_iam_policy_attached_only_to_group_or_roles",
+                        "aws_iam_rotate_access_keys_after_90_days",
+                        "aws_iam_unused_access_keys",
                         "aws_organizations_account_part_of_organizations"
                     ]
                 },
@@ -118,25 +126,46 @@
                     "title": "Article 21: Cybersecurity risk-management measures",
                     "description": "Defines specific technical and organizational measures that entities must implement to manage cybersecurity risks.",
                     "checks": [
+                        "aws_cloudfront_distribution_waf_enabled",
+                        "aws_cloudtrail_logs_s3_bucket_is_not_publicly_accessible",
+                        "aws_cloudtrail_uses_encryption_at_rest",
+                        "aws_dynamodb_continuous_backup_enabled",
+                        "aws_dynamodb_table_kms_encryption_enabled",
                         "aws_ec2_allow_ingress_from_internet_to_any_port",
                         "aws_ec2_default_security_group_restrict_traffic",
+                        "aws_ec2_instance_managed_by_ssm",
+                        "aws_ec2_snapshot_encrypted",
+                        "aws_ec2_volume_not_encrypted",
+                        "aws_ecr_image_scan_on_push",
+                        "aws_efs_storage_encrypted",
+                        "aws_eks_cluster_uses_a_supported_k8s_version",
+                        "aws_elasticache_encryption_at_rest_enabled",
+                        "aws_elb_insecure_ssl_ciphers",
+                        "aws_elbv2_insecure_ssl_ciphers",
+                        "aws_elbv2_waf_enabled",
                         "aws_iam_avoid_root_usage",
                         "aws_iam_password_policy_expire_90",
+                        "aws_iam_password_policy_lowercase",
+                        "aws_iam_password_policy_minimum_length_14",
+                        "aws_iam_password_policy_number",
+                        "aws_iam_password_policy_reuse_24",
+                        "aws_iam_password_policy_symbol",
+                        "aws_iam_password_policy_uppercase",
                         "aws_iam_root_mfa_enabled",
-                        "aws_cloudtrail_uses_encryption_at_rest",
-                        "aws_s3_bucket_default_encryption",
-                        "aws_rds_storage_encrypted",
-                        "aws_dynamodb_continuous_backup_enabled",
-                        "aws_s3_bucket_versioning_enabled",
-                        "aws_rds_backup_enabled",
-                        "aws_rds_multi_az_enabled",
-                        "aws_s3_bucket_is_zone_redundant",
-                        "aws_elbv2_waf_enabled",
-                        "aws_cloudfront_distribution_waf_enabled",
+                        "aws_iam_user_mfa_enabled_console_access",
+                        "aws_kms_cmk_policy_prohibit_public_access",
                         "aws_rds_auto_minor_version_upgrade",
-                        "aws_ec2_instance_managed_by_ssm",
-                        "aws_ecr_image_scan_on_push",
-                        "aws_kms_cmk_policy_prohibit_public_access"
+                        "aws_rds_backup_enabled",
+                        "aws_rds_deletion_protection_enabled",
+                        "aws_rds_multi_az_enabled",
+                        "aws_rds_no_public_access",
+                        "aws_rds_snapshot_not_public",
+                        "aws_rds_storage_encrypted",
+                        "aws_redshift_cluster_encrypted",
+                        "aws_s3_bucket_default_encryption",
+                        "aws_s3_bucket_is_zone_redundant",
+                        "aws_s3_bucket_versioning_enabled",
+                        "aws_sns_encryption_at_rest_enabled"
                     ]
                 },
                 {
@@ -148,8 +177,10 @@
                     "description": "Details reporting obligations for incidents, providing timelines and procedures for notifying national authorities.",
                     "checks": [
                         "aws_cloudtrail_logging_in_all_regions_enabled",
-                        "aws_config_enabled_in_all_regions",
+                        "aws_cloudtrail_no_recent_log_event",
+                        "aws_cloudtrail_s3_bucket_logging_enabled",
                         "aws_cloudwatch_changes_to_vpcs_alarm_configured",
+                        "aws_config_enabled_in_all_regions",
                         "aws_ec2_vpc_flow_logs_enabled"
                     ]
                 },
