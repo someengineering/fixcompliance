@@ -6,7 +6,7 @@
     "clouds": ["aws"],
     "children": [
         {
-            "title": "CHAPTER I: General Provisions",
+            "title": "Chapter I: General Provisions",
             "description": "Sets out the directive's objectives, scope, and definitions, establishing the foundation for enhancing cybersecurity across all Member States.",
             "children": [
                 {
@@ -36,7 +36,7 @@
             ]
         },
         {
-            "title": "CHAPTER II: Coordinated Cybersecurity Frameworks",
+            "title": "Chapter II: Coordinated Cybersecurity Frameworks",
             "description": "Discusses the frameworks for national cybersecurity strategies, competent authorities, CSIRTs, and collaboration mechanisms among Member States.",
             "children": [
                 {
@@ -81,7 +81,7 @@
             ]
         },
         {
-            "title": "CHAPTER III: Cooperation At Union And International Level",
+            "title": "Chapter III: Cooperation At Union And International Level",
             "description": "Focuses on enhancing strategic and operational cooperation at the EU level and with international partners to improve cybersecurity resilience.",
             "children": [
                 {
@@ -111,7 +111,7 @@
             ]
         },
         {
-            "title": "CHAPTER IV: Cybersecurity Risk-Management Measures And Reporting Obligations",
+            "title": "Chapter IV: Cybersecurity Risk-Management Measures And Reporting Obligations",
             "description": "Details the obligations for entities to implement risk management measures and report cybersecurity incidents, promoting a proactive cybersecurity posture.",
             "children": [
                 {
@@ -200,7 +200,7 @@
             ]
         },
         {
-            "title": "CHAPTER V: Jurisdiction And Registration",
+            "title": "Chapter V: Jurisdiction And Registration",
             "description": "Clarifies the jurisdictional aspects and registration requirements for entities under the directive, ensuring clear lines of regulatory responsibility.",
             "children": [
                 {
@@ -218,7 +218,7 @@
             ]
         },
         {
-            "title": "CHAPTER VI: Information Sharing",
+            "title": "Chapter VI: Information Sharing",
             "description": "Encourages robust information-sharing practices between entities and national authorities to improve collective cybersecurity intelligence and response capabilities.",
             "children": [
                 {
@@ -232,7 +232,7 @@
             ]
         },
         {
-            "title": "CHAPTER VII: SUPERVISION AND ENFORCEMENT",
+            "title": "Chapter VII: Supervision And Enforcement",
             "description": "Outlines the supervisory and enforcement mechanisms to ensure compliance with the directive, detailing the measures and penalties for non-compliance.",
             "children": [
                 {
@@ -266,7 +266,7 @@
             ]
         },
         {
-            "title": "CHAPTER VIII: DELEGATED AND IMPLEMENTING ACTS",
+            "title": "Chapter VIII: Delegated And Implementing Acts",
             "description": "Describes the procedural framework for the Commission to adopt delegated and implementing acts to ensure the directive's effective implementation and adaptability over time.",
             "children": [
                 {
@@ -280,7 +280,7 @@
             ]
         },
         {
-            "title": "CHAPTER IX: FINAL PROVISIONS",
+            "title": "Chapter IX: Final Provisions",
             "description": "Concludes the directive with final provisions on review, transposition, amendments, repeal, entry into force, and addresses, setting the framework for implementation and future evaluations.",
             "children": [
                 {
