@@ -1,0 +1,156 @@
+{
+    "framework": "CIS",
+    "title": "Azure CIS 2.1",
+    "version": "2.1",
+    "description": "The CIS Microsoft Azure Foundations Benchmark version 2.1 offers a comprehensive set of security guidelines for configuring Microsoft Azure environments. It aims to establish a robust baseline of security measures suitable for anyone utilizing Azure Cloud services. This document provides actionable recommendations to ensure the security of deployed Azure services, though additional, site-specific tailoring might be necessary.",
+    "clouds": ["azure"],
+    "children": [
+        {
+            "title": "1 Identity and Access Management",
+            "description": "Identity and Access Management (IAM) within Azure plays a pivotal role in securing cloud resources. The guidelines provided here focus on the necessity of enforcing strong identity verification methods. Detailed recommendations encourage the use of Multi-Factor Authentication (MFA) and Conditional Access policies to safeguard access to Azure resources, promoting a defense-in-depth security posture for cloud-based assets.",
+            "children": [
+                {
+                    "title": "1.1 Security Defaults",
+                    "description": "Security Defaults in Azure are designed to provide a simple activation of basic security settings that safeguard against common attacks. These defaults are essential for organizations that are either new to Azure or those with minimal requirements, ensuring foundational security without additional cost.",
+                    "checks": [
+                        "azure_entra_security_defaults_enabled",
+                        "azure_entra_mfa_status_enabled_privileged_users",
+                        "azure_entra_mfa_status_enabled_non_privileged_users",
+                        "azure_entra_disable_mfa_remember_trusted_devices"
+                    ]
+                },
+                {
+                    "title": "1.2 Conditional Access",
+                    "description": "Conditional Access policies are critical for adapting security settings based on the context of user sign-ins. This section discusses the importance of establishing policies that limit user access based on specific conditions such as user location, device state, and sign-in risk levels, enhancing security for Azure environments.",
+                    "checks": [
+                        "azure_entra_trusted_named_locations_configured",
+                        "azure_entra_exclusionary_geographic_access_policy",
+                        "azure_entra_mfa_policy_for_admin_groups",
+                        "azure_entra_mfa_policy_for_all_users",
+                        "azure_entra_mfa_mfa_for_risky_signins",
+                        "azure_entra_mfa_mfa_for_azure_service_management_api",
+                        "azure_entra_mfa_mfa_for_microsoft_admin_portals"
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "2 Microsoft Defender",
+            "description": "This section delves into the capabilities of Microsoft Defender and its integration with Azure. It covers the configuration of Microsoft Defender for Cloud, emphasizing its role in monitoring and protecting Azure services against cybersecurity threats. It also explores the specific features related to IoT security.",
+            "children": [
+                {
+                    "title": "2.1 Microsoft Defender for Cloud",
+                    "description": "Microsoft Defender for Cloud offers automated tools to enhance the security of cloud-based computing services. This section provides guidance on enabling Defender capabilities for comprehensive protection of Azure services.",
+                    "checks": [
+                        "azure_security_defender_for_servers_enabled",
+                        "azure_security_defender_for_app_services_enabled",
+                        "azure_security_defender_for_storage_accounts",
+                        "azure_security_defender_for_sql_databases_enabled",
+                        "azure_security_defender_for_sql_servers_on_machines_enabled",
+                        "azure_security_defender_for_open_source_databases_enabled",
+                        "azure_security_defender_for_azure_cosmos_db_enabled",
+                        "azure_security_defender_for_storage_enabled",
+                        "azure_security_defender_for_key_vault_enabled",
+                        "azure_security_defender_for_resource_manager_enabled"
+                    ]
+                },
+                {
+                    "title": "2.2 Microsoft Defender for IoT",
+                    "description": "Understanding the security requirements for Internet of Things (IoT) implementations, this subsection focuses on leveraging Microsoft Defender for IoT to protect and monitor IoT assets within the Azure ecosystem.",
+                    "checks": [
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "3 Storage Accounts",
+            "description": "The guidelines for Azure Storage Accounts focus on the implementation of security features like secure transfer requirements, encryption, and access control. These measures ensure that data stored in Azure is protected from unauthorized access and leaks.",
+            "checks": [
+            ]
+        },
+        {
+            "title": "4 Database Services",
+            "description": "This section covers the security configurations necessary for various database services available on Azure, including SQL Server, PostgreSQL, MySQL, and Cosmos DB. Recommendations include enabling auditing and encryption to secure database access and data integrity.",
+            "children": [
+                {
+                    "title": "4.1 SQL Server - Auditing",
+                    "description": "This subsection emphasizes the importance of auditing in SQL Server to track and log database activities, providing an audit trail that helps in forensic analysis and compliance with security policies.",
+                    "checks": [
+                    ]
+                },
+                {
+                    "title": "4.3 PostgreSQL Database Server",
+                    "description": "The focus here is on securing PostgreSQL Database Server deployments in Azure, detailing the activation of SSL connections and other security parameters to protect data transactions.",
+                    "checks": [
+                    ]
+                },
+                {
+                    "title": "4.4 MySQL Database",
+                    "description": "Security measures for MySQL Database Servers are detailed here, including the enforcement of SSL connections and audit log configurations to safeguard data interactions.",
+                    "checks": [
+                    ]
+                },
+                {
+                    "title": "4.5 Cosmos DB",
+                    "description": "This subsection provides guidelines for securing Cosmos DB, emphasizing the use of firewall rules and virtual networks to enhance data security in Azure's globally distributed database service.",
+                    "checks": [
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "5 Logging and Monitoring",
+            "description": "Effective logging and monitoring are critical for maintaining the security and integrity of cloud environments. This section provides best practices for configuring diagnostic settings in Azure, using activity log alerts, and integrating Application Insights for proactive monitoring and anomaly detection.",
+            "children": [
+                {
+                    "title": "5.1 Configuring Diagnostic Settings",
+                    "description": "Diagnostic settings in Azure enable the collection and routing of log data to different destinations, which is crucial for troubleshooting and securing Azure environments.",
+                    "checks": [
+                    ]
+                },
+                {
+                    "title": "5.2 Monitoring using Activity Log Alerts",
+                    "description": "Activity log alerts in Azure help in real-time monitoring of operational events, providing alerts for specified actions, thus enhancing the responsiveness to potential security incidents.",
+                    "checks": [
+                    ]
+                },
+                {
+                    "title": "5.3 Configuring Application Insights",
+                    "description": "Application Insights is an extensible Application Performance Management (APM) service for web developers on multiple platforms, aiding in the monitoring of live applications and automatically detecting performance anomalies.",
+                    "checks": [
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "6 Networking",
+            "description": "Networking security is paramount in Azure. This section covers essential configurations such as restricting RDP and SSH access, managing network security groups, and implementing secure network architectures to prevent unauthorized access and ensure data integrity across networks.",
+            "checks": [
+            ]
+        },
+        {
+            "title": "7 Virtual Machines",
+            "description": "This section addresses security best practices for Azure Virtual Machines. It includes guidelines for securing OS and data disks, using Azure Bastion for secure access, and ensuring that only approved extensions are installed on virtual machines.",
+            "checks": [
+            ]
+        },
+        {
+            "title": "8 Key Vault",
+            "description": "Azure Key Vault is a tool for securely storing and accessing secrets. This section outlines practices for managing keys and secrets in Key Vault, including setting expiration dates for keys and enabling access control policies.",
+            "checks": [
+            ]
+        },
+        {
+            "title": "9 AppService",
+            "description": "Azure App Service is a platform for building, deploying, and scaling web apps. This section provides security insights for App Service, including the use of authentication methods, TLS configurations, and the disabling of FTP deployments.",
+            "checks": [
+            ]
+        },
+        {
+            "title": "10 Miscellaneous",
+            "description": "This section includes additional miscellaneous recommendations for Azure configurations not covered in other sections, focusing on securing resources and managing Azure subscriptions efficiently.",
+            "checks": [
+            ]
+        }
+    ]
+}
