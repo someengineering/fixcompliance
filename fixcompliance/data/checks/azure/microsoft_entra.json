@@ -732,9 +732,7 @@
                 "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Subscriptions.\n3. Select Access control (IAM).\n4. Select Roles.\n5. Click Type and select CustomRole from the drop down menu.\n6. View each role and check JSON for assignableScopes set to the subscription, and actions set to '*'.\n7. Repeat for each custom role."
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Subscriptions.\n3. Select Access control (IAM).\n4. Select Roles.\n5. Click Type and select CustomRole from the drop down menu.\n6. Check the box next to each role which grants subscription administrator privileges.\n7. Select Remove.\n8. Confirm by selecting Yes.",
-                "cli": "List custom roles:\naz role definition list --custom-role-only True\nTo remove a violating role:\naz role definition delete --name <role name>",
-                "note": "Ensure any role assignments are removed before deleting a custom role. Assess impact before removing roles granting subscription administrator privileges."
+                "text": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Subscriptions.\n3. Select Access control (IAM).\n4. Select Roles.\n5. Click Type and select CustomRole from the drop down menu.\n6. Check the box next to each role which grants subscription administrator privileges.\n7. Select Remove.\n8. Confirm by selecting Yes."
             },
             "default_value": "By default, no custom owner roles are created.",
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-privileged-access#pa-7-follow-just-enough-administration-least-privilege-principle",
@@ -757,8 +755,7 @@
                 "manual": "From Azure Portal:\n1. In the Azure portal, open a subscription or resource group where you want to view assigned roles.\n2. Select Access control (IAM).\n3. Select Roles.\n4. Search for the custom role named 'Resource Lock Administrator'.\n5. Ensure that the role is assigned to the appropriate users."
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. In the Azure portal, open a subscription or resource group where you want the custom role to be assigned.\n2. Select Access control (IAM).\n3. Click Add.\n4. Select Add custom role.\n5. In the Custom Role Name field, enter 'Resource Lock Administrator'.\n6. Enter a description.\n7. For Baseline permissions, select Start from scratch.\n8. Go to the Permissions tab and select Add permissions.\n9. Search and select 'Microsoft.Authorization/locks'.\n10. Add the permission and review.\n11. Create the role and assign it to the appropriate user.",
-                "powershell": "Connect-AzAccount\n$role = Get-AzRoleDefinition 'User Access Administrator'\n$role.Id = $null\n$role.Name = 'Resource Lock Administrator'\n$role.Description = 'Can Administer Resource Locks'\n$role.Actions.Clear()\n$role.Actions.Add('Microsoft.Authorization/locks/*')\n$role.AssignableScopes.Clear()\n$role.AssignableScopes.Add('/providers/Microsoft.Management/managementGroups/[MG-Name]')\nNew-AzRoleDefinition -Role $role"
+                "text": "From Azure Portal:\n1. In the Azure portal, open a subscription or resource group where you want the custom role to be assigned.\n2. Select Access control (IAM).\n3. Click Add.\n4. Select Add custom role.\n5. In the Custom Role Name field, enter 'Resource Lock Administrator'.\n6. Enter a description.\n7. For Baseline permissions, select Start from scratch.\n8. Go to the Permissions tab and select Add permissions.\n9. Search and select 'Microsoft.Authorization/locks'.\n10. Add the permission and review.\n11. Create the role and assign it to the appropriate user."
             },
             "default_value": "By default, no custom role specifically for resource lock administration is created.",
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
@@ -781,7 +778,7 @@
                 "manual": "From Azure Portal:\n1. From the Azure Portal Home select the portal menu.\n2. Select Subscriptions.\n3. In the Advanced options drop-down menu, select Manage Policies.\n4. Ensure 'Subscription leaving Microsoft Entra ID directory' and 'Subscription entering Microsoft Entra ID directory' are set to 'Permit no one'."
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. From the Azure Portal Home select the portal menu.\n2. Select Subscriptions.\n3. In the Advanced options drop-down menu, select Manage Policies.\n4. Under 'Subscription leaving Microsoft Entra ID directory' and 'Subscription entering Microsoft Entra ID directory' select 'Permit no one'."
+                "text": "From Azure Portal:\n1. From the Azure Portal Home select the portal menu.\n2. Select Subscriptions.\n3. In the Advanced options drop-down menu, select Manage Policies.\n4. Under 'Subscription leaving Microsoft Entra ID directory' and 'Subscription entering Microsoft Entra ID directory' select 'Permit no one'."
             },
             "default_value": "By default, 'Subscription leaving Microsoft Entra ID directory' and 'Subscription entering Microsoft Entra ID directory' are set to 'Allow everyone' (default).",
             "url": "https://docs.microsoft.com/en-us/azure/cost-management-billing/manage/manage-azure-subscription-policy",
@@ -801,11 +798,10 @@
             "risk": "Having too many users with the Global Administrator role increases the risk of security breaches, unauthorized access, and potential misuse of elevated privileges.",
             "severity": "high",
             "detect": {
-                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Roles and Administrators.\n4. Select Global Administrator.\n5. Ensure less than 5 users are actively assigned the role.\n6. Ensure that at least 2 users are actively assigned the role."
+                "fix": "is(azure_subscription) <-- is(microsoft_graph_organization)  with(count>4, -[2]-> is(microsoft_graph_user) with(any, --> is(microsoft_graph_role) and name==\"Global Administrator\"))"
             },
             "remediation": {
-                "manual": "If more than 4 users are assigned:\n1. Remove the Global Administrator role for users which do not or no longer require the role.\n2. Assign the Global Administrator role via PIM which can be activated when required.\n3. Assign more granular roles to users to conduct their duties.\nIf only one user is assigned:\n1. Provide the Global Administrator role to a trusted user or create a 'break glass' admin account.",
-                "fix": "is(azure_subscription) <-- is(microsoft_graph_organization)  with(count>4, -[2]-> is(microsoft_graph_user) with(any, --> is(microsoft_graph_role) and name==\"Global Administrator\"))"
+                "text": "If more than 4 users are assigned:\n1. Remove the Global Administrator role for users which do not or no longer require the role.\n2. Assign the Global Administrator role via PIM which can be activated when required.\n3. Assign more granular roles to users to conduct their duties.\nIf only one user is assigned:\n1. Provide the Global Administrator role to a trusted user or create a 'break glass' admin account."
             },
             "default_value": "By default, the number of Global Administrators is not restricted.",
             "url": "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/best-practices#5-limit-the-number-of-global-administrators-to-less-than-5",

@@ -1,0 +1,75 @@
+{
+    "provider": "azure",
+    "service": "storage",
+    "checks": [
+        {
+            "name": "ensure_secure_transfer_required",
+            "title": "Ensure that 'Secure transfer required' is set to 'Enabled'",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "The secure transfer option enhances the security of a storage account by only allowing requests to the storage account by a secure connection. For example, when calling REST APIs to access storage accounts, the connection must use HTTPS. Any requests using HTTP will be rejected when 'secure transfer required' is enabled. When using the Azure files service, connection without encryption will fail, including scenarios using SMB 2.1, SMB 3.0 without encryption, and some flavors of the Linux SMB client. Because Azure storage doesn’t support HTTPS for custom domain names, this option is not applied when using a custom domain name.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and supports_https_traffic_only!=true"
+            },
+            "remediation": {
+                "text": "To enable 'Secure transfer required' to 'Enabled':\nFrom Azure Portal:\n1. Go to Storage Accounts.\n2. For each storage account, go to Configuration.\n3. Set 'Secure transfer required' to Enabled.\nFrom Azure CLI:\nUse the below command to enable 'Secure transfer required' for a Storage Account\naz storage account update --name <storageAccountName> --resource-group <resourceGroupName> --https-only true",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/blobs/security-recommendations#encryption-in-transit",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/blobs/security-recommendations#encryption-in-transit",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Erforderlicher sicherer Transfer' auf 'Aktiviert' gesetzt ist",
+                    "risk": "Die Option für den sicheren Transfer erhöht die Sicherheit eines Speicherkontos, indem nur Anfragen über eine sichere Verbindung zugelassen werden. Anfragen über HTTP werden abgelehnt, wenn der 'erforderliche sichere Transfer' aktiviert ist. Bei Verwendung des Azure-Dateidienstes schlägt die Verbindung ohne Verschlüsselung fehl, einschließlich Szenarien mit SMB 2.1, SMB 3.0 ohne Verschlüsselung und einigen Varianten des Linux-SMB-Clients.",
+                    "remediation": "Um den 'Erforderlichen sicheren Transfer' zu aktivieren:\nVom Azure-Portal:\n1. Gehen Sie zu Speicherkonten.\n2. Gehen Sie für jedes Speicherkonto zu Konfiguration.\n3. Setzen Sie den 'Erforderlichen sicheren Transfer' auf Aktiviert.\nVom Azure CLI:\nVerwenden Sie den folgenden Befehl, um den 'Erforderlichen sicheren Transfer' für ein Speicherkonto zu aktivieren\naz storage account update --name <Speicherkontoname> --resource-group <Ressourcengruppenname> --https-only true"
+                }
+            }
+        },
+        {
+            "name": "enable_infrastructure_encryption",
+            "title": "Ensure that ‘Enable Infrastructure Encryption’ for Each Storage Account in Azure Storage is Set to ‘enabled’",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Azure Storage automatically encrypts all data in a storage account at the network level using 256-bit AES encryption, which is one of the strongest, FIPS 140-2-compliant block ciphers available. Customers who require higher levels of assurance that their data is secure can also enable 256-bit AES encryption at the Azure Storage infrastructure level for double encryption. Double encryption of Azure Storage data protects against a scenario where one of the encryption algorithms or keys may be compromised.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and storage_encryption.require_infrastructure_encryption!=true"
+            },
+            "remediation": {
+                "text": "To enable Infrastructure Encryption for a Storage Account:\nFrom Azure Portal:\n1. During Storage Account creation, in the Encryption tab, check the box next to Enable infrastructure encryption.\nFrom Azure CLI:\naz storage account create --name <storage-account> --resource-group <resource-group> --location <location> --sku Standard_RAGRS --kind StorageV2 --require-infrastructure-encryption\nFrom PowerShell:\nNew-AzStorageAccount -ResourceGroupName <resource_group> -AccountName <storage-account> -Location <location> -SkuName \"Standard_RAGRS\" -Kind StorageV2 -RequireInfrastructureEncryption",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/common/infrastructure-encryption-enable"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/common/storage-service-encryption",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass für jedes Speicherkonto in Azure Storage die Infrastrukturverschlüsselung aktiviert ist (Automatisiert)",
+                    "risk": "Azure Storage verschlüsselt automatisch alle Daten in einem Speicherkonto auf Netzwerkebene mit 256-Bit-AES-Verschlüsselung, einem der stärksten, FIPS 140-2-konformen Blockchiffren. Kunden, die eine höhere Sicherheitsstufe für ihre Daten benötigen, können auch eine 256-Bit-AES-Verschlüsselung auf der Infrastrukturebene von Azure Storage für eine doppelte Verschlüsselung aktivieren.",
+                    "remediation": "Um die Infrastrukturverschlüsselung für ein Speicherkonto zu aktivieren:\nVom Azure-Portal:\n1. Bei der Erstellung des Speicherkontos, im Tab 'Verschlüsselung', das Kästchen neben 'Infrastrukturverschlüsselung aktivieren' ankreuzen.\nVom Azure CLI:\naz storage account create --name <Speicherkontoname> --resource-group <Ressourcengruppenname> --location <Standort> --sku Standard_RAGRS --kind StorageV2 --require-infrastructure-encryption\nVom PowerShell:\nNew-AzStorageAccount -ResourceGroupName <resource_group> -AccountName <Speicherkontoname> -Location <Standort> -SkuName \"Standard_RAGRS\" -Kind StorageV2 -RequireInfrastructureEncryption"
+                }
+            }
+        },
+        {
+            "name": "enable_key_rotation_reminders",
+            "title": "Ensure that 'Enable key rotation reminders' is enabled for each Storage Account (Manual)",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Access Keys authenticate application access requests to data contained in Storage Accounts. A periodic rotation of these keys is recommended to ensure that potentially compromised keys cannot result in a long-term exploitable credential. The 'Rotation Reminder' is an automatic reminder feature for a manual procedure.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_storage_account) and (key_policy==null or key_policy>90)"
+            },
+            "remediation": {
+                "manual": "From Azure Portal:\n1. Go to Storage Accounts.\n2. For each Storage Account that is not compliant, go to Access keys.\n3. Click Set rotation reminder.\n4. Check 'Enable key rotation reminders'.\n5. In the 'Send reminders' field select Custom, then set the 'Remind me every' field to 90 and the period drop down to Days.\n6. Click Save.\nFrom PowerShell:\n$rgName = <resource group name for the storage>\n$accountName = <storage account name>\n$account = Get-AzStorageAccount -ResourceGroupName $rgName -Name $accountName\nif ($account.KeyCreationTime.Key1 -eq $null -or $account.KeyCreationTime.Key2 -eq $null){\nWrite-output (\"You must regenerate both keys at least once before setting expiration policy\")\n} else {\n$account = Set-AzStorageAccount -ResourceGroupName $rgName -Name $accountName -KeyExpirationPeriodInDay 90\n}\n$account.KeyPolicy.KeyExpirationPeriodInDays"
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/storage/common/storage-create-storage-account#regenerate-storage-access-keys",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Erinnerungen an Schlüsselrotation aktivieren' für jedes Speicherkonto aktiviert ist (Manuell)",
+                    "risk": "Zugriffsschlüssel authentifizieren Anwendungsanforderungen zum Zugriff auf Daten in Speicherkonten. Eine regelmäßige Rotation dieser Schlüssel wird empfohlen, um sicherzustellen, dass möglicherweise kompromittierte Schlüssel nicht zu einer langfristig ausnutzbaren Anmeldeinformation führen können. Die 'Rotations-Erinnerung' ist eine automatische Erinnerungsfunktion für ein manuelles Verfahren.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu Speicherkonten.\n2. Für jedes nicht konforme Speicherkonto, gehen Sie zu Zugriffsschlüsseln.\n3. Klicken Sie auf Rotationserinnerung einstellen.\n4. Aktivieren Sie 'Erinnerungen an Schlüsselrotation aktivieren'.\n5. Wählen Sie im Feld 'Erinnerungen senden' die Option Benutzerdefiniert und stellen Sie das Feld 'Erinnere mich alle' auf 90 und das Dropdown-Menü auf Tage.\n6. Klicken Sie auf Speichern.\nVom PowerShell:\n$rgName = <Name der Ressourcengruppe für das Speicher>\n$accountName = <Name des Speicherkontos>\n$account = Get-AzStorageAccount -ResourceGroupName $rgName -Name $accountName\nwenn ($account.KeyCreationTime.Key1 -eq $null -oder $account.KeyCreationTime.Key2 -eq $null){\nWrite-output (\"Sie müssen beide Schlüssel mindestens einmal regenerieren, bevor Sie die Ablaufpolitik einstellen\")\n} else {\n$account = Set-AzStorageAccount -ResourceGroupName $rgName -Name $accountName -KeyExpirationPeriodInDay 90\n}\n$account.KeyPolicy.KeyExpirationPeriodInDays"
+                }
+            }
+        }
+    ]
+}
