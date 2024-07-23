@@ -84,9 +84,21 @@
             "title": "3 Storage Accounts",
             "description": "The guidelines for Azure Storage Accounts focus on the implementation of security features like secure transfer requirements, encryption, and access control. These measures ensure that data stored in Azure is protected from unauthorized access and leaks.",
             "checks": [
-                "azure_storage_ensure_secure_transfer_required",
-                "azure_storage_enable_infrastructure_encryption",
-                "azure_storage_enable_key_rotation_reminders"
+                "azure_storage_secure_transfer",
+                "azure_storage_infrastructure_encryption",
+                "azure_storage_key_rotation_reminders",
+                "azure_storage_periodic_regeneration_of_access_keys",
+                "azure_storage_logging_for_queue",
+                "azure_storage_public_network_access",
+                "azure_storage_default_network_access_deny",
+                "azure_storage_allow_trusted_azure_services_access",
+                "azure_storage_private_endpoints_for_storage",
+                "azure_storage_enable_soft_delete",
+                "azure_storage_cmk_encryption",
+                "azure_storage_logging_blob_service",
+                "azure_storage_logging_table_service",
+                "azure_storage_min_tls_version_1_2",
+                "azure_storage_blob_anonymous_access"
             ]
         },
         {
