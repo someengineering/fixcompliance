@@ -109,6 +109,12 @@
                     "title": "4.1 SQL Server - Auditing",
                     "description": "This subsection emphasizes the importance of auditing in SQL Server to track and log database activities, providing an audit trail that helps in forensic analysis and compliance with security policies.",
                     "checks": [
+                        "azure_sql_server_auditing_on",
+                        "azure_sql_server_allow_any_ip",
+                        "azure_sql_server_tde_protector_with_cmk",
+                        "azure_sql_server_admin_auth_using_entra",
+                        "azure_sql_server_db_data_encryption",
+                        "azure_sql_server_audit_retention"
                     ]
                 },
                 {
