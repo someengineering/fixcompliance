@@ -145,6 +145,12 @@
                     "title": "5.1 Configuring Diagnostic Settings",
                     "description": "Diagnostic settings in Azure enable the collection and routing of log data to different destinations, which is crucial for troubleshooting and securing Azure environments.",
                     "checks": [
+                        "azure_monitor_subscription_diagnostic",
+                        "azure_monitor_subscription_diagnostic_captures_categories",
+                        "azure_monitor_logs_storage_encrypted_with_CMK",
+                        "azure_monitor_key_vault_logging",
+                        "azure_monitor_flow_logs_analytics",
+                        "azure_monitor_appservice_http_logs"
                     ]
                 },
                 {
