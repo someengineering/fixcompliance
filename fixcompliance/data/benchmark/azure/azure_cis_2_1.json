@@ -157,6 +157,16 @@
                     "title": "5.2 Monitoring using Activity Log Alerts",
                     "description": "Activity log alerts in Azure help in real-time monitoring of operational events, providing alerts for specified actions, thus enhancing the responsiveness to potential security incidents.",
                     "checks": [
+                        "azure_monitor_alert_policy_assignment_change",
+                        "azure_monitor_alert_policy_assignment_delete",
+                        "azure_monitor_alert_network_security_group_change",
+                        "azure_monitor_alert_network_security_group_delete",
+                        "azure_monitor_alert_security_solution_change",
+                        "azure_monitor_alert_security_solution_delete",
+                        "azure_monitor_alert_sql_server_firewall_rule_change",
+                        "azure_monitor_alert_sql_server_firewall_rule_delete",
+                        "azure_monitor_alert_public_ip_address_rule_change",
+                        "azure_monitor_alert_public_ip_address_rule_delete"
                     ]
                 },
                 {

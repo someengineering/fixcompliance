@@ -133,7 +133,226 @@
                     "remediation": "Vom Azure-Portal:\n1. Navigieren Sie zu App Services.\n2. Für jeden App Service gehen Sie zu den Diagnoseeinstellungen.\n3. Klicken Sie auf Diagnoseeinstellung hinzufügen.\n4. Aktivieren Sie das Kontrollkästchen neben 'HTTP-Logs'.\n5. Konfigurieren Sie das Ziel des Logs gemäß der Protokollstrategie Ihrer Organisation (z.B. Stream zu einem Ereignishub für SIEM-Integration)."
                 }
             }
+        },
+        {
+            "name": "alert_policy_assignment_change",
+            "title": "Ensure that Activity Log Alert exists for Create Policy Assignment",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Without monitoring create policy assignment events, unsolicited changes may go unnoticed, potentially compromising Azure policy configurations.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Authorization/policyAssignments/write\"})"
+            },
+            "remediation": {
+                "manual": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Select Alert rule.\n4. Apply the condition for Create policy assignment and set up an action group to notify appropriate personnel."
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für die Erstellung von Richtlinienzuweisungen vorhanden ist",
+                    "risk": "Ohne Überwachung von Ereignissen zur Erstellung von Richtlinienzuweisungen können unerwünschte Änderungen unbemerkt bleiben, was potenziell die Azure-Richtlinienkonfigurationen gefährdet.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wählen Sie Warnregel.\n4. Wenden Sie die Bedingung für die Erstellung einer Richtlinienzuweisung an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_policy_assignment_delete",
+            "title": "Ensure that Activity Log Alert exists for Delete Policy Assignment",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring delete policy assignment events can delay detection of unsolicited changes, potentially exposing Azure environments to compliance risks and unauthorized modifications.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Authorization/policyAssignments/delete\"})"
+            },
+            "remediation": {
+                "manual": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete policy assignment and set up an action group to notify appropriate personnel."
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Löschen von Richtlinienzuweisungen vorhanden ist",
+                    "risk": "Nicht Überwachung von Ereignissen zum Löschen von Richtlinienzuweisungen kann die Erkennung unerwünschter Änderungen verzögern, was möglicherweise Azure-Umgebungen Compliance-Risiken und unbefugten Änderungen aussetzt.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Löschen einer Richtlinienzuweisung an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_network_security_group_change",
+            "title": "Ensure that Activity Log Alert exists for Create or Update Network Security Group",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Create or Update Network Security Group events can delay detection of suspicious network configuration changes, potentially exposing Azure environments to security risks.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/networkSecurityGroups/write\"})"
+            },
+            "remediation": {
+                "manual": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create or Update Network Security Group and set up an action group to notify appropriate personnel."
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Erstellen oder Aktualisieren einer Netzwerksicherheitsgruppe vorhanden ist",
+                    "risk": "Nicht Überwachung von Ereignissen zum Erstellen oder Aktualisieren von Netzwerksicherheitsgruppen kann die Erkennung verdächtiger Netzwerkkonfigurationsänderungen verzögern, was möglicherweise Azure-Umgebungen Sicherheitsrisiken aussetzt.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Erstellen oder Aktualisieren einer Netzwerksicherheitsgruppe an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_network_security_group_delete",
+            "title": "Ensure that Activity Log Alert exists for Delete Network Security Group",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Delete Network Security Group events can delay the detection of unauthorized network changes, potentially leading to security breaches.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals in [\"Microsoft.Network/networkSecurityGroups/delete\", \"Microsoft.ClassicNetwork/networkSecurityGroups/delete\"]})"
+            },
+            "remediation": {
+                "manual": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete Network Security Group and set up an action group to notify appropriate personnel."
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Löschen einer Netzwerksicherheitsgruppe vorhanden ist",
+                    "risk": "Nicht Überwachung von Löschen der Netzwerksicherheitsgruppen-Ereignisse kann die Erkennung von unbefugten Netzwerkänderungen verzögern, was potenziell zu Sicherheitsverletzungen führen könnte.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Löschen der Netzwerksicherheitsgruppe an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_security_solution_change",
+            "title": "Ensure that Activity Log Alert exists for Create or Update Security Solution",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Create or Update Security Solution events may delay the detection of unauthorized changes to security solutions, potentially leading to vulnerabilities.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Security/securitySolutions/write\"})"
+            },
+            "remediation": {
+                "manual": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create or Update Security Solutions and set up an action group to notify appropriate personnel."
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Erstellen oder Aktualisieren einer Sicherheitslösung vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Ereignissen zum Erstellen oder Aktualisieren von Sicherheitslösungen kann die Erkennung von unbefugten Änderungen an Sicherheitslösungen verzögern, was möglicherweise zu Sicherheitslücken führt.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Erstellen oder Aktualisieren von Sicherheitslösungen an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_security_solution_delete",
+            "title": "Ensure that Activity Log Alert exists for Delete Security Solution",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Delete Security Solution events may delay the detection of unauthorized changes to security measures, potentially leaving the system vulnerable.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Security/securitySolutions/delete\"})"
+            },
+            "remediation": {
+                "manual": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete Security Solutions and set up an action group to notify appropriate personnel."
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Löschen einer Sicherheitslösung vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Löschereignissen für Sicherheitslösungen kann die Erkennung von unbefugten Änderungen an Sicherheitsmaßnahmen verzögern und das System möglicherweise verwundbar machen.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Löschen von Sicherheitslösungen an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_sql_server_firewall_rule_change",
+            "title": "Ensure that Activity Log Alert exists for Create or Update SQL Server Firewall Rule",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Create or Update SQL Server Firewall Rule events can delay the detection of unauthorized network access changes, potentially exposing the SQL Server to external threats.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Sql/servers/firewallRules/write\"})"
+            },
+            "remediation": {
+                "manual": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create/Update server firewall rule and set up an action group to notify appropriate personnel."
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Erstellen oder Aktualisieren von SQL Server-Firewallregeln vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Ereignissen zum Erstellen oder Aktualisieren von SQL Server-Firewallregeln kann die Erkennung von unbefugten Netzwerkzugriffsänderungen verzögern und den SQL Server potenziellen Bedrohungen aussetzen.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Erstellen/Aktualisieren der Server-Firewallregel an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_sql_server_firewall_rule_delete",
+            "title": "Ensure that Activity Log Alert exists for Delete SQL Server Firewall Rule",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Delete SQL Server Firewall Rule events can lead to delayed detection of unauthorized changes to SQL Server network access, increasing the risk of security breaches.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Sql/servers/firewallRules/delete\"})"
+            },
+            "remediation": {
+                "manual": "To set up an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete server firewall rule and set up an action group to notify appropriate personnel."
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Löschen von SQL Server-Firewallregeln vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Ereignissen zum Löschen von SQL Server-Firewallregeln kann die Erkennung von unbefugten Änderungen am Netzwerkzugriff des SQL Servers verzögern und das Risiko von Sicherheitsverletzungen erhöhen.",
+                    "remediation": "Um eine Warnung im Azure-Portal einzurichten:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen und dann auf Erstellen.\n3. Wenden Sie die Bedingung für das Löschen der Server-Firewallregel an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_public_ip_address_rule_change",
+            "title": "Ensure that Activity Log Alert exists for Create or Update Public IP Addresses rule",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Create or Update Public IP Address events can lead to delayed detection of unauthorized network access changes, increasing the risk of security breaches.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/publicIPAddresses/write\"})"
+            },
+            "remediation": {
+                "manual": "To set up an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create or Update Public IP Address and set up an action group to notify appropriate personnel."
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für die Erstellung oder Aktualisierung von öffentlichen IP-Adressregeln vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Ereignissen zur Erstellung oder Aktualisierung öffentlicher IP-Adressen kann die Erkennung von unbefugten Netzwerkzugriffsänderungen verzögern und das Risiko von Sicherheitsverletzungen erhöhen.",
+                    "remediation": "Um eine Warnung im Azure-Portal einzurichten:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen und dann auf Erstellen.\n3. Wenden Sie die Bedingung für die Erstellung oder Aktualisierung der öffentlichen IP-Adresse an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_public_ip_address_rule_delete",
+            "title": "Ensure that Activity Log Alert exists for Delete Public IP Address rule",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Delete Public IP Address events can obscure visibility into network access changes, potentially delaying the detection of suspicious activity.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/publicIPAddresses/delete\"})"
+            },
+            "remediation": {
+                "manual": "To set up an alert in Azure Portal:\n1. Navigate to the Monitor blade.\n2. Select Alerts.\n3. Select Create.\n4. Select Alert rule.\n5. Choose a subscription.\n6. Select Apply.\n7. Select the Condition tab.\n8. Click See all signals.\n9. Select Delete Public IP Address.\n10. Click Apply.\n11. Select the Actions tab.\n12. Click Select action groups to select an existing action group, or Create action group to create a new one.\n13. Follow the prompts to choose or create an action group.\n14. Select the Details tab.\n15. Select a Resource group, provide an Alert rule name and an optional description.\n16. Click Review + create.\n17. Click Create."
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für die Löschung von öffentlichen IP-Adressregeln vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Löschereignissen für öffentliche IP-Adressen kann die Sichtbarkeit von Netzwerkzugriffsänderungen verschleiern und die Erkennung verdächtiger Aktivitäten verzögern.",
+                    "remediation": "Um eine Warnung im Azure-Portal einzurichten:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Wählen Sie Warnungen.\n3. Wählen Sie Erstellen.\n4. Wählen Sie Warnungsregel.\n5. Wählen Sie ein Abonnement.\n6. Wenden Sie an.\n7. Wählen Sie die Bedingung.\n8. Klicken Sie auf Alle Signale anzeigen.\n9. Wählen Sie Löschung der öffentlichen IP-Adresse.\n10. Wenden Sie an.\n11. Wählen Sie die Aktionen.\n12. Wählen Sie Aktionsgruppen aus, um eine vorhandene Gruppe zu wählen oder eine neue zu erstellen.\n13. Folgen Sie den Anweisungen, um eine Aktionsgruppe zu wählen oder zu erstellen.\n14. Wählen Sie die Details.\n15. Wählen Sie eine Ressourcengruppe, geben Sie einen Namen für die Warnungsregel und eine optionale Beschreibung an.\n16. Klicken Sie auf Überprüfen + erstellen.\n17. Klicken Sie auf Erstellen."
+                }
+            }
         }
-
     ]
 }
