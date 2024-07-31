@@ -353,6 +353,72 @@
                     "remediation": "Um eine Warnung im Azure-Portal einzurichten:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Wählen Sie Warnungen.\n3. Wählen Sie Erstellen.\n4. Wählen Sie Warnungsregel.\n5. Wählen Sie ein Abonnement.\n6. Wenden Sie an.\n7. Wählen Sie die Bedingung.\n8. Klicken Sie auf Alle Signale anzeigen.\n9. Wählen Sie Löschung der öffentlichen IP-Adresse.\n10. Wenden Sie an.\n11. Wählen Sie die Aktionen.\n12. Wählen Sie Aktionsgruppen aus, um eine vorhandene Gruppe zu wählen oder eine neue zu erstellen.\n13. Folgen Sie den Anweisungen, um eine Aktionsgruppe zu wählen oder zu erstellen.\n14. Wählen Sie die Details.\n15. Wählen Sie eine Ressourcengruppe, geben Sie einen Namen für die Warnungsregel und eine optionale Beschreibung an.\n16. Klicken Sie auf Überprüfen + erstellen.\n17. Klicken Sie auf Erstellen."
                 }
             }
+        },
+        {
+            "name": "application_insights_configured",
+            "title": "Ensure Application Insights are Configured",
+            "result_kinds": [],
+            "categories": ["security", "performance"],
+            "risk": "Not configuring Application Insights may lead to missed opportunities for improving application performance and identifying the sources of potential incidents, impacting both cost efficiency and security.",
+            "severity": "high",
+            "detect": {
+                "manual": "To manually verify if Application Insights is configured:\n1. Log into the Azure Portal.\n2. Navigate to 'Application Insights' under Azure services or use the search bar to find it.\n3. Check if there is an existing Application Insights resource. Verify the configuration details within each Application Insights instance to ensure they are properly set up, including checking for linked resources such as the associated Log Analytics workspace.\n4. Optionally, use Azure CLI to run the following command to list Application Insights components: az monitor app-insights component show --query \"[].{ID:appId, Name:name, Tenant:tenantId, Location:location, Provisioning_State:provisioningState}\"\n5. Review the output to ensure each Application Insights component is active and properly configured as expected."
+            },
+            "remediation": {
+                "manual": "To configure Application Insights in Azure Portal:\n1. Navigate to Application Insights.\n2. Under the Basics tab in the PROJECT DETAILS section, select your Subscription.\n3. Select the Resource group.\n4. Enter a Name in INSTANCE DETAILS.\n5. Select a Region.\n6. Choose 'Workspace-based' next to Resource Mode.\n7. Select the Subscription for the log analytics workspace in WORKSPACE DETAILS.\n8. Choose the appropriate Log Analytics Workspace.\n9. Proceed to the 'Next:Tags' section and enter Tags as Name, Value pairs.\n10. Review and create by clicking 'Next:Review+Create', then 'Create'."
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Application Insights konfiguriert sind",
+                    "risk": "Das Nichtkonfigurieren von Application Insights kann dazu führen, dass Chancen zur Verbesserung der Anwendungsleistung und zur Identifizierung der Quellen potenzieller Vorfälle verpasst werden, was sowohl die Kosteneffizienz als auch die Sicherheit beeinträchtigt.",
+                    "remediation": "So konfigurieren Sie Application Insights im Azure-Portal:\n1. Navigieren Sie zu Application Insights.\n2. Wählen Sie unter der Registerkarte Grundlagen im Abschnitt PROJEKTDETAILS Ihr Abonnement.\n3. Wählen Sie die Ressourcengruppe.\n4. Geben Sie einen Namen in den INSTANZDETAILS ein.\n5. Wählen Sie eine Region.\n6. Wählen Sie neben Ressourcenmodus 'Workspace-basiert'.\n7. Wählen Sie das Abonnement für den Log Analytics-Workspace in den WORKSPACE-DETAILS.\n8. Wählen Sie den entsprechenden Log Analytics-Workspace.\n9. Fahren Sie mit dem Abschnitt 'Next:Tags' fort und geben Sie Tags als Name-Wert-Paare ein.\n10. Überprüfen und erstellen Sie durch Klicken auf 'Next:Review+Create' und dann auf 'Create'."
+                }
+            }
+        },
+        {
+            "name": "resource_logging_enabled",
+            "title": "Ensure that Azure Monitor Resource Logging is Enabled for All Services that Support it",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Lack of resource logging reduces visibility into the data plane, compromising the ability to detect unauthorized access or malicious activities. This can potentially lead to undetected breaches or security incidents.",
+            "severity": "high",
+            "detect": {
+                "manual": "To manually verify if Azure Monitor Resource Logging is enabled:\n1. Log into the Azure Portal.\n2. Navigate to each Azure service that supports logging.\n3. Select the specific resource, then click on 'Diagnostic settings'.\n4. Verify if there's an existing diagnostic setting with logging enabled. If settings are missing or incorrect, logs may not be captured as required.\n5. For a more comprehensive check, use Azure CLI or PowerShell as described in the Audit section to list and verify the logging status for each supported resource.\n6. Ensure logging is configured as per compliance and governance requirements for each type of resource."
+            },
+            "remediation": {
+                "manual": "To enable Azure Monitor Resource Logging:\n1. Go to the Azure Portal and navigate to each resource.\n2. Click on 'Diagnostic settings' within the resource menu.\n3. Click 'Add diagnostic setting' and configure the necessary logs and metrics as required.\n4. Ensure logs are being sent to a Storage Account, Event Hub, or Azure Monitor Log Analytics workspace.\n5. Set appropriate retention policies, typically keeping logs readily accessible for at least one year before moving to colder storage if needed.\n6. Save the settings to apply them."
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/monitor-azure-resource",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass das Azure Monitor-Ressourcenprotokollierung für alle unterstützenden Dienste aktiviert ist",
+                    "risk": "Das Fehlen von Ressourcenprotokollierung reduziert die Sichtbarkeit in der Datenebene und beeinträchtigt die Fähigkeit, unbefugten Zugriff oder böswillige Aktivitäten zu erkennen. Dies kann zu unerkannten Sicherheitsverletzungen oder -vorfällen führen.",
+                    "remediation": "Um die Azure Monitor-Ressourcenprotokollierung zu aktivieren:\n1. Gehen Sie zum Azure-Portal und navigieren Sie zu jeder Ressource.\n2. Klicken Sie in dem Ressourcenmenü auf 'Diagnoseeinstellungen'.\n3. Klicken Sie auf 'Diagnoseeinstellung hinzufügen' und konfigurieren Sie die erforderlichen Protokolle und Metriken.\n4. Stellen Sie sicher, dass Protokolle an ein Speicherkonto, eine Ereignishub oder eine Azure Monitor Log Analytics-Arbeitsumgebung gesendet werden.\n5. Legen Sie angemessene Aufbewahrungsrichtlinien fest, wobei Protokolle typischerweise mindestens ein Jahr lang leicht zugänglich aufbewahrt werden, bevor sie bei Bedarf in kältere Speicherungen verschoben werden.\n6. Speichern Sie die Einstellungen, um sie anzuwenden."
+                }
+            }
+        },
+        {
+            "name": "avoid_basic_consumption_sku_for_production",
+            "title": "Ensure that SKU Basic/Consumption is not used on artifacts that need to be monitored (Particularly for Production Workloads)",
+            "result_kinds": [],
+            "categories": ["compliance", "operational"],
+            "risk": "Using Basic or Free SKUs for production workloads compromises monitoring capabilities and service support, potentially violating service level agreements (SLAs).",
+            "severity": "high",
+            "detect": {
+                "manual": "To manually check if Basic or Consumption SKUs are used on artifacts that need monitoring:\n1. Open Azure Resource Graph Explorer in the Azure Portal.\n2. Click 'New query'.\n3. Paste the following query: 'Resources | where sku contains \"Basic\" or sku contains \"consumption\" | order by type'.\n4. Run the query and evaluate the results to identify resources using unsuitable SKUs."
+            },
+            "remediation": {
+                "manual": "To remediate, follow the specific upgrade process for each artifact from Basic to Standard SKUs. This process varies by resource type but generally involves adjusting the SKU settings in the Azure management portal or via Azure CLI commands."
+            },
+            "url": "https://azure.microsoft.com/en-us/support/plans",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass keine Basic/Consumption-SKUs für zu überwachende Artefakte verwendet werden (insbesondere für Produktions-Workloads)",
+                    "risk": "Der Einsatz von Basic- oder Free-SKUs für Produktionsworkloads beeinträchtigt die Überwachungsfähigkeiten und den Service-Support, was möglicherweise zu Verstößen gegen Service Level Agreements (SLAs) führt.",
+                    "remediation": "Zur Behebung folgen Sie dem spezifischen Upgrade-Prozess für jedes Artefakt von Basic zu Standard-SKUs. Dieser Prozess variiert je nach Ressourcentyp, umfasst jedoch im Allgemeinen die Anpassung der SKU-Einstellungen im Azure-Verwaltungsportal oder über Azure CLI-Befehle."
+                }
+            }
         }
     ]
 }

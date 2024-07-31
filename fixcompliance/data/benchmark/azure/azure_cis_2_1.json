@@ -173,6 +173,21 @@
                     "title": "5.3 Configuring Application Insights",
                     "description": "Application Insights is an extensible Application Performance Management (APM) service for web developers on multiple platforms, aiding in the monitoring of live applications and automatically detecting performance anomalies.",
                     "checks": [
+                        "azure_monitor_application_insights_configured"
+                    ]
+                },
+                {
+                    "title": "5.4 Ensure that Azure Monitor Resource Logging is Enabled for all Services that Support it",
+                    "description": "Resource Logs in Azure capture data access activities within resources like Key Vaults, while Activity Logs monitor subscription-level operations. Currently, 95 Azure resources support this monitoring, but some back-end services lack adequate logging configurations. Given an average incident detection time of 240 days, retaining logs for at least two years is crucial for effective monitoring.",
+                    "checks": [
+                        "azure_monitor_resource_logging_enabled"
+                    ]
+                },
+                {
+                    "title": "5.5 Ensure that SKU Basic/Consumption is not used on artifacts that need to be monitored",
+                    "description": "Using Basic or Free SKUs in Azure limits monitoring and support, lacking a service SLA, and should not be used for production workloads. Upgrading to Standard SKUs ensures necessary monitoring and service level agreements for essential resources such as Public IP Addresses and VPN Gateways, supporting better management and compliance.",
+                    "checks": [
+                        "azure_monitor_avoid_basic_consumption_sku_for_production"
                     ]
                 }
             ]
