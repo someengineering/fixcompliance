@@ -248,7 +248,7 @@
         },
         {
             "name": "ensure_system_updates_applied",
-            "title": "Ensure that Microsoft Defender Recommendation for 'Apply system updates' status is 'Completed' (Automated)",
+            "title": "Ensure that Microsoft Defender Recommendation for 'Apply system updates' status is 'Completed'",
             "result_kinds": ["azure_virtual_machine_base"],
             "categories": ["security", "compliance"],
             "risk": "Without applying the latest OS patches, virtual machines are vulnerable to security threats and bugs, which can lead to system instability and potential security incidents.",
@@ -272,7 +272,7 @@
         },
         {
             "name": "auto_provision_log_analytics_agent_enabled",
-            "title": "Ensure that Auto provisioning of 'Log Analytics agent for Azure VMs' is Set to 'On' (Automated)",
+            "title": "Ensure that Auto provisioning of 'Log Analytics agent for Azure VMs' is Set to 'On'",
             "result_kinds": ["azure_security_auto_provisioning_setting"],
             "categories": ["security", "compliance"],
             "risk": "Without the automatic provisioning of the monitoring agent, security data collection from virtual machines might be incomplete, potentially leading to undetected security issues.",

@@ -51,7 +51,7 @@
         },
         {
             "name": "key_rotation_reminders",
-            "title": "Ensure that 'Enable key rotation reminders' is enabled for each Storage Account (Manual)",
+            "title": "Ensure that 'Enable key rotation reminders' is enabled for each Storage Account",
             "result_kinds": ["azure_storage_account"],
             "categories": ["security", "compliance"],
             "risk": "Access Keys authenticate application access requests to data contained in Storage Accounts. A periodic rotation of these keys is recommended to ensure that potentially compromised keys cannot result in a long-term exploitable credential. The 'Rotation Reminder' is an automatic reminder feature for a manual procedure.",

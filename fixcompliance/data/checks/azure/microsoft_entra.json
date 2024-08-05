@@ -316,7 +316,7 @@
         },
         {
             "name": "number_of_methods_required_to_reset",
-            "title": "Ensure That 'Number of methods required to reset' is set to '2' (Manual)",
+            "title": "Ensure That 'Number of methods required to reset' is set to '2'",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Without requiring two methods for password reset, an attacker only needs to compromise one method to reset a user's password, posing a security risk.",
@@ -339,7 +339,7 @@
             }
         }, {
             "name": "bad_password_list_enforced",
-            "title": "Ensure that a Custom Bad Password List is set to 'Enforce' for your Organization (Manual)",
+            "title": "Ensure that a Custom Bad Password List is set to 'Enforce' for your Organization",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Without enforcing a custom bad password list, users may use weak and easily guessable passwords, increasing the risk of unauthorized access to Azure resources.",
@@ -387,7 +387,7 @@
         },
         {
             "name": "notify_users_on_password_resets",
-            "title": "Ensure that 'Notify users on password resets?' is set to 'Yes' (Manual)",
+            "title": "Ensure that 'Notify users on password resets?' is set to 'Yes'",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Without notifying users on password resets, unauthorized password changes might go unnoticed, increasing the risk of unauthorized access.",
@@ -411,7 +411,7 @@
         },
         {
             "name": "notify_admins_on_admin_password_reset",
-            "title": "Ensure That 'Notify all admins when other admins reset their password?' is set to 'Yes' (Manual)",
+            "title": "Ensure That 'Notify all admins when other admins reset their password?' is set to 'Yes'",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Without notifying all admins when other admins reset their passwords, unauthorized password resets might go unnoticed, increasing the risk of unauthorized access to Global Administrator accounts.",
@@ -435,7 +435,7 @@
         },
         {
             "name": "user_consent_for_applications_disabled",
-            "title": "Ensure 'User consent for applications' is set to 'Do not allow user consent' (Manual)",
+            "title": "Ensure 'User consent for applications' is set to 'Do not allow user consent'",
             "result_kinds": ["azure_subscription"],
             "categories": ["security", "compliance"],
             "risk": "Allowing users to consent to applications can lead to malicious applications gaining access to organizational data and abusing user privileges.",
@@ -459,7 +459,7 @@
         },
         {
             "name": "user_consent_for_applications_verified_publishers",
-            "title": "Ensure 'User consent for applications' Is Set To 'Allow for Verified Publishers' (Manual)",
+            "title": "Ensure 'User consent for applications' Is Set To 'Allow for Verified Publishers'",
             "result_kinds": ["azure_subscription"],
             "categories": ["security", "compliance"],
             "risk": "Allowing users to consent to applications without verification can lead to malicious applications gaining access to organizational data and abusing user privileges.",
@@ -483,7 +483,7 @@
         },
         {
             "name": "users_cannot_add_gallery_apps_to_my_apps",
-            "title": "Ensure 'Users can add gallery apps to My Apps' is set to 'No' (Manual)",
+            "title": "Ensure 'Users can add gallery apps to My Apps' is set to 'No'",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Allowing users to add gallery apps to My Apps can lead to unauthorized access and potential exposure of sensitive information.",
@@ -507,7 +507,7 @@
         },
         {
             "name": "users_cannot_register_applications",
-            "title": "Ensure 'Users Can Register Applications' Is Set to 'No' (Manual)",
+            "title": "Ensure 'Users Can Register Applications' Is Set to 'No'",
             "result_kinds": ["azure_subscription"],
             "categories": ["security", "compliance"],
             "risk": "Require administrators or appropriately delegated users to register third-party applications. Allowing regular users to register applications can lead to the introduction of insecure or malicious applications without proper oversight.",
@@ -531,7 +531,7 @@
         },
         {
             "name": "guest_users_access_restrictions_most_restrictive",
-            "title": "Ensure 'Guest users access restrictions' is set to 'Guest user access is restricted to properties and memberships of their own directory objects' (Manual)",
+            "title": "Ensure 'Guest users access restrictions' is set to 'Guest user access is restricted to properties and memberships of their own directory objects'",
             "result_kinds": ["azure_subscription"],
             "categories": ["security", "compliance"],
             "risk": "Limiting guest user permissions ensures that guest accounts do not have permission for certain directory tasks, such as enumerating users, groups, or other directory resources, and cannot be assigned to administrative roles in your directory. This setting helps protect sensitive directory information from unauthorized access by guest users.",
@@ -555,7 +555,7 @@
         },
         {
             "name": "guest_invite_restrictions_admin_only",
-            "title": "Ensure 'Guest invite restrictions' is set to 'Only users assigned to specific admin roles can invite guest users' (Manual)",
+            "title": "Ensure 'Guest invite restrictions' is set to 'Only users assigned to specific admin roles can invite guest users'",
             "result_kinds": ["azure_subscription"],
             "categories": ["security", "compliance"],
             "risk": "Restricting guest invites to specific admin roles ensures only authorized users can grant access to cloud resources, maintaining security and data privacy.",
@@ -579,7 +579,7 @@
         },
         {
             "name": "restrict_access_to_microsoft_entra_admin_center",
-            "title": "Ensure That 'Restrict access to Microsoft Entra admin center' is Set to 'Yes' (Manual)",
+            "title": "Ensure That 'Restrict access to Microsoft Entra admin center' is Set to 'Yes'",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Restricting access to the Microsoft Entra ID administration center to administrators helps prevent unauthorized access and potential exposure of sensitive information.",
@@ -603,7 +603,7 @@
         },
         {
             "name": "restrict_user_ability_to_access_groups_features_in_the_access_pane",
-            "title": "Ensure that 'Restrict user ability to access groups features in the Access Pane' is Set to 'Yes' (Manual)",
+            "title": "Ensure that 'Restrict user ability to access groups features in the Access Pane' is Set to 'Yes'",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Allowing all users access to self-service group management can lead to unauthorized changes and potential security breaches.",
@@ -627,7 +627,7 @@
         },
         {
             "name": "users_cannot_create_security_groups_in_azure",
-            "title": "Ensure that 'Users can create security groups in Azure portals, API or PowerShell' is set to 'No' (Manual)",
+            "title": "Ensure that 'Users can create security groups in Azure portals, API or PowerShell' is set to 'No'",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Allowing all users to create security groups can lead to unauthorized group management and potential security vulnerabilities.",
@@ -651,7 +651,7 @@
         },
         {
             "name": "owners_cannot_manage_group_membership_requests_in_access_panel",
-            "title": "Ensure that 'Owners can manage group membership requests in the Access Panel' is set to 'No' (Manual)",
+            "title": "Ensure that 'Owners can manage group membership requests in the Access Panel' is set to 'No'",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Allowing owners to manage group membership requests can lead to unauthorized changes and potential security vulnerabilities in group membership.",
@@ -675,7 +675,7 @@
         },
         {
             "name": "users_cannot_create_microsoft_365_groups",
-            "title": "Ensure that 'Users can create Microsoft 365 groups in Azure portals, API or PowerShell' is set to 'No' (Manual)",
+            "title": "Ensure that 'Users can create Microsoft 365 groups in Azure portals, API or PowerShell' is set to 'No'",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Allowing all users to create Microsoft 365 groups can lead to uncontrolled group proliferation and potential mismanagement of resources.",
@@ -699,7 +699,7 @@
         },
         {
             "name": "require_mfa_to_register_or_join_devices_with_microsoft_entra_id",
-            "title": "Ensure that 'Require Multi-Factor Authentication to register or join devices with Microsoft Entra ID' is set to 'Yes' (Manual)",
+            "title": "Ensure that 'Require Multi-Factor Authentication to register or join devices with Microsoft Entra ID' is set to 'Yes'",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Not requiring Multi-Factor Authentication for registering or joining devices may allow unauthorized devices to be added to the network, compromising security.",
@@ -723,7 +723,7 @@
         },
         {
             "name": "no_custom_subscription_administrator_roles",
-            "title": "Ensure That No Custom Subscription Administrator Roles Exist (Automated)",
+            "title": "Ensure That No Custom Subscription Administrator Roles Exist",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Allowing custom roles with potentially excessive privileges can lead to unauthorized actions and compromise of Azure resources.",
@@ -746,7 +746,7 @@
         },
         {
             "name": "custom_role_for_resource_lock_administration",
-            "title": "Ensure a Custom Role is Assigned Permissions for Administering Resource Locks (Manual)",
+            "title": "Ensure a Custom Role is Assigned Permissions for Administering Resource Locks",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Without a dedicated role for resource lock administration, there is a higher risk of unauthorized or accidental modifications to resource locks.",
@@ -769,7 +769,7 @@
         },
         {
             "name": "restrict_subscription_movement_in_microsoft_entra_id_directory",
-            "title": "Ensure That 'Subscription leaving Microsoft Entra ID directory' and 'Subscription entering Microsoft Entra ID directory' Is Set To ‘Permit No One’ (Manual)",
+            "title": "Ensure That 'Subscription leaving Microsoft Entra ID directory' and 'Subscription entering Microsoft Entra ID directory' Is Set To ‘Permit No One’",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Allowing unrestricted movement of subscriptions into and out of the Microsoft Entra ID directory can expose sensitive resources to unauthorized access or potential bad actors.",
@@ -792,7 +792,7 @@
         },
         {
             "name": "limit_global_administrator_assignments",
-            "title": "Ensure fewer than 5 users have global administrator assignment (Manual)",
+            "title": "Ensure fewer than 5 users have global administrator assignment",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Having too many users with the Global Administrator role increases the risk of security breaches, unauthorized access, and potential misuse of elevated privileges.",
