@@ -121,6 +121,14 @@
                     "title": "4.3 PostgreSQL Database Server",
                     "description": "The focus here is on securing PostgreSQL Database Server deployments in Azure, detailing the activation of SSL connections and other security parameters to protect data transactions.",
                     "checks": [
+                        "azure_postgresql_enforce_ssl",
+                        "azure_postgresql_log_checkpoints",
+                        "azure_postgresql_log_connections",
+                        "azure_postgresql_log_disconnections",
+                        "azure_postgresql_connection_throttling",
+                        "azure_postgresql_log_retention_days",
+                        "azure_postgresql_disable_access_azure_services",
+                        "azure_postgresql_infrastructure_double_encryption"
                     ]
                 },
                 {
