@@ -135,6 +135,10 @@
                     "title": "4.4 MySQL Database",
                     "description": "Security measures for MySQL Database Servers are detailed here, including the enforcement of SSL connections and audit log configurations to safeguard data interactions.",
                     "checks": [
+                        "azure_mysql_enforce_ssl",
+                        "azure_mysql_tls_version",
+                        "azure_mysql_audit_log",
+                        "azure_mysql_audit_log_connection"
                     ]
                 },
                 {
