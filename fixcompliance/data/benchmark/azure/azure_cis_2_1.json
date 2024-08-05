@@ -208,6 +208,13 @@
             "title": "6 Networking",
             "description": "Networking security is paramount in Azure. This section covers essential configurations such as restricting RDP and SSH access, managing network security groups, and implementing secure network architectures to prevent unauthorized access and ensure data integrity across networks.",
             "checks": [
+                "azure_network_rdp_internet_restricted",
+                "azure_network_ssh_internet_restricted",
+                "azure_network_udp_internet_restricted",
+                "azure_network_http_access_restricted",
+                "TODO:azure_network_nsg_flow_log_retention",
+                "TODO:azure_network_network_watcher",
+                "azure_network_public_ip_addresses"
             ]
         },
         {
