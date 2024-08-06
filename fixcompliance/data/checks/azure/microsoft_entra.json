@@ -284,7 +284,7 @@
             "url": "https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/users-default-permissions",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Einschränkung der Erstellung von Mandanten durch Nicht-Administratoren' auf 'Ja' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Einschränkung der Erstellung von Mandanten durch Nicht-Administratoren' auf 'Ja' gesetzt ist",
                     "risk": "Ohne die Einschränkung der Erstellung von Mandanten durch Nicht-Administratoren könnten unbefugte Benutzer neue Microsoft Entra ID oder Azure AD B2C Mandanten erstellen, was zu Sicherheitslücken und administrativen Problemen führen könnte.",
                     "remediation": "Um die Erstellung von Mandanten durch Nicht-Administratoren einzuschränken:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Benutzer.\n4. Wählen Sie Benutzereinstellungen.\n5. Setzen Sie die Einstellung 'Einschränkung der Erstellung von Mandanten durch Nicht-Administratoren' auf Ja.\n\nVon PowerShell:\nImport-Module Microsoft.Graph.Identity.SignIns\nConnect-MgGraph -Scopes 'Policy.ReadWrite.Authorization'\nSelect-MgProfile -Name beta\n$params = @{\nDefaultUserRolePermissions = @{\nAllowedToCreateTenants = $false\n}\n}\nUpdate-MgPolicyAuthorizationPolicy -AuthorizationPolicyId -BodyParameter $params."
                 }
@@ -308,7 +308,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/active-directory/b2b/user-properties",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass Gastbenutzer regelmäßig überprüft werden (Manuell)",
+                    "title": "Stellen Sie sicher, dass Gastbenutzer regelmäßig überprüft werden",
                     "risk": "Inaktive und unnötige Gastbenutzerkonten können Sicherheitslücken darstellen, wenn sie nicht regelmäßig überprüft und entfernt werden.",
                     "remediation": "Um unnötige Gastbenutzer zu überprüfen und zu entfernen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Benutzer.\n4. Klicken Sie auf Filter hinzufügen.\n5. Wählen Sie Benutzerart.\n6. Wählen Sie Gast aus dem Dropdown-Wert.\n7. Klicken Sie auf Anwenden.\n8. Überprüfen und löschen Sie inaktive oder unnötige Gastbenutzer."
                 }
@@ -332,7 +332,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-sspr",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Anzahl der Methoden zur Zurücksetzung' auf '2' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Anzahl der Methoden zur Zurücksetzung' auf '2' gesetzt ist",
                     "risk": "Ohne die Anforderung von zwei Methoden zur Zurücksetzung des Passworts muss ein Angreifer nur eine Methode kompromittieren, um das Passwort eines Benutzers zurückzusetzen, was ein Sicherheitsrisiko darstellt.",
                     "remediation": "Um die Anzahl der Methoden zur Zurücksetzung auf 2 zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie dann Benutzer.\n4. Wählen Sie Passwort zurücksetzen.\n5. Wählen Sie dann Authentifizierungsmethoden.\n6. Setzen Sie die 'Anzahl der Methoden zur Zurücksetzung' auf 2."
                 }
@@ -355,7 +355,7 @@
             "url": "https://learn.microsoft.com/en-us/entra/identity/authentication/concept-password-ban-bad-combined-policy",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass eine benutzerdefinierte schlechte Passwortliste auf 'Durchsetzen' für Ihre Organisation gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass eine benutzerdefinierte schlechte Passwortliste auf 'Durchsetzen' für Ihre Organisation gesetzt ist",
                     "risk": "Ohne Durchsetzung einer benutzerdefinierten schlechten Passwortliste können Benutzer schwache und leicht zu erratende Passwörter verwenden, was das Risiko eines unbefugten Zugriffs auf Azure-Ressourcen erhöht.",
                     "remediation": "Um die benutzerdefinierte schlechte Passwortliste auf 'Durchsetzen' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Sicherheit.\n4. Unter Verwalten wählen Sie Authentifizierungsmethoden.\n5. Wählen Sie Passwortschutz.\n6. Setzen Sie die Option 'Benutzerdefinierte Liste durchsetzen' auf Ja.\n7. Doppelklicken Sie auf die benutzerdefinierte schlechte Passwortliste, um eine Zeichenfolge hinzuzufügen."
                 }
@@ -379,7 +379,7 @@
             "url": "https://learn.microsoft.com/en-us/azure/active-directory/authentication/tutorial-configure-custom-password-protection",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass die 'Anzahl der Tage, bevor Benutzer aufgefordert werden, ihre Authentifizierungsinformationen erneut zu bestätigen' nicht auf '0' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass die 'Anzahl der Tage, bevor Benutzer aufgefordert werden, ihre Authentifizierungsinformationen erneut zu bestätigen' nicht auf '0' gesetzt ist",
                     "risk": "Wenn Benutzer nicht regelmäßig aufgefordert werden, ihre Authentifizierungsinformationen erneut zu bestätigen, erhöht sich das Risiko der Verwendung veralteter und unsicherer Authentifizierungsmethoden.",
                     "remediation": "Um die Anzahl der Tage festzulegen, bevor Benutzer aufgefordert werden, ihre Authentifizierungsinformationen erneut zu bestätigen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Sicherheit.\n4. Unter Verwalten wählen Sie Authentifizierungsmethoden.\n5. Setzen Sie die 'Anzahl der Tage, bevor Benutzer aufgefordert werden, ihre Authentifizierungsinformationen erneut zu bestätigen' auf einen Wert größer als '0'."
                 }
@@ -403,7 +403,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-sspr-deployment",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Benutzer bei Kennwortzurücksetzungen benachrichtigen?' auf 'Ja' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Benutzer bei Kennwortzurücksetzungen benachrichtigen?' auf 'Ja' gesetzt ist",
                     "risk": "Ohne Benachrichtigung der Benutzer bei Kennwortzurücksetzungen könnten unbefugte Kennwortänderungen unbemerkt bleiben, was das Risiko eines unbefugten Zugriffs erhöht.",
                     "remediation": "Um Benachrichtigungen für Kennwortzurücksetzungen zu aktivieren:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Benutzer.\n4. Gehen Sie zu Kennwortzurücksetzung.\n5. Wählen Sie unter Verwalten Benachrichtigungen.\n6. Setzen Sie 'Benutzer bei Kennwortzurücksetzungen benachrichtigen?' auf Ja."
                 }
@@ -427,7 +427,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-sspr#set-up-notifications-and-customizations",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Benachrichtigen Sie alle Administratoren, wenn andere Administratoren ihr Passwort zurücksetzen?' auf 'Ja' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Benachrichtigen Sie alle Administratoren, wenn andere Administratoren ihr Passwort zurücksetzen?' auf 'Ja' gesetzt ist",
                     "risk": "Ohne die Benachrichtigung aller Administratoren bei der Zurücksetzung der Passwörter durch andere Administratoren könnten unbefugte Zurücksetzungen unbemerkt bleiben, was das Risiko eines unbefugten Zugriffs auf Global-Administrator-Konten erhöht.",
                     "remediation": "Um Benachrichtigungen für die Zurücksetzung von Administratorpasswörtern zu aktivieren:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Benutzer.\n4. Wählen Sie Kennwort zurücksetzen.\n5. Wählen Sie unter Verwalten Benachrichtigungen.\n6. Setzen Sie 'Benachrichtigen Sie alle Administratoren, wenn andere Administratoren ihr Passwort zurücksetzen?' auf Ja."
                 }
@@ -451,7 +451,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/configure-user-consent#configure-user-consent-to-applications",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Benutzerzustimmung für Anwendungen' auf 'Benutzerzustimmung nicht zulassen' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Benutzerzustimmung für Anwendungen' auf 'Benutzerzustimmung nicht zulassen' gesetzt ist",
                     "risk": "Wenn Benutzer der Zustimmung zu Anwendungen zustimmen dürfen, können böswillige Anwendungen Zugriff auf organisatorische Daten erhalten und Benutzerprivilegien missbrauchen.",
                     "remediation": "Um die Benutzerzustimmung für Anwendungen zu deaktivieren:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Enterprise-Anwendungen.\n4. Wählen Sie Zustimmung und Berechtigungen.\n5. Wählen Sie Benutzereinstellungen.\n6. Setzen Sie 'Benutzerzustimmung für Anwendungen' auf 'Benutzerzustimmung nicht zulassen'.\n7. Klicken Sie auf Speichern."
                 }
@@ -475,7 +475,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/configure-user-consent#configure-user-consent-to-applications",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Benutzerzustimmung für Anwendungen' auf 'Benutzerzustimmung nur für verifizierte Herausgeber zulassen' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Benutzerzustimmung für Anwendungen' auf 'Benutzerzustimmung nur für verifizierte Herausgeber zulassen' gesetzt ist",
                     "risk": "Wenn Benutzer der Zustimmung zu Anwendungen ohne Überprüfung zustimmen dürfen, können böswillige Anwendungen Zugriff auf organisatorische Daten erhalten und Benutzerprivilegien missbrauchen.",
                     "remediation": "Um die Benutzerzustimmung für Anwendungen auf 'Nur für verifizierte Herausgeber zulassen' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Enterprise-Anwendungen.\n4. Wählen Sie Zustimmung und Berechtigungen.\n5. Wählen Sie Benutzereinstellungen.\n6. Wählen Sie unter Benutzerzustimmung für Anwendungen die Option 'Benutzerzustimmung nur für Apps von verifizierten Herausgebern und ausgewählten Berechtigungen zulassen'.\n7. Wählen Sie Speichern."
                 }
@@ -499,7 +499,7 @@
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Benutzer können Galerien-Apps zu 'Meine Apps' hinzufügen' auf 'Nein' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Benutzer können Galerien-Apps zu 'Meine Apps' hinzufügen' auf 'Nein' gesetzt ist",
                     "risk": "Das Zulassen, dass Benutzer Galerien-Apps zu 'Meine Apps' hinzufügen, kann zu unbefugtem Zugriff und potenzieller Offenlegung sensibler Informationen führen.",
                     "remediation": "Um 'Benutzer können Galerien-Apps zu 'Meine Apps' hinzufügen' auf 'Nein' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie dann Unternehmensanwendungen.\n4. Wählen Sie Benutzereinstellungen.\n5. Setzen Sie 'Benutzer können Galerien-Apps zu 'Meine Apps' hinzufügen' auf 'Nein'."
                 }
@@ -523,7 +523,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/active-directory/roles/delegate-app-roles#restrict-who-can-create-applications",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Benutzer können Anwendungen registrieren' auf 'Nein' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Benutzer können Anwendungen registrieren' auf 'Nein' gesetzt ist",
                     "risk": "Erfordern Sie, dass Administratoren oder entsprechend delegierte Benutzer Drittanbieteranwendungen registrieren. Das Zulassen, dass reguläre Benutzer Anwendungen registrieren, kann zur Einführung unsicherer oder bösartiger Anwendungen ohne ordnungsgemäße Aufsicht führen.",
                     "remediation": "Um 'Benutzer können Anwendungen registrieren' auf 'Nein' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Benutzer.\n4. Wählen Sie Benutzereinstellungen.\n5. Setzen Sie 'Benutzer können Anwendungen registrieren' auf 'Nein'."
                 }
@@ -547,7 +547,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/active-directory/enterprise-users/users-restrict-guest-permissions",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Einschränkungen des Gastbenutzerzugriffs' auf 'Gastbenutzerzugriff ist auf Eigenschaften und Mitgliedschaften ihrer eigenen Verzeichnisobjekte beschränkt' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Einschränkungen des Gastbenutzerzugriffs' auf 'Gastbenutzerzugriff ist auf Eigenschaften und Mitgliedschaften ihrer eigenen Verzeichnisobjekte beschränkt' gesetzt ist",
                     "risk": "Das Einschränken der Berechtigungen von Gastbenutzern stellt sicher, dass Gastkonten keine Berechtigung für bestimmte Verzeichnisaufgaben haben, wie z. B. das Auflisten von Benutzern, Gruppen oder anderen Verzeichnisressourcen, und keine administrativen Rollen in Ihrem Verzeichnis zugewiesen werden können. Diese Einstellung hilft, sensible Verzeichnisinformationen vor unbefugtem Zugriff durch Gastbenutzer zu schützen.",
                     "remediation": "Um 'Einschränkungen des Gastbenutzerzugriffs' auf 'Gastbenutzerzugriff ist auf Eigenschaften und Mitgliedschaften ihrer eigenen Verzeichnisobjekte beschränkt' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie dann Externe Identitäten.\n4. Wählen Sie Einstellungen für externe Zusammenarbeit.\n5. Ändern Sie unter Gastbenutzerzugriff die Einstellung 'Einschränkungen des Gastbenutzerzugriffs' in 'Gastbenutzerzugriff ist auf Eigenschaften und Mitgliedschaften ihrer eigenen Verzeichnisobjekte beschränkt'.\n\nVom PowerShell:\n1. Geben Sie den folgenden Befehl ein: Set-AzureADMSAuthorizationPolicy -GuestUserRoleId '2af84b1e-32c8-42b7-82bc-daa82404023b'\n2. Überprüfen Sie die Einstellung, indem Sie eingeben: Get-AzureADMSAuthorizationPolicy\n3. Stellen Sie sicher, dass die 'GuestUserRoleId' gleich '2af84b1e-32c8-42b7-82bc-daa82404023b' ist."
                 }
@@ -571,7 +571,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/active-directory/active-directory-b2b-delegate-invitations",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Einladungsbeschränkungen für Gäste' auf 'Nur Benutzern mit bestimmten Administratorrollen können Gäste einladen' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Einladungsbeschränkungen für Gäste' auf 'Nur Benutzern mit bestimmten Administratorrollen können Gäste einladen' gesetzt ist",
                     "risk": "Das Einschränken von Gasteinladungen auf bestimmte Administratorrollen stellt sicher, dass nur autorisierte Benutzer Zugriff auf Cloud-Ressourcen gewähren können, was die Sicherheit und den Datenschutz gewährleistet.",
                     "remediation": "Um 'Einladungsbeschränkungen für Gäste' auf 'Nur Benutzern mit bestimmten Administratorrollen können Gäste einladen' zu setzen:\nVom Azure-Portal:\n1. Gehen Sie zu Microsoft Entra ID.\n2. Wählen Sie Externe Identitäten > Einstellungen für externe Zusammenarbeit.\n3. Setzen Sie 'Einladungsbeschränkungen für Gäste' auf 'Nur Benutzern mit bestimmten Administratorrollen können Gäste einladen'."
                 }
@@ -595,7 +595,7 @@
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass der Zugang zum Microsoft Entra Admin-Center auf 'Ja' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass der Zugang zum Microsoft Entra Admin-Center auf 'Ja' gesetzt ist",
                     "risk": "Die Beschränkung des Zugangs zum Microsoft Entra ID-Verwaltungszentrum auf Administratoren verhindert unbefugten Zugriff und potenzielle Offenlegung sensibler Informationen.",
                     "remediation": "Um den Zugang zum Microsoft Entra Admin-Center auf 'Ja' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie dann Benutzer.\n4. Wählen Sie Benutzereinstellungen.\n5. Setzen Sie den Zugang zum Microsoft Entra Admin-Center auf 'Ja'."
                 }
@@ -619,7 +619,7 @@
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass der Zugriff auf Gruppenfunktionen im Zugangsbereich auf 'Ja' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass der Zugriff auf Gruppenfunktionen im Zugangsbereich auf 'Ja' gesetzt ist",
                     "risk": "Die Bereitstellung des Zugriffs auf Selbstbedienungsgruppenverwaltung für alle Benutzer kann zu unbefugten Änderungen und potenziellen Sicherheitsverletzungen führen.",
                     "remediation": "Um den Zugriff auf Gruppenfunktionen in meinen Gruppen auf 'Ja' zu beschränken:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Gruppen.\n4. Wählen Sie unter Einstellungen Allgemein.\n5. Setzen Sie den Zugriff auf Gruppenfunktionen in meinen Gruppen auf 'Ja'."
                 }
@@ -643,7 +643,7 @@
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Benutzer können Sicherheitsgruppen in Azure-Portalen, API oder PowerShell erstellen' auf 'Nein' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Benutzer können Sicherheitsgruppen in Azure-Portalen, API oder PowerShell erstellen' auf 'Nein' gesetzt ist",
                     "risk": "Das Zulassen, dass alle Benutzer Sicherheitsgruppen erstellen können, führt zu unbefugtem Gruppenmanagement und potenziellen Sicherheitsrisiken.",
                     "remediation": "Um 'Benutzer können Sicherheitsgruppen in Azure-Portalen, API oder PowerShell' auf 'Nein' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Gruppen.\n4. Wählen Sie unter Einstellungen Allgemein.\n5. Setzen Sie 'Benutzer können Sicherheitsgruppen in Azure-Portalen, API oder PowerShell' auf 'Nein'."
                 }
@@ -667,7 +667,7 @@
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Besitzer können Gruppenmitgliedschaftsanfragen im Zugangsbereich verwalten' auf 'Nein' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Besitzer können Gruppenmitgliedschaftsanfragen im Zugangsbereich verwalten' auf 'Nein' gesetzt ist",
                     "risk": "Das Zulassen, dass Besitzer Gruppenmitgliedschaftsanfragen verwalten können, führt zu unbefugten Änderungen und potenziellen Sicherheitsrisiken in der Gruppenmitgliedschaft.",
                     "remediation": "Um 'Besitzer können Gruppenmitgliedschaftsanfragen im Zugangsbereich verwalten' auf 'Nein' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Gruppen.\n4. Wählen Sie unter Einstellungen Allgemein.\n5. Setzen Sie 'Besitzer können Gruppenmitgliedschaftsanfragen im Zugangsbereich verwalten' auf 'Nein'."
                 }
@@ -691,7 +691,7 @@
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Benutzer können Microsoft 365 Gruppen in Azure-Portalen, API oder PowerShell erstellen' auf 'Nein' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Benutzer können Microsoft 365 Gruppen in Azure-Portalen, API oder PowerShell erstellen' auf 'Nein' gesetzt ist",
                     "risk": "Das Zulassen, dass alle Benutzer Microsoft 365 Gruppen erstellen können, führt zu unkontrollierter Gruppenvermehrung und potenziellem Missmanagement von Ressourcen.",
                     "remediation": "Um 'Benutzer können Microsoft 365 Gruppen in Azure-Portalen, API oder PowerShell' auf 'Nein' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Gruppen.\n4. Wählen Sie unter Einstellungen Allgemein.\n5. Setzen Sie 'Benutzer können Microsoft 365 Gruppen in Azure-Portalen, API oder PowerShell' auf 'Nein'."
                 }
@@ -715,7 +715,7 @@
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-identity-management#im-6-use-strong-authentication-controls",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Erforderliche Mehrfaktorauthentifizierung, um Geräte mit Microsoft Entra ID zu registrieren oder beizutreten' auf 'Ja' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Erforderliche Mehrfaktorauthentifizierung, um Geräte mit Microsoft Entra ID zu registrieren oder beizutreten' auf 'Ja' gesetzt ist",
                     "risk": "Das Nichterfordern der Mehrfaktorauthentifizierung bei der Registrierung oder dem Beitritt von Geräten kann dazu führen, dass unbefugte Geräte dem Netzwerk hinzugefügt werden, was die Sicherheit gefährdet.",
                     "remediation": "Um 'Erforderliche Mehrfaktorauthentifizierung, um Geräte mit Microsoft Entra ID zu registrieren oder beizutreten' auf 'Ja' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Geräte.\n4. Wählen Sie Geräteeinstellungen.\n5. Setzen Sie 'Erforderliche Mehrfaktorauthentifizierung, um Geräte mit Microsoft Entra ID zu registrieren oder beizutreten' auf 'Ja'."
                 }
@@ -738,7 +738,7 @@
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-privileged-access#pa-7-follow-just-enough-administration-least-privilege-principle",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass keine benutzerdefinierten Abonnement-Administratorrollen existieren (Automatisiert)",
+                    "title": "Stellen Sie sicher, dass keine benutzerdefinierten Abonnement-Administratorrollen existieren",
                     "risk": "Das Zulassen von benutzerdefinierten Rollen mit potenziell übermäßigen Berechtigungen kann zu unbefugten Aktionen und Kompromittierung von Azure-Ressourcen führen.",
                     "remediation": "Vom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Abonnements.\n3. Wählen Sie Zugriffskontrolle (IAM).\n4. Wählen Sie Rollen.\n5. Klicken Sie auf Typ und wählen Sie CustomRole aus dem Dropdown-Menü.\n6. Markieren Sie das Kästchen neben jeder Rolle, die Abonnement-Administratorrechte gewährt.\n7. Wählen Sie Entfernen.\n8. Bestätigen Sie mit Ja."
                 }
@@ -761,7 +761,7 @@
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass eine benutzerdefinierte Rolle Berechtigungen für die Verwaltung von Ressourcensperren zugewiesen ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass eine benutzerdefinierte Rolle Berechtigungen für die Verwaltung von Ressourcensperren zugewiesen ist",
                     "risk": "Ohne eine spezielle Rolle für die Verwaltung von Ressourcensperren besteht ein höheres Risiko für unbefugte oder versehentliche Änderungen an den Sperren.",
                     "remediation": "Vom Azure-Portal:\n1. Öffnen Sie im Azure-Portal ein Abonnement oder eine Ressourcengruppe, wo die benutzerdefinierte Rolle zugewiesen werden soll.\n2. Wählen Sie Zugriffskontrolle (IAM).\n3. Klicken Sie auf Hinzufügen.\n4. Wählen Sie Benutzerdefinierte Rolle hinzufügen.\n5. Geben Sie im Feld für den Rollennamen 'Resource Lock Administrator' ein.\n6. Geben Sie eine Beschreibung ein.\n7. Wählen Sie bei Basisberechtigungen 'Von Grund auf neu starten'.\n8. Gehen Sie zur Registerkarte Berechtigungen und wählen Sie Berechtigungen hinzufügen.\n9. Suchen und wählen Sie 'Microsoft.Authorization/locks'.\n10. Fügen Sie die Berechtigung hinzu und überprüfen Sie diese.\n11. Erstellen Sie die Rolle und weisen Sie sie dem entsprechenden Benutzer zu."
                 }
@@ -784,7 +784,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/cost-management-billing/manage/manage-azure-subscription-policy",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass 'Abonnement verlässt Microsoft Entra ID Verzeichnis' und 'Abonnement tritt Microsoft Entra ID Verzeichnis bei' auf 'Niemandem erlauben' gesetzt ist (Manuell)",
+                    "title": "Stellen Sie sicher, dass 'Abonnement verlässt Microsoft Entra ID Verzeichnis' und 'Abonnement tritt Microsoft Entra ID Verzeichnis bei' auf 'Niemandem erlauben' gesetzt ist",
                     "risk": "Das uneingeschränkte Bewegen von Abonnements in und aus dem Microsoft Entra ID Verzeichnis kann sensible Ressourcen unautorisiertem Zugriff oder potenziellen böswilligen Akteuren aussetzen.",
                     "remediation": "Vom Azure-Portal:\n1. Wählen Sie im Startbildschirm des Azure-Portals das Portal-Menü.\n2. Wählen Sie Abonnements.\n3. Wählen Sie im Dropdown-Menü Erweiterte Optionen die Option Richtlinien verwalten.\n4. Stellen Sie sicher, dass 'Abonnement verlässt Microsoft Entra ID Verzeichnis' und 'Abonnement tritt Microsoft Entra ID Verzeichnis bei' auf 'Niemandem erlauben' gesetzt ist."
                 }
@@ -807,7 +807,7 @@
             "url": "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/best-practices#5-limit-the-number-of-global-administrators-to-less-than-5",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass weniger als 5 Benutzer die Rolle des globalen Administrators zugewiesen haben (Manuell)",
+                    "title": "Stellen Sie sicher, dass weniger als 5 Benutzer die Rolle des globalen Administrators zugewiesen haben",
                     "risk": "Zu viele Benutzer mit der Rolle des Globalen Administrators erhöhen das Risiko von Sicherheitsverletzungen, unbefugtem Zugriff und potenziellem Missbrauch von erweiterten Berechtigungen.",
                     "remediation": "Wenn mehr als 4 Benutzer zugewiesen sind:\n1. Entfernen Sie die Rolle des Globalen Administrators bei Benutzern, die diese nicht mehr benötigen.\n2. Weisen Sie die Rolle des Globalen Administrators über PIM zu, die bei Bedarf aktiviert werden kann.\n3. Weisen Sie den Benutzern spezifischere Rollen zu, um ihre Aufgaben durchzuführen.\nWenn nur ein Benutzer zugewiesen ist:\n1. Weisen Sie die Rolle des Globalen Administrators einem vertrauenswürdigen Benutzer zu oder erstellen Sie ein 'Break Glass' Admin-Konto."
                 }

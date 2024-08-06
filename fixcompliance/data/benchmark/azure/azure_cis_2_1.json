@@ -212,8 +212,8 @@
                 "azure_network_ssh_internet_restricted",
                 "azure_network_udp_internet_restricted",
                 "azure_network_http_access_restricted",
-                "TODO:azure_network_nsg_flow_log_retention",
-                "TODO:azure_network_network_watcher",
+                "azure_network_nsg_flow_log_retention",
+                "azure_network_watcher",
                 "azure_network_public_ip_addresses"
             ]
         },
@@ -221,6 +221,12 @@
             "title": "7 Virtual Machines",
             "description": "This section addresses security best practices for Azure Virtual Machines. It includes guidelines for securing OS and data disks, using Azure Bastion for secure access, and ensuring that only approved extensions are installed on virtual machines.",
             "checks": [
+                "azure_compute_bastion_host",
+                "azure_compute_vms_use_managed_disks",
+                "azure_compute_disks_encrypted_with_cmk",
+                "azure_compute_approved_vm_extensions",
+                "azure_compute_endpoint_protection_on_vms",
+                "azure_compute_ensure_trusted_launch_enabled"
             ]
         },
         {

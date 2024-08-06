@@ -113,7 +113,7 @@
             }
         },
         {
-            "name": "network_watcher",
+            "name": "watcher",
             "title": "Ensure that Network Watcher is 'Enabled'",
             "result_kinds": [],
             "categories": ["security", "compliance"],
@@ -129,7 +129,7 @@
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-logging-threat-detection#lt-4-enable-network-logging-for-security-investigation",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass Network Watcher 'aktiviert' ist (Automatisiert)",
+                    "title": "Stellen Sie sicher, dass Network Watcher 'aktiviert' ist",
                     "risk": "Das Deaktivieren oder Nichtaktivieren des Network Watchers schränkt die Fähigkeit ein, Bedingungen auf der Ebene des Netzwerkszenarios in Azure zu visualisieren, zu überwachen und zu diagnostizieren, und kann dazu führen, dass kritische Einblicke in Netzwerkleistung und Sicherheitsbedrohungen fehlen.",
                     "remediation": "Vom Azure-Portal:\n1. Gehen Sie zum Network Watcher.\n2. Klicken Sie auf Erstellen.\n3. Wählen Sie eine Region aus dem Dropdown-Menü aus.\n4. Klicken Sie auf Hinzufügen.\nVon Azure CLI:\nAktivieren Sie den Network Watcher in jeder Region mit dem Befehl:\naz network watcher configure --locations <region> --enabled true --resource-group <resource_group>"
                 }
@@ -153,7 +153,7 @@
             "url": "https://docs.microsoft.com/en-us/cli/azure/network/public-ip?view=azure-cli-latest",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass öffentliche IP-Adressen regelmäßig bewertet werden (Manuell)",
+                    "title": "Stellen Sie sicher, dass öffentliche IP-Adressen regelmäßig bewertet werden",
                     "risk": "Öffentliche IP-Adressen, die nicht regelmäßig überprüft und kontrolliert werden, stellen ein Sicherheitsrisiko dar, indem sie Azure-Ressourcen potenziellen Bedrohungen aussetzen. Nicht benötigte oder ungenutzte öffentliche IPs können Angriffsvektoren sein, wenn sie nicht ordnungsgemäß verwaltet oder stillgelegt werden.",
                     "remediation": "Die Abhilfemaßnahmen umfassen die Überprüfung und mögliche Stilllegung unnötiger öffentlicher IP-Adressen. Die Schritte umfassen:\n1. Überprüfen Sie jede öffentliche IP-Adresse auf ihre Notwendigkeit und Relevanz für Ihre Umgebung.\n2. Für nicht mehr benötigte IPs, folgen Sie den Schritten, um sie sicher zu dissoziieren und stillzulegen.\n3. Stellen Sie für erforderliche IPs sicher, dass sie durch angemessene Sicherheitsmaßnahmen wie Firewalls, VPNs, Verkehrsfilterung usw. geschützt sind."
                 }

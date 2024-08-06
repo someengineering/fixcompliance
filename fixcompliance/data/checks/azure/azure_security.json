@@ -264,7 +264,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/defender-for-cloud/deploy-vulnerability-assessment-vm",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass die Microsoft Defender-Empfehlung für 'Systemupdates anwenden' den Status 'Abgeschlossen' hat (Automatisiert)",
+                    "title": "Stellen Sie sicher, dass die Microsoft Defender-Empfehlung für 'Systemupdates anwenden' den Status 'Abgeschlossen' hat",
                     "risk": "Ohne die neuesten Betriebssystem-Patches sind virtuelle Maschinen anfällig für Sicherheitsbedrohungen und Fehler, die zu Systeminstabilität und potenziellen Sicherheitsvorfällen führen können.",
                     "remediation": "Um Systemupdates anzuwenden:\nVom Azure-Portal:\n1. Wählen Sie vom Azure-Startbildschirm das Portalmenü aus.\n2. Wählen Sie Microsoft Defender für Cloud.\n3. Gehen Sie zum Empfehlungsblade.\n4. Befolgen Sie die Empfehlungen, um Systemupdates anzuwenden.\n\nVon der Azure CLI:\nFühren Sie den folgenden Befehl aus, um Updates anzuwenden:\naz vm update -g <resource_group> -n <vm_name> --apply-updates\n\nVon PowerShell:\nVerwenden Sie den folgenden Befehl, um Updates auf eine VM anzuwenden:\nUpdate-AzVM -ResourceGroupName <resource_group> -VMName <vm_name> -ApplyUpdates"
                 }
@@ -288,7 +288,7 @@
             "url": "https://docs.microsoft.com/en-us/azure/security-center/security-center-enable-data-collection",
             "localizations": {
                 "de": {
-                    "title": "Stellen Sie sicher, dass die automatische Bereitstellung des 'Log Analytics-Agents für Azure-VMs' auf 'Ein' gesetzt ist (Automatisiert)",
+                    "title": "Stellen Sie sicher, dass die automatische Bereitstellung des 'Log Analytics-Agents für Azure-VMs' auf 'Ein' gesetzt ist",
                     "risk": "Ohne die automatische Bereitstellung des Überwachungsagents kann die Sammlung von Sicherheitsdaten von virtuellen Maschinen unvollständig sein, was potenziell zu unentdeckten Sicherheitsproblemen führt.",
                     "remediation": "Um die automatische Bereitstellung des Log Analytics-Agents für Azure-VMs zu aktivieren:\nVom Azure-Portal:\n1. Gehen Sie zu Microsoft Defender für Cloud.\n2. Wählen Sie Umgebungseinstellungen.\n3. Wählen Sie ein Abonnement.\n4. Klicken Sie auf Einstellungen & Überwachung.\n5. Stellen Sie sicher, dass der Log Analytics-Agents/Azure Monitor-Agents auf Ein gesetzt ist.\n\nVon der Azure CLI:\nVerwenden Sie den folgenden Befehl, um die automatische Bereitstellung zu aktivieren:\naz security auto-provisioning-setting update --name default --auto-provision On\n\nVon PowerShell:\nVerwenden Sie den folgenden Befehl, um die automatische Bereitstellung zu aktivieren:\nSet-AzSecurityAutoProvisioningSetting -Name 'default' -AutoProvision On."
                 }
