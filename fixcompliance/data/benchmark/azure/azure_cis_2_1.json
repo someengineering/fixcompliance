@@ -233,6 +233,12 @@
             "title": "8 Key Vault",
             "description": "Azure Key Vault is a tool for securely storing and accessing secrets. This section outlines practices for managing keys and secrets in Key Vault, including setting expiration dates for keys and enabling access control policies.",
             "checks": [
+                "azure_keyvault_key_expires",
+                "azure_keyvault_secret_expires",
+                "azure_keyvault_recoverability",
+                "azure_keyvault_rbac",
+                "azure_keyvault_private_endpoints",
+                "azure_keyvault_key_rotation"
             ]
         },
         {
