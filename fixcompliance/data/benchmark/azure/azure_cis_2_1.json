@@ -245,6 +245,16 @@
             "title": "9 AppService",
             "description": "Azure App Service is a platform for building, deploying, and scaling web apps. This section provides security insights for App Service, including the use of authentication methods, TLS configurations, and the disabling of FTP deployments.",
             "checks": [
+                "azure_web_authentication",
+                "azure_web_https",
+                "azure_web_tls_version",
+                "azure_web_register_with_entra_id",
+                "azure_web_php_version",
+                "azure_web_python_version",
+                "azure_web_java_version",
+                "azure_web_http_version",
+                "azure_web_ftp_deployments_disabled",
+                "azure_web_key_vaults"
             ]
         },
         {
