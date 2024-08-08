@@ -121,7 +121,7 @@
         },
         {
             "name": "ensure_trusted_launch_enabled",
-            "title": "Ensure Trusted Launch is enabled on Virtual Machines (Automated)",
+            "title": "Ensure Trusted Launch is enabled on Virtual Machines",
             "result_kinds": [],
             "categories": ["security", "compliance"],
             "risk": "Not enabling Trusted Launch on Azure VMs may expose them to various boot-level attacks such as rootkits and bootkits, which can compromise the VM's integrity and data security.",

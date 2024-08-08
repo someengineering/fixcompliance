@@ -261,6 +261,7 @@
             "title": "10 Miscellaneous",
             "description": "This section includes additional miscellaneous recommendations for Azure configurations not covered in other sections, focusing on securing resources and managing Azure subscriptions efficiently.",
             "checks": [
+                "azure_resource_locks"
             ]
         }
     ]
