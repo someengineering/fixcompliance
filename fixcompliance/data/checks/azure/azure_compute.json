@@ -13,7 +13,7 @@
                 "fix": "is(azure_virtual_machine_base) <-[2]- is(azure_subscription) with(empty, -[2]-> is(azure_bastion_host))"
             },
             "remediation": {
-                "manual": "To manually enable Azure Bastion in each region:\nFrom Azure Portal:\n1. Click on Bastions\n2. Select the Subscription\n3. Select the Resource group\n4. Type a Name for the new Bastion host\n5. Select a Region\n6. Choose Standard next to Tier\n7. Set the Instance count\n8. Select or Create a new Virtual network and specify the Subnet named AzureBastionSubnet using a /26 CIDR range\n9. Choose the appropriate Public IP address option\n10. Click Create\nFrom Azure CLI:\nUse `az network bastion create --location <location> --name <name> --public-ip-address <public IP address name or ID> --resource-group <resource group name> --vnet-name <virtual network name> --sku Standard`",
+                "text": "To manually enable Azure Bastion in each region:\nFrom Azure Portal:\n1. Click on Bastions\n2. Select the Subscription\n3. Select the Resource group\n4. Type a Name for the new Bastion host\n5. Select a Region\n6. Choose Standard next to Tier\n7. Set the Instance count\n8. Select or Create a new Virtual network and specify the Subnet named AzureBastionSubnet using a /26 CIDR range\n9. Choose the appropriate Public IP address option\n10. Click Create\nFrom Azure CLI:\nUse `az network bastion create --location <location> --name <name> --public-ip-address <public IP address name or ID> --resource-group <resource group name> --vnet-name <virtual network name> --sku Standard`",
                 "url": "https://docs.microsoft.com/en-us/azure/bastion/bastion-create-host-portal"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-logging-threat-detection#lt-4-enable-network-logging-for-security-investigation",
@@ -36,7 +36,7 @@
                 "fix": "is(azure_virtual_machine) with(empty, --> is(azure_disk))"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Using the search feature, go to Virtual Machines.\n2. Select the virtual machine you would like to convert.\n3. Select Disks in the menu for the VM.\n4. At the top select Migrate to managed disks.\n5. Follow the prompts to convert the disk and finish by selecting Migrate to start the process.\nNote: VMs will be stopped and restarted after migration is complete.\nFrom PowerShell:\nRun: Stop-AzVM -ResourceGroupName $rgName -Name $vmName -Force\nConvertTo-AzVMManagedDisk -ResourceGroupName $rgName -VMName $vmName\nStart-AzVM -ResourceGroupName $rgName -Name $vmName",
+                "text": "From Azure Portal:\n1. Using the search feature, go to Virtual Machines.\n2. Select the virtual machine you would like to convert.\n3. Select Disks in the menu for the VM.\n4. At the top select Migrate to managed disks.\n5. Follow the prompts to convert the disk and finish by selecting Migrate to start the process.\nNote: VMs will be stopped and restarted after migration is complete.\nFrom PowerShell:\nRun: Stop-AzVM -ResourceGroupName $rgName -Name $vmName -Force\nConvertTo-AzVMManagedDisk -ResourceGroupName $rgName -VMName $vmName\nStart-AzVM -ResourceGroupName $rgName -Name $vmName",
                 "url": "https://docs.microsoft.com/en-us/azure/virtual-machines/windows/convert-unmanaged-to-managed-disks"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-4-enable-data-at-rest-encryption-by-default",
@@ -59,7 +59,7 @@
                 "fix": "is(azure_disk) and disk_encryption.type==EncryptionAtRestWithPlatformKey"
             },
             "remediation": {
-                "manual": "To change the encryption for disks to use CMK:\nFrom Azure Portal:\n1. Go to Virtual machines\n2. Select the virtual machine you wish to convert\n3. Select Disks from the menu\n4. Detach the disk that needs encryption change\n5. Search for Disks in the portal and select the disk\n6. Click on Encryption, change the type to use your encryption, select your key\n7. Save the changes\n8. Re-attach the disk to the VM\nFrom PowerShell:\nStop the VM with `Stop-AzVM -ResourceGroupName $rgName -Name $vmName -Force`, then convert with `Set-AzVMDiskEncryptionExtension` and start the VM again with `Start-AzVM`.",
+                "text": "To change the encryption for disks to use CMK:\nFrom Azure Portal:\n1. Go to Virtual machines\n2. Select the virtual machine you wish to convert\n3. Select Disks from the menu\n4. Detach the disk that needs encryption change\n5. Search for Disks in the portal and select the disk\n6. Click on Encryption, change the type to use your encryption, select your key\n7. Save the changes\n8. Re-attach the disk to the VM\nFrom PowerShell:\nStop the VM with `Stop-AzVM -ResourceGroupName $rgName -Name $vmName -Force`, then convert with `Set-AzVMDiskEncryptionExtension` and start the VM again with `Start-AzVM`.",
                 "url": "https://docs.microsoft.com/en-us/azure/virtual-machines/windows/disks-enable-customer-managed-keys-powershell"
             },
             "url": "https://docs.microsoft.com/azure/security/fundamentals/data-encryption-best-practices#protect-data-at-rest",
@@ -83,7 +83,7 @@
                 "url": "https://docs.microsoft.com/en-us/azure/virtual-machines/windows/extensions-features"
             },
             "remediation": {
-                "manual": "To remove unapproved extensions:\nFrom Azure Portal:\n1. Go to Virtual machines.\n2. For each VM, go to Extensions + applications.\n3. Uninstall any unapproved extensions.\nFrom Azure CLI:\nUse `az vm extension delete --resource-group <resourceGroupName> --vm-name <vmName> --name <extensionName>` to remove an unapproved extension.\nFrom PowerShell:\nRun `Remove-AzVMExtension -ResourceGroupName <ResourceGroupName> -Name <ExtensionName> -VMName <VirtualMachineName>` for each unapproved extension identified.",
+                "text": "To remove unapproved extensions:\nFrom Azure Portal:\n1. Go to Virtual machines.\n2. For each VM, go to Extensions + applications.\n3. Uninstall any unapproved extensions.\nFrom Azure CLI:\nUse `az vm extension delete --resource-group <resourceGroupName> --vm-name <vmName> --name <extensionName>` to remove an unapproved extension.\nFrom PowerShell:\nRun `Remove-AzVMExtension -ResourceGroupName <ResourceGroupName> -Name <ExtensionName> -VMName <VirtualMachineName>` for each unapproved extension identified.",
                 "url": "https://docs.microsoft.com/en-us/powershell/module/az.compute/remove-azvmextension?view=azps-7.5.0"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-asset-management#am-5-use-only-approved-applications-in-virtual-machine",
@@ -107,7 +107,7 @@
                 "url": "https://docs.microsoft.com/en-us/azure/security-center/security-center-install-endpoint-protection"
             },
             "remediation": {
-                "manual": "To install endpoint protection:\nFrom Azure Portal:\n1. Go to Security Center.\n2. Follow the instructions to install endpoint protection as recommended.\nAlternatively, use your preferred endpoint protection tool following its specific installation guide for the operating system on your VMs.",
+                "text": "To install endpoint protection:\nFrom Azure Portal:\n1. Go to Security Center.\n2. Follow the instructions to install endpoint protection as recommended.\nAlternatively, use your preferred endpoint protection tool following its specific installation guide for the operating system on your VMs.",
                 "url": "https://docs.microsoft.com/en-us/azure/security-center/security-center-install-endpoint-protection"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-endpoint-security#es-1-use-endpoint-detection-and-response-edr",
@@ -122,7 +122,7 @@
         {
             "name": "ensure_trusted_launch_enabled",
             "title": "Ensure Trusted Launch is enabled on Virtual Machines",
-            "result_kinds": [],
+            "result_kinds": ["azure_virtual_machine"],
             "categories": ["security", "compliance"],
             "risk": "Not enabling Trusted Launch on Azure VMs may expose them to various boot-level attacks such as rootkits and bootkits, which can compromise the VM's integrity and data security.",
             "severity": "high",
@@ -130,7 +130,7 @@
                 "fix": "is(azure_virtual_machine) and virtual_machine_security_profile.uefi_settings.{v_tpm_enabled=false or secure_boot_enabled=false}"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Go to Virtual Machines.\n2. For each VM, under Settings, click on Configuration.\n3. Under Security Type, select 'Trusted Launch Virtual Machines'.\n4. Check 'Enable Secure Boot' & 'Enable vTPM'.\n5. Click Apply.\nNote: Trusted launch is not supported on Azure Generation 1 VMs.",
+                "text": "From Azure Portal:\n1. Go to Virtual Machines.\n2. For each VM, under Settings, click on Configuration.\n3. Under Security Type, select 'Trusted Launch Virtual Machines'.\n4. Check 'Enable Secure Boot' & 'Enable vTPM'.\n5. Click Apply.\nNote: Trusted launch is not supported on Azure Generation 1 VMs.",
                 "url": "https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-existing-vm?tabs=portal#enable-trusted-launch-on-existing-vm"
             },
             "url": "https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch#secure-boot",

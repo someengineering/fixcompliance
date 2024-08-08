@@ -13,7 +13,7 @@
                 "fix": "is(azure_web_app) and app_authentication_settings.enabled!=true"
             },
             "remediation": {
-                "manual": "To set up App Service Authentication:\nFrom Azure Portal:\n1. Navigate to App Services and select the app.\n2. Under Settings, click on Authentication.\n3. Set App Service Authentication to Enabled and configure the identity providers as necessary.\nFrom Azure CLI:\nUse `az webapp auth update --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --enabled true` to enable authentication for the app.",
+                "text": "To set up App Service Authentication:\nFrom Azure Portal:\n1. Navigate to App Services and select the app.\n2. Under Settings, click on Authentication.\n3. Set App Service Authentication to Enabled and configure the identity providers as necessary.\nFrom Azure CLI:\nUse `az webapp auth update --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --enabled true` to enable authentication for the app.",
                 "url": "https://docs.microsoft.com/en-us/azure/app-service/overview-authentication-authorization"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-privileged-access#pa-3-manage-lifecycle-of-identities-and-entitlements",
@@ -36,7 +36,7 @@
                 "fix": "is(azure_web_app) and https_only!=true"
             },
             "remediation": {
-                "manual": "To enforce HTTPS-only traffic:\nFrom Azure Portal:\n1. Navigate to App Services and select the app.\n2. Under Configuration, set HTTPS Only to 'On'.\nFrom Azure CLI:\nUse `az webapp update --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --set httpsOnly=true` to enforce HTTPS-only traffic.",
+                "text": "To enforce HTTPS-only traffic:\nFrom Azure Portal:\n1. Navigate to App Services and select the app.\n2. Under Configuration, set HTTPS Only to 'On'.\nFrom Azure CLI:\nUse `az webapp update --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --set httpsOnly=true` to enforce HTTPS-only traffic.",
                 "url": "https://docs.microsoft.com/en-us/azure/app-service/configure-ssl-bindings#enforce-https"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-3-encrypt-sensitive-data-in-transit",
@@ -59,7 +59,7 @@
                 "fix": "is(azure_web_app) and site_config.min_tls_version in [\"1.0\", \"1.1\"]"
             },
             "remediation": {
-                "manual": "To ensure the latest TLS version is used:\nFrom Azure Portal:\n1. Navigate to App Services.\n2. Select an app and under SSL settings, set Minimum TLS Version to 1.2.\nFrom Azure CLI:\nUse `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --min-tls-version 1.2` to update the TLS version.",
+                "text": "To ensure the latest TLS version is used:\nFrom Azure Portal:\n1. Navigate to App Services.\n2. Select an app and under SSL settings, set Minimum TLS Version to 1.2.\nFrom Azure CLI:\nUse `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --min-tls-version 1.2` to update the TLS version.",
                 "url": "https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-ssl#enforce-tls-versions"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-3-encrypt-sensitive-data-in-transit",
@@ -82,7 +82,7 @@
                 "fix": "is(azure_web_app) and identity.type!=SystemAssigned"
             },
             "remediation": {
-                "manual": "To enable Register with Entra ID:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Identity, and under System assigned, set Status to On.\nFrom Azure CLI:\nEnable Managed Identity with `az webapp identity assign --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME>`.",
+                "text": "To enable Register with Entra ID:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Identity, and under System assigned, set Status to On.\nFrom Azure CLI:\nEnable Managed Identity with `az webapp identity assign --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME>`.",
                 "url": "https://docs.microsoft.com/en-gb/azure/app-service/app-service-web-tutorial-connect-msi"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-identity-management#im-1-use-centralized-identity-and-authentication-system",
@@ -105,7 +105,7 @@
                 "fix": "is(azure_web_app) and (site_config.php_version!=null and site_config.php_version!~\"^8\")"
             },
             "remediation": {
-                "manual": "To update the PHP version to the latest:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, and then General settings.\n3. Update the PHP version to the latest stable release.\nFrom Azure CLI:\nUpdate the PHP version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --php-version <latest_version>`.",
+                "text": "To update the PHP version to the latest:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, and then General settings.\n3. Update the PHP version to the latest stable release.\nFrom Azure CLI:\nUpdate the PHP version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --php-version <latest_version>`.",
                 "url": "https://docs.microsoft.com/en-us/azure/app-service/web-sites-configure#general-settings"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-posture-vulnerability-management#pv-6-rapidly-and-automatically-remediate-vulnerabilities",
@@ -128,7 +128,7 @@
                 "fix": "is(azure_web_app) and (site_config.python_version!=null and site_config.python_version!~\"^3.1[1-9]\")"
             },
             "remediation": {
-                "manual": "To update the Python version to the latest:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the Python version to the latest stable release, e.g., Python 3.11.\n\nFrom Azure CLI:\nUpdate the Python version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --linux-fx-version 'PYTHON|3.11' --windows-fx-version 'PYTHON|3.11'`.",
+                "text": "To update the Python version to the latest:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the Python version to the latest stable release, e.g., Python 3.11.\n\nFrom Azure CLI:\nUpdate the Python version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --linux-fx-version 'PYTHON|3.11' --windows-fx-version 'PYTHON|3.11'`.",
                 "url": "https://docs.microsoft.com/en-us/azure/app-service/web-sites-configure#general-settings"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-posture-vulnerability-management#pv-6-rapidly-and-automatically-remediate-vulnerabilities",
@@ -151,7 +151,7 @@
                 "fix": "is(azure_web_app) and (site_config.java_version!=null and site_config.java_version!=\"^(8|11|17|2[1-9])$\")"
             },
             "remediation": {
-                "manual": "To update the Java version to the latest:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the Java version to the latest stable release.\n\nFrom Azure CLI:\nUpdate the Java version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --java-version <LATEST_VERSION>`.",
+                "text": "To update the Java version to the latest:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the Java version to the latest stable release.\n\nFrom Azure CLI:\nUpdate the Java version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --java-version <LATEST_VERSION>`.",
                 "url": "https://docs.microsoft.com/en-us/azure/app-service/web-sites-configure#general-settings"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-posture-vulnerability-management#pv-6-rapidly-and-automatically-remediate-vulnerabilities",
@@ -173,7 +173,7 @@
                 "fix": "is(azure_web_app) and site_config.http20_enabled==false"
             },
             "remediation": {
-                "manual": "To update the HTTP version to 2.0:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the HTTP version to 2.0.\n\nFrom Azure CLI:\nUpdate the HTTP version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --http20-enabled true`.",
+                "text": "To update the HTTP version to 2.0:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the HTTP version to 2.0.\n\nFrom Azure CLI:\nUpdate the HTTP version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --http20-enabled true`.",
                 "url": "https://docs.microsoft.com/en-us/azure/app-service/web-sites-configure#general-settings"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-posture-vulnerability-management#pv-3-define-and-establish-secure-configurations-for-compute-resources",
@@ -193,11 +193,10 @@
             "risk": "FTP deployments can expose sensitive data and credentials over potentially unsecured connections, leading to unauthorized access.",
             "severity": "high",
             "detect": {
-                "manual": "From Azure Portal:\n1. Navigate to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Check that FTP state is not set to 'All allowed'.\n\nFrom Azure CLI:\nVerify the FTP state with `az webapp config show --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --query ftpsState`.",
-                "url": "https://docs.microsoft.com/en-us/azure/app-service/overview-security"
+                "manual": "From Azure Portal:\n1. Navigate to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Check that FTP state is not set to 'All allowed'.\n\nFrom Azure CLI:\nVerify the FTP state with `az webapp config show --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --query ftpsState`."
             },
             "remediation": {
-                "manual": "To disable FTP deployments:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the FTP state to 'Disabled' or 'FTPS Only'.\n\nFrom Azure CLI:\nUpdate the FTP state with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --ftps-state disabled`.",
+                "text": "To disable FTP deployments:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the FTP state to 'Disabled' or 'FTPS Only'.\n\nFrom Azure CLI:\nUpdate the FTP state with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --ftps-state disabled`.",
                 "url": "https://docs.microsoft.com/en-us/azure/app-service/deploy-ftp"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-3-encrypt-sensitive-data-in-transit",
@@ -217,11 +216,10 @@
             "risk": "Storing sensitive information such as credentials within applications or their configuration files exposes them to unauthorized access. Using Azure Key Vault enhances security by isolating and controlling access to secrets.",
             "severity": "high",
             "detect": {
-                "manual": "From Azure Portal:\n1. Navigate to Key Vaults.\n2. Verify if secrets, keys, and certificates are appropriately stored within these vaults.\n\nFrom Azure CLI:\nVerify if secrets are listed within key vaults by using `Get-AzKeyVaultSecret`.",
-                "url": "https://docs.microsoft.com/en-us/azure/key-vault/"
+                "manual": "From Azure Portal:\n1. Navigate to Key Vaults.\n2. Verify if secrets, keys, and certificates are appropriately stored within these vaults.\n\nFrom Azure CLI:\nVerify if secrets are listed within key vaults by using `Get-AzKeyVaultSecret`."
             },
             "remediation": {
-                "manual": "To securely store secrets using Azure Key Vault:\nFrom Azure CLI:\nCreate a new key vault using `az keyvault create --name '<name>' --resource-group '<myResourceGroup>' --location myLocation`.\n\nFrom PowerShell:\nCreate a new key vault with `New-AzKeyvault -name <name> -ResourceGroupName <myResourceGroup> -Location <myLocation>`.\n\nIntegrate Key Vault with your applications to retrieve secrets without storing them within the application code or configurations.",
+                "text": "To securely store secrets using Azure Key Vault:\nFrom Azure CLI:\nCreate a new key vault using `az keyvault create --name '<name>' --resource-group '<myResourceGroup>' --location myLocation`.\n\nFrom PowerShell:\nCreate a new key vault with `New-AzKeyvault -name <name> -ResourceGroupName <myResourceGroup> -Location <myLocation>`.\n\nIntegrate Key Vault with your applications to retrieve secrets without storing them within the application code or configurations.",
                 "url": "https://docs.microsoft.com/en-us/azure/app-service/app-service-key-vault-references"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-identity-management#im-3-manage-application-identities-securely-and-automatically",

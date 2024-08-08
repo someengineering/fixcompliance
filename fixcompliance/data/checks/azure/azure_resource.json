@@ -14,7 +14,7 @@
                 "url": "https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-lock-resources"
             },
             "remediation": {
-                "manual": "For each critical resource, apply the appropriate lock through the Azure Portal, Azure CLI, or PowerShell. Set the lock type based on the necessity of preventing deletions or modifications.",
+                "text": "For each critical resource, apply the appropriate lock through the Azure Portal, Azure CLI, or PowerShell. Set the lock type based on the necessity of preventing deletions or modifications.",
                 "url": "https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-subscription-governance#azure-resource-locks"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-asset-management#am-4-limit-access-to-asset-management",

@@ -13,7 +13,7 @@
                 "fix": "is(azure_mysql_server_configuration) and config.require_secure_transport!=true <-- is(azure_mysql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com\n2. Go to Azure Database for MySQL servers\n3. For each database, click on Connection security\n4. In SSL settings, click on ENABLED to enforce SSL connections.\nFrom Azure CLI:\nUse the command to set MYSQL Databases to enforce SSL connection.\naz mysql server update --resource-group <resourceGroupName> --name <serverName> --ssl-enforcement Enabled",
+                "text": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com\n2. Go to Azure Database for MySQL servers\n3. For each database, click on Connection security\n4. In SSL settings, click on ENABLED to enforce SSL connections.\nFrom Azure CLI:\nUse the command to set MYSQL Databases to enforce SSL connection.\naz mysql server update --resource-group <resourceGroupName> --name <serverName> --ssl-enforcement Enabled",
                 "url": "https://docs.microsoft.com/en-us/azure/mysql/single-server/how-to-configure-ssl"
             },
             "url": "https://docs.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-3-encrypt-sensitive-data-in-transit",
@@ -36,7 +36,7 @@
                 "fix": "is(azure_mysql_server_configuration) and config.ssl_min_protocol_version in [\"TLSv1.0\", \"TLSv1.1\"] <-- is(azure_mysql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com\n2. Go to Azure Database for MySQL flexible servers\n3. For each database, click on Server parameters under Settings\n4. In the search box, type in tls_version\n5. Click on the VALUE dropdown, and ensure only TLSV1.2 (or higher) is selected for tls_version.\nFrom Azure CLI:\nUse the command to set MYSQL flexible databases to use version 1.2 for the tls_version parameter.\naz mysql flexible-server parameter set --name tls_version --resource-group <resourceGroupName> --server-name <serverName> --value TLSV1.2",
+                "text": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com\n2. Go to Azure Database for MySQL flexible servers\n3. For each database, click on Server parameters under Settings\n4. In the search box, type in tls_version\n5. Click on the VALUE dropdown, and ensure only TLSV1.2 (or higher) is selected for tls_version.\nFrom Azure CLI:\nUse the command to set MYSQL flexible databases to use version 1.2 for the tls_version parameter.\naz mysql flexible-server parameter set --name tls_version --resource-group <resourceGroupName> --server-name <serverName> --value TLSV1.2",
                 "url": "https://docs.microsoft.com/en-us/azure/mysql/howto-configure-ssl"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-4-enable-data-at-rest-encryption-by-default",
@@ -59,7 +59,7 @@
                 "fix": "is(azure_mysql_server_configuration) and config.audit_log_enabled!=true <-- is(azure_mysql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com.\n2. Select Azure Database for MySQL Servers.\n3. Select a database.\n4. Under Settings, select Server parameters.\n5. Update audit_log_enabled parameter to ON\n6. Under Monitoring, select Diagnostic settings.\n7. Select + Add diagnostic setting.\n8. Provide a diagnostic setting name.\n9. Under Categories, select MySQL Audit Logs.\n10. Specify destination details.\n11. Click Save.\nIt may take up to 10 minutes for the logs to appear in the configured destination.",
+                "text": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com.\n2. Select Azure Database for MySQL Servers.\n3. Select a database.\n4. Under Settings, select Server parameters.\n5. Update audit_log_enabled parameter to ON\n6. Under Monitoring, select Diagnostic settings.\n7. Select + Add diagnostic setting.\n8. Provide a diagnostic setting name.\n9. Under Categories, select MySQL Audit Logs.\n10. Specify destination details.\n11. Click Save.\nIt may take up to 10 minutes for the logs to appear in the configured destination.",
                 "url": "https://docs.microsoft.com/en-us/azure/mysql/single-server/how-to-configure-audit-logs-portal"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-logging-threat-detection#lt-3-enable-logging-for-security-investigation",
@@ -74,7 +74,7 @@
         {
             "name": "audit_log_connection",
             "title": "Ensure server parameter 'audit_log_events' has 'CONNECTION' set for MySQL Database Server",
-            "result_kinds": [],
+            "result_kinds": ["azure_mysql_server"],
             "categories": ["security", "compliance"],
             "risk": "Not setting 'CONNECTION' for audit_log_events on MySQL servers can lead to missing critical log information about connection attempts, both successful and failed, which is essential for security monitoring and troubleshooting.",
             "severity": "medium",
@@ -82,7 +82,7 @@
                 "fix": "is(azure_mysql_server_configuration) and not config.audit_log_events[*]==CONNECTION <-- is(azure_mysql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Azure Database for MySQL servers.\n3. Select a database.\n4. Under Settings, select Server parameters.\n5. Update audit_log_enabled parameter to ON.\n6. Update audit_log_events parameter to have at least CONNECTION checked.\n7. Click Save.\n8. Under Monitoring, select Diagnostic settings.\n9. Select + Add diagnostic setting.\n10. Provide a diagnostic setting name.\n11. Under Categories, select MySQL Audit Logs.\n12. Specify destination details.\n13. Click Save.\nIt may take up to 10 minutes for the logs to appear in the configured destination.",
+                "text": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Azure Database for MySQL servers.\n3. Select a database.\n4. Under Settings, select Server parameters.\n5. Update audit_log_enabled parameter to ON.\n6. Update audit_log_events parameter to have at least CONNECTION checked.\n7. Click Save.\n8. Under Monitoring, select Diagnostic settings.\n9. Select + Add diagnostic setting.\n10. Provide a diagnostic setting name.\n11. Under Categories, select MySQL Audit Logs.\n12. Specify destination details.\n13. Click Save.\nIt may take up to 10 minutes for the logs to appear in the configured destination.",
                 "url": "https://docs.microsoft.com/en-us/azure/mysql/single-server/how-to-configure-audit-logs-portal"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-logging-threat-detection#lt-3-enable-logging-for-security-investigation",

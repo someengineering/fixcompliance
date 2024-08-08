@@ -127,7 +127,7 @@
         {
             "name": "defender_for_azure_cosmos_db_enabled",
             "title": "Ensure That Microsoft Defender for Azure Cosmos DB Is Enabled",
-            "result_kinds": ["azure_cosmos_db"],
+            "result_kinds": ["azure_security_pricing"],
             "categories": ["security", "compliance"],
             "risk": "Without Microsoft Defender for Azure Cosmos DB enabled, these databases lack advanced threat detection and protection capabilities, increasing the risk of undetected security incidents.",
             "severity": "medium",
@@ -200,12 +200,12 @@
         {
             "name": "defender_for_key_vault_enabled",
             "title": "Ensure That Microsoft Defender for Key Vault Is Enabled",
-            "result_kinds": ["azure_key_vault"],
+            "result_kinds": ["azure_security_pricing"],
             "categories": ["security", "compliance"],
             "risk": "Without Microsoft Defender for Key Vault enabled, key vaults lack advanced threat detection and protection capabilities, increasing the risk of undetected security incidents.",
             "severity": "medium",
             "detect": {
-                "fix": "is(azure_security_pricing) and name==KeyVaults and pricing_tier!=Standard"
+                "fix": "is(azure_security_pricing) and name==KeyVaults and pricing_tier==Standard"
             },
             "remediation": {
                 "text": "To enable Microsoft Defender for Key Vault:\nFrom Azure Portal:\n1. Go to Microsoft Defender for Cloud.\n2. Select Environment Settings blade.\n3. Click on the subscription name.\n4. Select the Defender plans blade.\n5. Select On under Status for Key Vault.\n6. Select Save.\n\nFrom Azure CLI:\nEnable Standard pricing tier for Key Vault:\naz security pricing create -n 'KeyVaults' --tier 'Standard'\n\nFrom PowerShell:\nEnable Standard pricing tier for Key Vault:\nSet-AzSecurityPricing -Name 'KeyVaults' -PricingTier 'Standard'.",

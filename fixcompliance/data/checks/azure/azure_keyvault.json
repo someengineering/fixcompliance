@@ -13,7 +13,7 @@
                 "fix": "is(azure_key) and key_attributes.expire==null"
             },
             "remediation": {
-                "manual": "To set or update the expiration date of keys:\nFrom Azure Portal:\n1. Navigate to the Key Vault.\n2. Select 'Keys' and choose a key.\n3. Set or update the 'Expiration Date' under key properties.\nFrom Azure CLI:\nUse `az keyvault key set-attributes --name <keyName> --vault-name <vaultName> --expires <date in YYYY-MM-DD format>` to set the expiration date.\nFrom PowerShell:\nUse `Set-AzKeyVaultKeyAttribute -VaultName <VaultName> -Name <KeyName> -Expires <DateTime>` to set the expiration date.",
+                "text": "To set or update the expiration date of keys:\nFrom Azure Portal:\n1. Navigate to the Key Vault.\n2. Select 'Keys' and choose a key.\n3. Set or update the 'Expiration Date' under key properties.\nFrom Azure CLI:\nUse `az keyvault key set-attributes --name <keyName> --vault-name <vaultName> --expires <date in YYYY-MM-DD format>` to set the expiration date.\nFrom PowerShell:\nUse `Set-AzKeyVaultKeyAttribute -VaultName <VaultName> -Name <KeyName> -Expires <DateTime>` to set the expiration date.",
                 "url": "https://docs.microsoft.com/en-us/azure/key-vault/keys/key-operations"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-6-use-a-secure-key-management-process",
@@ -36,7 +36,7 @@
                 "fix": "is(azure_secret) and secret_attributes.expire==null"
             },
             "remediation": {
-                "manual": "To set or update the expiration date of secrets:\nFrom Azure Portal:\n1. Navigate to the Key Vault.\n2. Select 'Secrets' and choose a secret.\n3. Set or update the 'Expiration Date' under secret properties.\nFrom Azure CLI:\nUse `az keyvault secret set-attributes --name <secretName> --vault-name <vaultName> --expires <date in YYYY-MM-DD format>` to set the expiration date.\nFrom PowerShell:\nUse `Set-AzKeyVaultSecretAttribute -VaultName <VaultName> -Name <SecretName> -Expires <DateTime>` to set the expiration date.",
+                "text": "To set or update the expiration date of secrets:\nFrom Azure Portal:\n1. Navigate to the Key Vault.\n2. Select 'Secrets' and choose a secret.\n3. Set or update the 'Expiration Date' under secret properties.\nFrom Azure CLI:\nUse `az keyvault secret set-attributes --name <secretName> --vault-name <vaultName> --expires <date in YYYY-MM-DD format>` to set the expiration date.\nFrom PowerShell:\nUse `Set-AzKeyVaultSecretAttribute -VaultName <VaultName> -Name <SecretName> -Expires <DateTime>` to set the expiration date.",
                 "url": "https://docs.microsoft.com/en-us/azure/key-vault/secrets/key-vault-manage-with-cli#set-or-update-a-secret"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-6-use-a-secure-key-management-process",
@@ -51,7 +51,7 @@
         {
             "name": "recoverability",
             "title": "Ensure the Key Vault is Recoverable",
-            "result_kinds": [],
+            "result_kinds": ["azure_key_vault"],
             "categories": ["security", "compliance"],
             "risk": "Without enabling 'Do Not Purge' and 'Soft Delete', Key Vaults and their contents may be irrecoverably lost if accidentally deleted or maliciously purged, potentially leading to data loss and a breach of security functions.",
             "severity": "critical",
@@ -59,7 +59,7 @@
                 "fix": "is(azure_key_vault) and purge_protection!=true or soft_delete!=true"
             },
             "remediation": {
-                "manual": "To enable 'Do Not Purge' and 'Soft Delete' features:\nFrom Azure Portal:\n1. Go to Key Vaults.\n2. Select each Key Vault.\n3. Under Properties, set 'Enable purge protection' to true.\nFrom Azure CLI:\nUse `az resource update --id /subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.KeyVault/vaults/<keyVaultName> --set properties.enablePurgeProtection=true`.\nFrom PowerShell:\nExecute `Update-AzKeyVault -VaultName <VaultName> -ResourceGroupName <ResourceGroupName> -EnablePurgeProtection`.",
+                "text": "To enable 'Do Not Purge' and 'Soft Delete' features:\nFrom Azure Portal:\n1. Go to Key Vaults.\n2. Select each Key Vault.\n3. Under Properties, set 'Enable purge protection' to true.\nFrom Azure CLI:\nUse `az resource update --id /subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.KeyVault/vaults/<keyVaultName> --set properties.enablePurgeProtection=true`.\nFrom PowerShell:\nExecute `Update-AzKeyVault -VaultName <VaultName> -ResourceGroupName <ResourceGroupName> -EnablePurgeProtection`.",
                 "url": "https://docs.microsoft.com/en-us/azure/key-vault/key-vault-soft-delete-cli"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-8-ensure-security-of-key-and-certificate-repository",
@@ -82,7 +82,7 @@
                 "fix": "is(azure_key_vault) and rbac_authorization!=true"
             },
             "remediation": {
-                "manual": "To enable RBAC for Key Vaults:\nFrom Azure Portal:\n1. Open Portal Menu.\n2. Navigate to Key Vaults and select a vault.\n3. In Access configuration, set the Permission model to Azure role-based access control and save.\nFrom Azure CLI:\nUse `az keyvault update --resource-group <RESOURCE GROUP NAME> --name <KEY VAULT NAME> --enable-rbac-authorization true`.\nFrom PowerShell:\nRun `Update-AzKeyVault -ResourceGroupName <RESOURCE GROUP NAME> -VaultName <KEY VAULT NAME> -EnableRbacAuthorization $True`.",
+                "text": "To enable RBAC for Key Vaults:\nFrom Azure Portal:\n1. Open Portal Menu.\n2. Navigate to Key Vaults and select a vault.\n3. In Access configuration, set the Permission model to Azure role-based access control and save.\nFrom Azure CLI:\nUse `az keyvault update --resource-group <RESOURCE GROUP NAME> --name <KEY VAULT NAME> --enable-rbac-authorization true`.\nFrom PowerShell:\nRun `Update-AzKeyVault -ResourceGroupName <RESOURCE GROUP NAME> -VaultName <KEY VAULT NAME> -EnableRbacAuthorization $True`.",
                 "url": "https://docs.microsoft.com/en-gb/azure/role-based-access-control/role-assignments-portal?tabs=current"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-8-ensure-security-of-key-and-certificate-repository",
@@ -105,7 +105,7 @@
                 "fix": "is(azure_key_vault) and not vault_private_endpoint_connections[*].id!=null"
             },
             "remediation": {
-                "manual": "To configure private endpoints for Key Vaults:\nFrom Azure Portal:\n1. Navigate to Key Vaults and select a vault.\n2. In Networking, go to Private endpoint connections and click + Create.\n3. Follow the prompts to configure and associate the private endpoint.\nFrom Azure CLI:\nRun `az network private-endpoint create --resource-group <resourceGroup> --vnet-name <vnetName> --subnet <subnetName> --name <PrivateEndpointName> --private-connection-resource-id '/subscriptions/<AZURE SUBSCRIPTION ID>/resourceGroups/<resourceGroup>/providers/Microsoft.KeyVault/vaults/<keyVaultName>' --group-ids vault --connection-name <privateLinkConnectionName> --location <azureRegion> --manual-request`.\nEnsure you approve the endpoint request and set up DNS correctly to resolve the private endpoint.",
+                "text": "To configure private endpoints for Key Vaults:\nFrom Azure Portal:\n1. Navigate to Key Vaults and select a vault.\n2. In Networking, go to Private endpoint connections and click + Create.\n3. Follow the prompts to configure and associate the private endpoint.\nFrom Azure CLI:\nRun `az network private-endpoint create --resource-group <resourceGroup> --vnet-name <vnetName> --subnet <subnetName> --name <PrivateEndpointName> --private-connection-resource-id '/subscriptions/<AZURE SUBSCRIPTION ID>/resourceGroups/<resourceGroup>/providers/Microsoft.KeyVault/vaults/<keyVaultName>' --group-ids vault --connection-name <privateLinkConnectionName> --location <azureRegion> --manual-request`.\nEnsure you approve the endpoint request and set up DNS correctly to resolve the private endpoint.",
                 "url": "https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-overview"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-8-ensure-security-of-key-and-certificate-repository",
@@ -128,7 +128,7 @@
                 "fix": "is(azure_key) and rotation_policy==null"
             },
             "remediation": {
-                "manual": "To enable and configure automatic key rotation:\nFrom Azure Portal:\n1. Navigate to Key Vaults and select a Key Vault.\n2. Under Objects, click on Keys and select a key.\n3. In the Rotation policy section, set Enable auto rotation to Enabled and configure the rotation and notification parameters.\nFrom Azure CLI:\nExecute `az keyvault key rotation-policy update --name <keyName> --vault-name <vaultName> --value <path/to/policy.json>` to update the key's rotation policy.\nFrom PowerShell:\nRun `Set-AzKeyVaultKeyRotationPolicy -VaultName <vaultName> -Name <keyName> -PolicyPath rotation_policy.json` to set the rotation policy.",
+                "text": "To enable and configure automatic key rotation:\nFrom Azure Portal:\n1. Navigate to Key Vaults and select a Key Vault.\n2. Under Objects, click on Keys and select a key.\n3. In the Rotation policy section, set Enable auto rotation to Enabled and configure the rotation and notification parameters.\nFrom Azure CLI:\nExecute `az keyvault key rotation-policy update --name <keyName> --vault-name <vaultName> --value <path/to/policy.json>` to update the key's rotation policy.\nFrom PowerShell:\nRun `Set-AzKeyVaultKeyRotationPolicy -VaultName <vaultName> -Name <keyName> -PolicyPath rotation_policy.json` to set the rotation policy.",
                 "url": "https://docs.microsoft.com/en-us/azure/key-vault/keys/rotate-key"
             },
             "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-6-use-a-secure-key-management-process",

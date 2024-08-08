@@ -13,7 +13,8 @@
                 "fix": "is(azure_postgresql_server_configuration) and config.require_secure_transport!=true <-- is(azure_postgresql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com\n2. Go to Azure Database for PostgreSQL server\n3. For each database, click on Connection security\n4. In SSL settings, click on ENABLED to enforce SSL connections\n5. Click Save\nFrom Azure CLI:\nUse the below command to enforce ssl connection for PostgreSQL Database.\naz postgres server update --resource-group <resourceGroupName> --name <serverName> --ssl-enforcement Enabled\nFrom PowerShell:\nUpdate-AzPostgreSqlServer -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -SslEnforcement Enabled"
+                "text": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com\n2. Go to Azure Database for PostgreSQL server\n3. For each database, click on Connection security\n4. In SSL settings, click on ENABLED to enforce SSL connections\n5. Click Save\nFrom Azure CLI:\nUse the below command to enforce ssl connection for PostgreSQL Database.\naz postgres server update --resource-group <resourceGroupName> --name <serverName> --ssl-enforcement Enabled\nFrom PowerShell:\nUpdate-AzPostgreSqlServer -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -SslEnforcement Enabled",
+                "url": "https://learn.microsoft.com/en-us/powershell/module/az.postgresql/update-azpostgresqlserver?view=azps-9.2.0#example-1-update-postgresql-server-by-resource-group-and-server-name"
             },
             "url": "https://docs.microsoft.com/en-us/azure/postgresql/concepts-ssl-connection-security",
             "localizations": {
@@ -35,7 +36,8 @@
                 "fix": "is(azure_postgresql_server_configuration) and config.log_checkpoints!=true <-- is(azure_postgresql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for log_checkpoints.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update log_checkpoints configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_checkpoints --value on\nFrom PowerShell:\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> --ServerName <ServerName> --Name log_checkpoints -Value on"
+                "text": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for log_checkpoints.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update log_checkpoints configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_checkpoints --value on\nFrom PowerShell:\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> --ServerName <ServerName> --Name log_checkpoints -Value on",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal"
             },
             "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal",
             "localizations": {
@@ -57,7 +59,8 @@
                 "fix": "is(azure_postgresql_server_configuration) and config.log_connections!=true <-- is(azure_postgresql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for log_connections.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update log_connections configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_connections --value on\nFrom PowerShell:\nUse the below command to update log_connections configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> --ServerName <ServerName> -Name log_connections -Value on"
+                "text": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for log_connections.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update log_connections configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_connections --value on\nFrom PowerShell:\nUse the below command to update log_connections configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> --ServerName <ServerName> -Name log_connections -Value on",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal"
             },
             "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal",
             "localizations": {
@@ -79,7 +82,8 @@
                 "fix": "is(azure_postgresql_server_configuration) and config.log_disconnections!=true <-- is(azure_postgresql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu\n2. Go to Azure Database for PostgreSQL servers\n3. For each database, click on Server parameters\n4. Search for log_disconnections.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update log_disconnections configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_disconnections --value on\nFrom PowerShell:\nUse the below command to update log_disconnections configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name log_disconnections -Value on"
+                "text": "From Azure Portal:\n1. From Azure Home select the Portal Menu\n2. Go to Azure Database for PostgreSQL servers\n3. For each database, click on Server parameters\n4. Search for log_disconnections.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update log_disconnections configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_disconnections --value on\nFrom PowerShell:\nUse the below command to update log_disconnections configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name log_disconnections -Value on",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal"
             },
             "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal",
             "localizations": {
@@ -101,7 +105,8 @@
                 "fix": "is(azure_postgresql_server_configuration) and config.`connection_throttle.enable`!=true <-- is(azure_postgresql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for connection_throttling.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update connection_throttling configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name connection_throttling --value on\nFrom PowerShell:\nUse the below command to update connection_throttling configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name connection_throttling -Value on"
+                "text": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for connection_throttling.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update connection_throttling configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name connection_throttling --value on\nFrom PowerShell:\nUse the below command to update connection_throttling configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name connection_throttling -Value on",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal"
             },
             "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal",
             "localizations": {
@@ -123,7 +128,8 @@
                 "fix": "is(azure_postgresql_server_configuration) and config.`logfiles.retention_days`<4 <-- is(azure_postgresql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for log_retention_days.\n5. Input a value between 4 and 7 (inclusive) and click Save.\nFrom Azure CLI:\nUse the below command to update log_retention_days configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_retention_days --value <4-7>\nFrom PowerShell:\nUse the below command to update log_retention_days configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name log_retention_days -Value <4-7>"
+                "text": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for log_retention_days.\n5. Input a value between 4 and 7 (inclusive) and click Save.\nFrom Azure CLI:\nUse the below command to update log_retention_days configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_retention_days --value <4-7>\nFrom PowerShell:\nUse the below command to update log_retention_days configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name log_retention_days -Value <4-7>",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal"
             },
             "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal",
             "localizations": {
@@ -145,7 +151,8 @@
                 "fix": "is(azure_postgresql_server_firewall_rule) and start_ip_address=\"0.0.0.0\" or end_ip_address=\"0.0.0.0\" <-- is(azure_postgresql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Connection security.\n4. Under Firewall rules, set Allow access to Azure services to No.\n5. Click Save.\nFrom Azure CLI:\nUse the below command to delete the AllowAllWindowsAzureIps rule for PostgreSQL Database.\naz postgres server firewall-rule delete --name AllowAllWindowsAzureIps --resource-group <resourceGroupName> --server-name <serverName>"
+                "text": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Connection security.\n4. Under Firewall rules, set Allow access to Azure services to No.\n5. Click Save.\nFrom Azure CLI:\nUse the below command to delete the AllowAllWindowsAzureIps rule for PostgreSQL Database.\naz postgres server firewall-rule delete --name AllowAllWindowsAzureIps --resource-group <resourceGroupName> --server-name <serverName>",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-manage-firewall-using-cli"
             },
             "url": "https://docs.microsoft.com/en-us/azure/postgresql/concepts-firewall-rules",
             "localizations": {
@@ -167,7 +174,7 @@
                 "manual": "From Azure Portal:\n1. From Azure Home, click on more services.\n2. Click on Databases.\n3. Click on Azure Database for PostgreSQL servers.\n4. Select the database by clicking on its name.\n5. Under Security, click Data encryption.\n6. Ensure that 'Infrastructure encryption enabled' is displayed and is 'checked'.\nFrom Azure CLI:\nVerify that Infrastructure encryption is enabled with the command: az postgres server configuration show --name <servername> --resource-group <resourcegroup> --query 'properties.infrastructureEncryption' -o tsv"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Go through the normal process of database creation.\n2. On step 2 titled 'Additional settings' ensure that 'Infrastructure double encryption enabled' is 'checked'.\n3. Acknowledge that you understand this will impact database performance.\n4. Finish database creation as normal.\nFrom Azure CLI:\nCreate a new PostgreSQL server with infrastructure double encryption enabled using the command: az postgres server create --resource-group <resourcegroup> --name <servername> --location <location> --admin-user <adminusername> --admin-password <server_admin_password> --sku-name GP_Gen4_2 --version 11 --infrastructure-encryption Enabled",
+                "text": "From Azure Portal:\n1. Go through the normal process of database creation.\n2. On step 2 titled 'Additional settings' ensure that 'Infrastructure double encryption enabled' is 'checked'.\n3. Acknowledge that you understand this will impact database performance.\n4. Finish database creation as normal.\nFrom Azure CLI:\nCreate a new PostgreSQL server with infrastructure double encryption enabled using the command: az postgres server create --resource-group <resourcegroup> --name <servername> --location <location> --admin-user <adminusername> --admin-password <server_admin_password> --sku-name GP_Gen4_2 --version 11 --infrastructure-encryption Enabled",
                 "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-double-encryption"
             },
             "url": "https://docs.microsoft.com/en-us/azure/postgresql/concepts-data-encryption-postgresql",

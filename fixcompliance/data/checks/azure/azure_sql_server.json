@@ -13,7 +13,8 @@
                 "fix": "is(azure_sql_server) and blob_auditing_policy.state=\"Disabled\""
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Go to SQL servers.\n2. Select the SQL server instance.\n3. Under Security, click on Auditing.\n4. Toggle Enable Azure SQL Auditing to On.\n5. Select an Audit log destination and click Save.\nFrom PowerShell:\nEnable auditing for each SQL Server and set appropriate targets and retention policies:\n$serverList = Get-AzSqlServer\nforeach ($server in $serverList) {\n    Set-AzSqlServerAudit -ResourceGroupName $server.ResourceGroupName -ServerName $server.ServerName -BlobStorageTargetState Enabled -RetentionInDays 90 -LogAnalyticsTargetState Enabled -EventHubTargetState Enabled\n}"
+                "text": "From Azure Portal:\n1. Go to SQL servers.\n2. Select the SQL server instance.\n3. Under Security, click on Auditing.\n4. Toggle Enable Azure SQL Auditing to On.\n5. Select an Audit log destination and click Save.\nFrom PowerShell:\nEnable auditing for each SQL Server and set appropriate targets and retention policies:\n$serverList = Get-AzSqlServer\nforeach ($server in $serverList) {\n    Set-AzSqlServerAudit -ResourceGroupName $server.ResourceGroupName -ServerName $server.ServerName -BlobStorageTargetState Enabled -RetentionInDays 90 -LogAnalyticsTargetState Enabled -EventHubTargetState Enabled\n}",
+                "url": "https://docs.microsoft.com/en-us/azure/security-center/security-center-enable-auditing-on-sql-servers"
             },
             "url": "https://docs.microsoft.com/en-us/azure/security-center/security-center-enable-auditing-on-sql-servers",
             "localizations": {
@@ -35,7 +36,8 @@
                 "fix": "is(azure_sql_server_firewall_rule) and start_ip_address==\"0.0.0.0\" and end_ip_address==\"255.255.255.255\" <-- is(azure_sql_server)"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Go to SQL servers.\n2. For each SQL server, click on Networking.\n3. Uncheck 'Allow Azure services and resources to access this server'.\n4. Remove or modify any firewall rule that allows access from 0.0.0.0.\nFrom Azure CLI:\nRemove inappropriate firewall rules and set more restrictive ones:\naz sql server firewall-rule delete --resource-group <resource group> --server <sql server name> --name \"RuleName\"\naz sql server firewall-rule create --resource-group <resource group> --server <sql server name> --name \"NewRuleName\" --start-ip-address \"<restricted IP start>\" --end-ip-address \"<restricted IP end>\"\nFrom PowerShell:\nAdjust or remove firewall rules accordingly:\nRemove-AzSqlServerFirewallRule -FirewallRuleName \"RuleName\" -ResourceGroupName <resource group name> -ServerName <server name>\nSet-AzSqlServerFirewallRule -ResourceGroupName <resource group name> -ServerName <server name> -FirewallRuleName \"NewRuleName\" -StartIpAddress \"<restricted IP start>\" -EndIpAddress \"<restricted IP end>\""
+                "text": "From Azure Portal:\n1. Go to SQL servers.\n2. For each SQL server, click on Networking.\n3. Uncheck 'Allow Azure services and resources to access this server'.\n4. Remove or modify any firewall rule that allows access from 0.0.0.0.\nFrom Azure CLI:\nRemove inappropriate firewall rules and set more restrictive ones:\naz sql server firewall-rule delete --resource-group <resource group> --server <sql server name> --name \"RuleName\"\naz sql server firewall-rule create --resource-group <resource group> --server <sql server name> --name \"NewRuleName\" --start-ip-address \"<restricted IP start>\" --end-ip-address \"<restricted IP end>\"\nFrom PowerShell:\nAdjust or remove firewall rules accordingly:\nRemove-AzSqlServerFirewallRule -FirewallRuleName \"RuleName\" -ResourceGroupName <resource group name> -ServerName <server name>\nSet-AzSqlServerFirewallRule -ResourceGroupName <resource group name> -ServerName <server name> -FirewallRuleName \"NewRuleName\" -StartIpAddress \"<restricted IP start>\" -EndIpAddress \"<restricted IP end>\"",
+                "url": "https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/configure-a-windows-firewall-for-database-engine-access?view=sql-server-2017"
             },
             "url": "https://docs.microsoft.com/en-us/azure/sql-database/sql-database-firewall-configure",
             "localizations": {
@@ -57,7 +59,8 @@
                 "fix": "is(azure_sql_server) and encryption_protector.server_key_type!=\"AzureKeyVault\""
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Go to SQL servers.\n2. For the desired server instance, click on Transparent Data Encryption.\n3. Set Transparent Data Encryption to Customer-managed key.\n4. Select an existing key or create a new key in the Azure Key Vault.\n5. Ensure 'Make selected key the default TDE protector' is checked.\nFrom Azure CLI:\nSet the TDE protector to use a customer-managed key using:\naz sql server tde-key set --resource-group <resourceGroupName> --server <serverName> --server-key-type AzureKeyVault --kid <keyIdentifier>\nFrom PowerShell:\nSet the TDE protector with a Customer-managed Key Vault key using:\nSet-AzSqlServerTransparentDataEncryptionProtector -Type AzureKeyVault -KeyId <KeyIdentifier> -ServerName <ServerName> -ResourceGroupName <ResourceGroupName>"
+                "text": "From Azure Portal:\n1. Go to SQL servers.\n2. For the desired server instance, click on Transparent Data Encryption.\n3. Set Transparent Data Encryption to Customer-managed key.\n4. Select an existing key or create a new key in the Azure Key Vault.\n5. Ensure 'Make selected key the default TDE protector' is checked.\nFrom Azure CLI:\nSet the TDE protector to use a customer-managed key using:\naz sql server tde-key set --resource-group <resourceGroupName> --server <serverName> --server-key-type AzureKeyVault --kid <keyIdentifier>\nFrom PowerShell:\nSet the TDE protector with a Customer-managed Key Vault key using:\nSet-AzSqlServerTransparentDataEncryptionProtector -Type AzureKeyVault -KeyId <KeyIdentifier> -ServerName <ServerName> -ResourceGroupName <ResourceGroupName>",
+                "url": "https://docs.microsoft.com/en-us/sql/relational-databases/security/encryption/transparent-data-encryption-byok-azure-sql"
             },
             "url": "https://docs.microsoft.com/en-us/azure/sql-database/transparent-data-encryption-byok-azure-sql",
             "localizations": {
@@ -79,7 +82,8 @@
                 "fix": "is(azure_sql_server) and server_administrators[*].administrator_type!=\"ActiveDirectory\""
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Go to SQL servers.\n2. For each SQL server, click on 'Microsoft Entra admin'.\n3. Click on 'Set admin'.\n4. Select an admin from the directory and click 'Save'.\nFrom Azure CLI:\nSet AD Admin for each server:\naz sql server ad-admin create --resource-group <resource group name> --server <server name> --display-name <display name> --object-id <object id of user>\nFrom PowerShell:\nSet Entra ID Admin for each server:\nSet-AzSqlServerActiveDirectoryAdministrator -ResourceGroupName <resource group name> -ServerName <server name> -DisplayName \"<Display name of AD account to set as DB administrator>\""
+                "text": "From Azure Portal:\n1. Go to SQL servers.\n2. For each SQL server, click on 'Microsoft Entra admin'.\n3. Click on 'Set admin'.\n4. Select an admin from the directory and click 'Save'.\nFrom Azure CLI:\nSet AD Admin for each server:\naz sql server ad-admin create --resource-group <resource group name> --server <server name> --display-name <display name> --object-id <object id of user>\nFrom PowerShell:\nSet Entra ID Admin for each server:\nSet-AzSqlServerActiveDirectoryAdministrator -ResourceGroupName <resource group name> -ServerName <server name> -DisplayName \"<Display name of AD account to set as DB administrator>\"",
+                "url": "https://learn.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-configure"
             },
             "url": "https://learn.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-configure",
             "localizations": {
@@ -101,7 +105,8 @@
                 "fix": "is(azure_sql_server_database) and transparent_data_encryption_status==Disabled"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Go to SQL databases.\n2. For each DB instance, click on Transparent data encryption.\n3. Set Data encryption to On.\nFrom Azure CLI:\nEnable TDE for each SQL DB instance:\naz sql db tde set --resource-group <resourceGroup> --server <dbServerName> --database <dbName> --status Enabled\nFrom PowerShell:\nEnable TDE for SQL DB instances:\n$Databases = Get-AzSqlDatabase -ServerName <SQL Server Name> -ResourceGroupName <Resource Group Name> | Where-Object {$_.DatabaseName -ne 'master'}\nforeach ($Db in $Databases) { Set-AzSqlDatabaseTransparentDataEncryption -ResourceGroupName $Db.ResourceGroupName -ServerName $Db.ServerName -DatabaseName $Db.DatabaseName -State 'Enabled' }"
+                "text": "From Azure Portal:\n1. Go to SQL databases.\n2. For each DB instance, click on Transparent data encryption.\n3. Set Data encryption to On.\nFrom Azure CLI:\nEnable TDE for each SQL DB instance:\naz sql db tde set --resource-group <resourceGroup> --server <dbServerName> --database <dbName> --status Enabled\nFrom PowerShell:\nEnable TDE for SQL DB instances:\n$Databases = Get-AzSqlDatabase -ServerName <SQL Server Name> -ResourceGroupName <Resource Group Name> | Where-Object {$_.DatabaseName -ne 'master'}\nforeach ($Db in $Databases) { Set-AzSqlDatabaseTransparentDataEncryption -ResourceGroupName $Db.ResourceGroupName -ServerName $Db.ServerName -DatabaseName $Db.DatabaseName -State 'Enabled' }",
+                "url": "https://docs.microsoft.com/en-us/sql/relational-databases/security/encryption/transparent-data-encryption-with-azure-sql-database"
             },
             "url": "https://docs.microsoft.com/en-us/sql/relational-databases/security/encryption/transparent-data-encryption-with-azure-sql-database",
             "localizations": {
@@ -123,7 +128,8 @@
                 "fix": "is(azure_sql_server) and blob_auditing_policy.{state!=Enabled or retention_days<90}"
             },
             "remediation": {
-                "manual": "From Azure Portal:\n1. Go to SQL servers.\n2. For each server instance, click on Auditing.\n3. If storage is selected, expand Advanced properties.\n4. Set the Retention (days) setting to a value greater than 90 days or to 0 for unlimited retention.\n5. Click Save.\nFrom PowerShell:\nFor each Server, update the retention policy to more than 90 days:\n$Servers = Get-AzSqlServer\nforeach ($Server in $Servers) {\n    Set-AzSqlServerAudit -ResourceGroupName $Server.ResourceGroupName -ServerName $Server.ServerName -RetentionInDays 91\n}"
+                "text": "From Azure Portal:\n1. Go to SQL servers.\n2. For each server instance, click on Auditing.\n3. If storage is selected, expand Advanced properties.\n4. Set the Retention (days) setting to a value greater than 90 days or to 0 for unlimited retention.\n5. Click Save.\nFrom PowerShell:\nFor each Server, update the retention policy to more than 90 days:\n$Servers = Get-AzSqlServer\nforeach ($Server in $Servers) {\n    Set-AzSqlServerAudit -ResourceGroupName $Server.ResourceGroupName -ServerName $Server.ServerName -RetentionInDays 91\n}",
+                "url": "https://docs.microsoft.com/en-us/azure/sql-database/sql-database-auditing"
             },
             "url": "https://docs.microsoft.com/en-us/azure/sql-database/sql-database-auditing",
             "localizations": {
