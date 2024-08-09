@@ -1,0 +1,144 @@
+{
+    "provider": "azure",
+    "service": "keyvault",
+    "checks": [
+        {
+            "name": "key_expires",
+            "title": "Ensure that the Expiration Date is set for all Keys in Key Vaults",
+            "result_kinds": ["azure_key"],
+            "categories": ["security", "compliance"],
+            "risk": "Keys without expiration dates in Azure Key Vaults pose a security risk as they may be used indefinitely, increasing the risk of unauthorized access if they are compromised. Setting an expiration date enforces periodic rotation and helps maintain secure access.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_key) and key_attributes.expire==null"
+            },
+            "remediation": {
+                "text": "To set or update the expiration date of keys:\nFrom Azure Portal:\n1. Navigate to the Key Vault.\n2. Select 'Keys' and choose a key.\n3. Set or update the 'Expiration Date' under key properties.\nFrom Azure CLI:\nUse `az keyvault key set-attributes --name <keyName> --vault-name <vaultName> --expires <date in YYYY-MM-DD format>` to set the expiration date.\nFrom PowerShell:\nUse `Set-AzKeyVaultKeyAttribute -VaultName <VaultName> -Name <KeyName> -Expires <DateTime>` to set the expiration date.",
+                "url": "https://docs.microsoft.com/en-us/azure/key-vault/keys/key-operations"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-6-use-a-secure-key-management-process",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass für alle Schlüssel in Key Vaults ein Ablaufdatum festgelegt ist",
+                    "risk": "Schlüssel ohne Ablaufdatum in Azure Key Vaults stellen ein Sicherheitsrisiko dar, da sie möglicherweise unbegrenzt verwendet werden können, was das Risiko eines unbefugten Zugriffs erhöht, falls sie kompromittiert werden. Durch das Festlegen eines Ablaufdatums wird der regelmäßige Austausch erzwungen und der sichere Zugriff gewährleistet.",
+                    "remediation": "So setzen oder aktualisieren Sie das Ablaufdatum von Schlüsseln:\nIm Azure-Portal:\n1. Navigieren Sie zum Key Vault.\n2. Wählen Sie 'Schlüssel' und wählen Sie einen Schlüssel aus.\n3. Setzen oder aktualisieren Sie das 'Ablaufdatum' unter Schlüsseleigenschaften.\nMit Azure CLI:\nVerwenden Sie `az keyvault key set-attributes --name <keyName> --vault-name <vaultName> --expires <Datum im YYYY-MM-DD-Format>` um das Ablaufdatum festzulegen.\nMit PowerShell:\nVerwenden Sie `Set-AzKeyVaultKeyAttribute -VaultName <VaultName> -Name <KeyName> -Expires <DateTime>` um das Ablaufdatum festzulegen."
+                }
+            }
+        },
+        {
+            "name": "secret_expires",
+            "title": "Ensure that the Expiration Date is set for all Secrets in Key Vaults",
+            "result_kinds": ["azure_secret"],
+            "categories": ["security", "compliance"],
+            "risk": "Secrets without expiration dates in Azure Key Vaults may continue to be used indefinitely without oversight, increasing the risk of unauthorized access and potential data breaches.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_secret) and secret_attributes.expire==null"
+            },
+            "remediation": {
+                "text": "To set or update the expiration date of secrets:\nFrom Azure Portal:\n1. Navigate to the Key Vault.\n2. Select 'Secrets' and choose a secret.\n3. Set or update the 'Expiration Date' under secret properties.\nFrom Azure CLI:\nUse `az keyvault secret set-attributes --name <secretName> --vault-name <vaultName> --expires <date in YYYY-MM-DD format>` to set the expiration date.\nFrom PowerShell:\nUse `Set-AzKeyVaultSecretAttribute -VaultName <VaultName> -Name <SecretName> -Expires <DateTime>` to set the expiration date.",
+                "url": "https://docs.microsoft.com/en-us/azure/key-vault/secrets/key-vault-manage-with-cli#set-or-update-a-secret"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-6-use-a-secure-key-management-process",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass für alle Geheimnisse in Key Vaults ein Ablaufdatum festgelegt ist",
+                    "risk": "Geheimnisse ohne Ablaufdaten in Azure Key Vaults können möglicherweise unbegrenzt ohne Überwachung verwendet werden, was das Risiko unbefugten Zugriffs und möglicher Datenverletzungen erhöht.",
+                    "remediation": "So setzen oder aktualisieren Sie das Ablaufdatum von Geheimnissen:\nIm Azure-Portal:\n1. Navigieren Sie zum Key Vault.\n2. Wählen Sie 'Geheimnisse' und wählen Sie ein Geheimnis aus.\n3. Setzen oder aktualisieren Sie das 'Ablaufdatum' unter den Eigenschaften des Geheimnisses.\nMit Azure CLI:\nVerwenden Sie `az keyvault secret set-attributes --name <secretName> --vault-name <vaultName> --expires <Datum im YYYY-MM-DD-Format>` um das Ablaufdatum festzulegen.\nMit PowerShell:\nVerwenden Sie `Set-AzKeyVaultSecretAttribute -VaultName <VaultName> -Name <SecretName> -Expires <DateTime>` um das Ablaufdatum festzulegen."
+                }
+            }
+        },
+        {
+            "name": "recoverability",
+            "title": "Ensure the Key Vault is Recoverable",
+            "result_kinds": ["azure_key_vault"],
+            "categories": ["security", "compliance"],
+            "risk": "Without enabling 'Do Not Purge' and 'Soft Delete', Key Vaults and their contents may be irrecoverably lost if accidentally deleted or maliciously purged, potentially leading to data loss and a breach of security functions.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(azure_key_vault) and purge_protection!=true or soft_delete!=true"
+            },
+            "remediation": {
+                "text": "To enable 'Do Not Purge' and 'Soft Delete' features:\nFrom Azure Portal:\n1. Go to Key Vaults.\n2. Select each Key Vault.\n3. Under Properties, set 'Enable purge protection' to true.\nFrom Azure CLI:\nUse `az resource update --id /subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.KeyVault/vaults/<keyVaultName> --set properties.enablePurgeProtection=true`.\nFrom PowerShell:\nExecute `Update-AzKeyVault -VaultName <VaultName> -ResourceGroupName <ResourceGroupName> -EnablePurgeProtection`.",
+                "url": "https://docs.microsoft.com/en-us/azure/key-vault/key-vault-soft-delete-cli"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-8-ensure-security-of-key-and-certificate-repository",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Key Vault wiederherstellbar ist",
+                    "risk": "Ohne die Aktivierung von 'Nicht Löschen' und 'Soft Delete' können Key Vaults und deren Inhalte unwiederbringlich verloren gehen, wenn sie versehentlich gelöscht oder bösartig gelöscht werden, was zu Datenverlust und einer Verletzung der Sicherheitsfunktionen führen kann.",
+                    "remediation": "Um die Funktionen 'Nicht Löschen' und 'Soft Delete' zu aktivieren:\nIm Azure-Portal:\n1. Gehen Sie zu Key Vaults.\n2. Wählen Sie jeden Key Vault aus.\n3. Unter Eigenschaften, setzen Sie 'Purge Protection aktivieren' auf wahr.\nMit Azure CLI:\nVerwenden Sie `az resource update --id /subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.KeyVault/vaults/<keyVaultName> --set properties.enablePurgeProtection=true`.\nMit PowerShell:\nFühren Sie `Update-AzKeyVault -VaultName <VaultName> -ResourceGroupName <ResourceGroupName> -EnablePurgeProtection` aus."
+                }
+            }
+        },
+        {
+            "name": "rbac",
+            "title": "Ensure Role Based Access Control for Azure Key Vault",
+            "result_kinds": ["azure_key_vault"],
+            "categories": ["security", "compliance"],
+            "risk": "Without RBAC, Key Vaults may be accessed or managed improperly, posing a risk of unauthorized access and configuration. RBAC allows for finer-grained access control, enhancing security and compliance by aligning access with users' roles and responsibilities.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_key_vault) and rbac_authorization!=true"
+            },
+            "remediation": {
+                "text": "To enable RBAC for Key Vaults:\nFrom Azure Portal:\n1. Open Portal Menu.\n2. Navigate to Key Vaults and select a vault.\n3. In Access configuration, set the Permission model to Azure role-based access control and save.\nFrom Azure CLI:\nUse `az keyvault update --resource-group <RESOURCE GROUP NAME> --name <KEY VAULT NAME> --enable-rbac-authorization true`.\nFrom PowerShell:\nRun `Update-AzKeyVault -ResourceGroupName <RESOURCE GROUP NAME> -VaultName <KEY VAULT NAME> -EnableRbacAuthorization $True`.",
+                "url": "https://docs.microsoft.com/en-gb/azure/role-based-access-control/role-assignments-portal?tabs=current"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-8-ensure-security-of-key-and-certificate-repository",
+            "localizations": {
+                "de": {
+                    "title": "Aktivieren der rollenbasierten Zugriffskontrolle für Azure Key Vault",
+                    "risk": "Ohne RBAC könnten Key Vaults unsachgemäß zugegriffen oder verwaltet werden, was ein Risiko für unbefugten Zugriff und Konfiguration darstellt. RBAC ermöglicht eine feingranulare Zugriffskontrolle, verbessert die Sicherheit und Compliance durch die Ausrichtung des Zugriffs mit den Rollen und Verantwortlichkeiten der Benutzer.",
+                    "remediation": "Zur Aktivierung von RBAC für Key Vaults:\nIm Azure-Portal:\n1. Öffnen Sie das Portal-Menü.\n2. Navigieren Sie zu Key Vaults und wählen Sie einen Tresor aus.\n3. In der Zugriffskonfiguration setzen Sie das Berechtigungsmodell auf Azure-Rollenbasierte Zugriffskontrolle und speichern.\nMit Azure CLI:\nVerwenden Sie `az keyvault update --resource-group <RESOURCE GROUP NAME> --name <KEY VAULT NAME> --enable-rbac-authorization true`.\nMit PowerShell:\nFühren Sie `Update-AzKeyVault -ResourceGroupName <RESOURCE GROUP NAME> -VaultName <KEY VAULT NAME> -EnableRbacAuthorization $True` aus."
+                }
+            }
+        },
+        {
+            "name": "private_endpoints",
+            "title": "Ensure that Private Endpoints are Used for Azure Key Vault",
+            "result_kinds": ["azure_key_vault"],
+            "categories": ["security", "compliance"],
+            "risk": "Without private endpoints, Azure Key Vaults may be accessible over public networks, increasing the risk of unauthorized access. Private endpoints restrict network traffic to and from Azure Key Vaults within the Azure Virtual Network, significantly reducing the surface for network attacks.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_key_vault) and not vault_private_endpoint_connections[*].id!=null"
+            },
+            "remediation": {
+                "text": "To configure private endpoints for Key Vaults:\nFrom Azure Portal:\n1. Navigate to Key Vaults and select a vault.\n2. In Networking, go to Private endpoint connections and click + Create.\n3. Follow the prompts to configure and associate the private endpoint.\nFrom Azure CLI:\nRun `az network private-endpoint create --resource-group <resourceGroup> --vnet-name <vnetName> --subnet <subnetName> --name <PrivateEndpointName> --private-connection-resource-id '/subscriptions/<AZURE SUBSCRIPTION ID>/resourceGroups/<resourceGroup>/providers/Microsoft.KeyVault/vaults/<keyVaultName>' --group-ids vault --connection-name <privateLinkConnectionName> --location <azureRegion> --manual-request`.\nEnsure you approve the endpoint request and set up DNS correctly to resolve the private endpoint.",
+                "url": "https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-overview"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-8-ensure-security-of-key-and-certificate-repository",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass für Azure Key Vault private Endpunkte verwendet werden",
+                    "risk": "Ohne private Endpunkte könnten Azure Key Vaults über öffentliche Netzwerke zugänglich sein, was das Risiko unbefugter Zugriffe erhöht. Private Endpunkte beschränken den Netzwerkverkehr zu und von Azure Key Vaults innerhalb des Azure Virtual Network, wodurch die Oberfläche für Netzwerkangriffe erheblich reduziert wird.",
+                    "remediation": "So konfigurieren Sie private Endpunkte für Key Vaults:\nIm Azure-Portal:\n1. Navigieren Sie zu Key Vaults und wählen Sie einen Tresor aus.\n2. Unter Networking gehen Sie zu Private Endpoint Connections und klicken auf + Erstellen.\n3. Folgen Sie den Anweisungen, um den privaten Endpunkt zu konfigurieren und zu verknüpfen.\nMit Azure CLI:\nFühren Sie `az network private-endpoint create --resource-group <resourceGroup> --vnet-name <vnetName> --subnet <subnetName> --name <PrivateEndpointName> --private-connection-resource-id '/subscriptions/<AZURE SUBSCRIPTION ID>/resourceGroups/<resourceGroup>/providers/Microsoft.KeyVault/vaults/<keyVaultName>' --group-ids vault --connection-name <privateLinkConnectionName> --location <azureRegion> --manual-request` aus.\nStellen Sie sicher, dass Sie die Endpunktanfrage genehmigen und DNS korrekt einrichten, um den privaten Endpunkt aufzulösen."
+                }
+            }
+        },
+        {
+            "name": "key_rotation",
+            "title": "Ensure Automatic Key Rotation is Enabled Within Azure Key Vault for the Supported Services",
+            "result_kinds": ["azure_key"],
+            "categories": ["security", "compliance"],
+            "risk": "Failing to enable automatic key rotation may lead to the use of outdated or potentially compromised keys, increasing the risk of security breaches. Automatic rotation helps maintain key freshness and reduces the administrative overhead associated with manual key rotation.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_key) and rotation_policy==null"
+            },
+            "remediation": {
+                "text": "To enable and configure automatic key rotation:\nFrom Azure Portal:\n1. Navigate to Key Vaults and select a Key Vault.\n2. Under Objects, click on Keys and select a key.\n3. In the Rotation policy section, set Enable auto rotation to Enabled and configure the rotation and notification parameters.\nFrom Azure CLI:\nExecute `az keyvault key rotation-policy update --name <keyName> --vault-name <vaultName> --value <path/to/policy.json>` to update the key's rotation policy.\nFrom PowerShell:\nRun `Set-AzKeyVaultKeyRotationPolicy -VaultName <vaultName> -Name <keyName> -PolicyPath rotation_policy.json` to set the rotation policy.",
+                "url": "https://docs.microsoft.com/en-us/azure/key-vault/keys/rotate-key"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-6-use-a-secure-key-management-process",
+            "localizations": {
+                "de": {
+                    "title": "Sicherstellen, dass die automatische Schlüsselrotation in der Azure Key Vault für die unterstützten Dienste aktiviert ist",
+                    "risk": "Das Nichtaktivieren der automatischen Schlüsselrotation kann dazu führen, dass veraltete oder möglicherweise kompromittierte Schlüssel verwendet werden, was das Risiko von Sicherheitsverletzungen erhöht. Die automatische Rotation hilft, die Frische der Schlüssel zu erhalten und den administrativen Aufwand zu reduzieren, der mit der manuellen Schlüsselrotation verbunden ist.",
+                    "remediation": "So aktivieren und konfigurieren Sie die automatische Schlüsselrotation:\nIm Azure-Portal:\n1. Navigieren Sie zu Key Vaults und wählen Sie einen Key Vault aus.\n2. Klicken Sie unter Objekte auf Schlüssel und wählen Sie einen Schlüssel aus.\n3. Setzen Sie im Abschnitt Rotationsrichtlinie die Option Auto-Rotation aktivieren auf Aktiviert und konfigurieren Sie die Rotations- und Benachrichtigungsparameter.\nMit Azure CLI:\nFühren Sie `az keyvault key rotation-policy update --name <keyName> --vault-name <vaultName> --value <path/to/policy.json>` aus, um die Rotationsrichtlinie des Schlüssels zu aktualisieren.\nMit PowerShell:\nFühren Sie `Set-AzKeyVaultKeyRotationPolicy -VaultName <vaultName> -Name <keyName> -PolicyPath rotation_policy.json` aus, um die Rotationsrichtlinie festzulegen."
+                }
+            }
+        }
+    ]
+}

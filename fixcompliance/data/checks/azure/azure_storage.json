@@ -1,0 +1,375 @@
+{
+    "provider": "azure",
+    "service": "storage",
+    "checks": [
+        {
+            "name": "secure_transfer",
+            "title": "Ensure that 'Secure transfer required' is set to 'Enabled'",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "The secure transfer option enhances the security of a storage account by only allowing requests to the storage account by a secure connection. For example, when calling REST APIs to access storage accounts, the connection must use HTTPS. Any requests using HTTP will be rejected when 'secure transfer required' is enabled. When using the Azure files service, connection without encryption will fail, including scenarios using SMB 2.1, SMB 3.0 without encryption, and some flavors of the Linux SMB client. Because Azure storage doesn’t support HTTPS for custom domain names, this option is not applied when using a custom domain name.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and supports_https_traffic_only!=true"
+            },
+            "remediation": {
+                "text": "To enable 'Secure transfer required' to 'Enabled':\nFrom Azure Portal:\n1. Go to Storage Accounts.\n2. For each storage account, go to Configuration.\n3. Set 'Secure transfer required' to Enabled.\nFrom Azure CLI:\nUse the below command to enable 'Secure transfer required' for a Storage Account\naz storage account update --name <storageAccountName> --resource-group <resourceGroupName> --https-only true",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/blobs/security-recommendations#encryption-in-transit",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/blobs/security-recommendations#encryption-in-transit",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Erforderlicher sicherer Transfer' auf 'Aktiviert' gesetzt ist",
+                    "risk": "Die Option für den sicheren Transfer erhöht die Sicherheit eines Speicherkontos, indem nur Anfragen über eine sichere Verbindung zugelassen werden. Anfragen über HTTP werden abgelehnt, wenn der 'erforderliche sichere Transfer' aktiviert ist. Bei Verwendung des Azure-Dateidienstes schlägt die Verbindung ohne Verschlüsselung fehl, einschließlich Szenarien mit SMB 2.1, SMB 3.0 ohne Verschlüsselung und einigen Varianten des Linux-SMB-Clients.",
+                    "remediation": "Um den 'Erforderlichen sicheren Transfer' zu aktivieren:\nVom Azure-Portal:\n1. Gehen Sie zu Speicherkonten.\n2. Gehen Sie für jedes Speicherkonto zu Konfiguration.\n3. Setzen Sie den 'Erforderlichen sicheren Transfer' auf Aktiviert.\nVom Azure CLI:\nVerwenden Sie den folgenden Befehl, um den 'Erforderlichen sicheren Transfer' für ein Speicherkonto zu aktivieren\naz storage account update --name <Speicherkontoname> --resource-group <Ressourcengruppenname> --https-only true"
+                }
+            }
+        },
+        {
+            "name": "infrastructure_encryption",
+            "title": "Ensure that ‘Enable Infrastructure Encryption’ for Each Storage Account in Azure Storage is Set to ‘enabled’",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Azure Storage automatically encrypts all data in a storage account at the network level using 256-bit AES encryption, which is one of the strongest, FIPS 140-2-compliant block ciphers available. Customers who require higher levels of assurance that their data is secure can also enable 256-bit AES encryption at the Azure Storage infrastructure level for double encryption. Double encryption of Azure Storage data protects against a scenario where one of the encryption algorithms or keys may be compromised.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and storage_encryption.require_infrastructure_encryption!=true"
+            },
+            "remediation": {
+                "text": "To enable Infrastructure Encryption for a Storage Account:\nFrom Azure Portal:\n1. During Storage Account creation, in the Encryption tab, check the box next to Enable infrastructure encryption.\nFrom Azure CLI:\naz storage account create --name <storage-account> --resource-group <resource-group> --location <location> --sku Standard_RAGRS --kind StorageV2 --require-infrastructure-encryption\nFrom PowerShell:\nNew-AzStorageAccount -ResourceGroupName <resource_group> -AccountName <storage-account> -Location <location> -SkuName \"Standard_RAGRS\" -Kind StorageV2 -RequireInfrastructureEncryption",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/common/infrastructure-encryption-enable"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/common/storage-service-encryption",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass für jedes Speicherkonto in Azure Storage die Infrastrukturverschlüsselung aktiviert ist",
+                    "risk": "Azure Storage verschlüsselt automatisch alle Daten in einem Speicherkonto auf Netzwerkebene mit 256-Bit-AES-Verschlüsselung, einem der stärksten, FIPS 140-2-konformen Blockchiffren. Kunden, die eine höhere Sicherheitsstufe für ihre Daten benötigen, können auch eine 256-Bit-AES-Verschlüsselung auf der Infrastrukturebene von Azure Storage für eine doppelte Verschlüsselung aktivieren.",
+                    "remediation": "Um die Infrastrukturverschlüsselung für ein Speicherkonto zu aktivieren:\nVom Azure-Portal:\n1. Bei der Erstellung des Speicherkontos, im Tab 'Verschlüsselung', das Kästchen neben 'Infrastrukturverschlüsselung aktivieren' ankreuzen.\nVom Azure CLI:\naz storage account create --name <Speicherkontoname> --resource-group <Ressourcengruppenname> --location <Standort> --sku Standard_RAGRS --kind StorageV2 --require-infrastructure-encryption\nVom PowerShell:\nNew-AzStorageAccount -ResourceGroupName <resource_group> -AccountName <Speicherkontoname> -Location <Standort> -SkuName \"Standard_RAGRS\" -Kind StorageV2 -RequireInfrastructureEncryption"
+                }
+            }
+        },
+        {
+            "name": "key_rotation_reminders",
+            "title": "Ensure that 'Enable key rotation reminders' is enabled for each Storage Account",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Access Keys authenticate application access requests to data contained in Storage Accounts. A periodic rotation of these keys is recommended to ensure that potentially compromised keys cannot result in a long-term exploitable credential. The 'Rotation Reminder' is an automatic reminder feature for a manual procedure.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_storage_account) and key_policy==null"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Storage Accounts.\n2. For each Storage Account that is not compliant, go to Access keys.\n3. Click Set rotation reminder.\n4. Check 'Enable key rotation reminders'.\n5. In the 'Send reminders' field select Custom, then set the 'Remind me every' field to 90 and the period drop down to Days.\n6. Click Save.\nFrom PowerShell:\n$rgName = <resource group name for the storage>\n$accountName = <storage account name>\n$account = Get-AzStorageAccount -ResourceGroupName $rgName -Name $accountName\nif ($account.KeyCreationTime.Key1 -eq $null -or $account.KeyCreationTime.Key2 -eq $null){\nWrite-output (\"You must regenerate both keys at least once before setting expiration policy\")\n} else {\n$account = Set-AzStorageAccount -ResourceGroupName $rgName -Name $accountName -KeyExpirationPeriodInDay 90\n}\n$account.KeyPolicy.KeyExpirationPeriodInDays",
+                "url": "https://docs.microsoft.com/en-us/azure/key-vault/keys/how-to-configure-key-rotation"
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/storage/common/storage-create-storage-account#regenerate-storage-access-keys",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Erinnerungen an Schlüsselrotation aktivieren' für jedes Speicherkonto aktiviert ist",
+                    "risk": "Zugriffsschlüssel authentifizieren Anwendungsanforderungen zum Zugriff auf Daten in Speicherkonten. Eine regelmäßige Rotation dieser Schlüssel wird empfohlen, um sicherzustellen, dass möglicherweise kompromittierte Schlüssel nicht zu einer langfristig ausnutzbaren Anmeldeinformation führen können. Die 'Rotations-Erinnerung' ist eine automatische Erinnerungsfunktion für ein manuelles Verfahren.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu Speicherkonten.\n2. Für jedes nicht konforme Speicherkonto, gehen Sie zu Zugriffsschlüsseln.\n3. Klicken Sie auf Rotationserinnerung einstellen.\n4. Aktivieren Sie 'Erinnerungen an Schlüsselrotation aktivieren'.\n5. Wählen Sie im Feld 'Erinnerungen senden' die Option Benutzerdefiniert und stellen Sie das Feld 'Erinnere mich alle' auf 90 und das Dropdown-Menü auf Tage.\n6. Klicken Sie auf Speichern.\nVom PowerShell:\n$rgName = <Name der Ressourcengruppe für das Speicher>\n$accountName = <Name des Speicherkontos>\n$account = Get-AzStorageAccount -ResourceGroupName $rgName -Name $accountName\nwenn ($account.KeyCreationTime.Key1 -eq $null -oder $account.KeyCreationTime.Key2 -eq $null){\nWrite-output (\"Sie müssen beide Schlüssel mindestens einmal regenerieren, bevor Sie die Ablaufpolitik einstellen\")\n} else {\n$account = Set-AzStorageAccount -ResourceGroupName $rgName -Name $accountName -KeyExpirationPeriodInDay 90\n}\n$account.KeyPolicy.KeyExpirationPeriodInDays"
+                }
+            }
+        },
+        {
+            "name": "periodic_regeneration_of_access_keys",
+            "title": "Ensure that Storage Account Access Keys are Periodically Regenerated",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "When a storage account is created, Azure generates two 512-bit storage access keys which are used for authentication when the storage account is accessed. Rotating these keys periodically ensures that any inadvertent access or exposure does not result from the compromise of these keys. Cryptographic key rotation periods will vary depending on your organization's security requirements and the type of data which is being stored in the Storage Account.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and key_policy!=null and key_policy>90"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Storage Accounts.\n2. For each Storage Account with outdated keys, go to Access keys.\n3. Click 'Rotate key' next to the outdated key, then click 'Yes' to the prompt confirming that you want to regenerate the access key.\nAfter Azure regenerates the Access Key, you can confirm that 'Access keys' reflects a 'Last rotated' date of (0 days ago).",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/common/storage-create-storage-account#regenerate-storage-access-keys"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/common/storage-create-storage-account#regenerate-storage-access-keys",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Zugriffsschlüssel für Speicherkonten regelmäßig neu generiert werden",
+                    "risk": "Bei der Erstellung eines Speicherkontos generiert Azure zwei 512-Bit-Zugriffsschlüssel, die zur Authentifizierung verwendet werden, wenn auf das Speicherkonto zugegriffen wird. Die regelmäßige Rotation dieser Schlüssel stellt sicher, dass kein unbeabsichtigter Zugriff oder keine unbeabsichtigte Offenlegung durch Kompromittierung dieser Schlüssel erfolgt.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu Speicherkonten.\n2. Für jedes Speicherkonto mit veralteten Schlüsseln gehen Sie zu Zugriffsschlüsseln.\n3. Klicken Sie neben dem veralteten Schlüssel auf 'Schlüssel drehen' und dann auf 'Ja' zur Bestätigung, dass Sie den Zugriffsschlüssel neu generieren möchten.\nNachdem Azure den Zugriffsschlüssel neu generiert hat, können Sie bestätigen, dass 'Zugriffsschlüssel' ein 'Zuletzt gedreht' Datum von (0 Tagen her) anzeigt."
+                }
+            }
+        },
+        {
+            "name": "logging_for_queue",
+            "title": "Ensure Storage Logging is Enabled for Queue Service for 'Read', 'Write', and 'Delete' requests",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "The Storage Queue service stores messages that may be read by any client who has access to the storage account. A queue can contain an unlimited number of messages, each of which can be up to 64KB in size. Storage Logging happens server-side and records details for both successful and failed requests, including the details of read, write, and delete operations against the queues. This logging is crucial for monitoring and diagnosing issues within storage services.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. Go to Storage Accounts.\n2. Select the specific Storage Account.\n3. Click the Diagnostics settings under the Monitoring section.\n4. Select the queue tab, then check if StorageRead, StorageWrite, and StorageDelete options are selected under the Logs section.\nFrom Azure CLI:\nEnsure the below command's output contains properties delete, read, and write set to true.\naz storage logging show --services q --account-name <storageAccountName>\nBy default, storage account queue services are not logged."
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Storage Accounts.\n2. Select the specific Storage Account.\n3. Click the Diagnostics settings under the Monitoring section.\n4. Select the queue tab.\n5. Click + Add diagnostic setting.\n6. Select StorageRead, StorageWrite, and StorageDelete options under the Logs section to enable Storage Logging for Queue service.\n7. Select a destination for your logs to be sent to.\nFrom Azure CLI:\nUse the below command to enable the Storage Logging for Queue service.\naz storage logging update --account-name <storageAccountName> --account-key <storageAccountKey> --services q --log rwd --retention 90",
+                "url": "https://docs.microsoft.com/en-us/rest/api/storageservices/about-storage-analytics-logging"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/queues/monitor-queue-storage",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Speicherprotokollierung für den Warteschlangendienst für 'Lesen', 'Schreiben' und 'Löschen' von Anfragen aktiviert ist",
+                    "risk": "Der Storage Queue-Dienst speichert Nachrichten, die von jedem Client gelesen werden können, der Zugang zum Speicherkonto hat. Eine Warteschlange kann eine unbegrenzte Anzahl von Nachrichten enthalten, von denen jede bis zu 64 KB groß sein kann. Die Speicherprotokollierung erfolgt serverseitig und zeichnet Details sowohl für erfolgreiche als auch für fehlgeschlagene Anfragen auf, einschließlich der Details von Lese-, Schreib- und Löschvorgängen gegenüber den Warteschlangen. Diese Protokollierung ist entscheidend für die Überwachung und Diagnose von Problemen innerhalb von Speicherdiensten.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu Speicherkonten.\n2. Wählen Sie das spezifische Speicherkonto.\n3. Klicken Sie unter dem Überwachungsabschnitt auf die Diagnoseeinstellungen.\n4. Wählen Sie die Warteschlangenregisterkarte.\n5. Klicken Sie auf + Diagnoseeinstellung hinzufügen.\n6. Wählen Sie die Optionen StorageRead, StorageWrite und StorageDelete unter dem Abschnitt Protokolle, um die Speicherprotokollierung für den Warteschlangendienst zu aktivieren.\n7. Wählen Sie ein Ziel für Ihre Protokolle aus.\nVom Azure CLI:\nVerwenden Sie den folgenden Befehl, um die Speicherprotokollierung für den Warteschlangendienst zu aktivieren.\naz storage logging update --account-name <Speicherkontoname> --account-key <Speicherkonto-Schlüssel> --services q --log rwd --retention 90"
+                }
+            }
+        },
+        {
+            "name": "public_network_access",
+            "title": "Ensure 'Public Network Access' is Disabled for Storage Accounts",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Disabling public network access for a storage account overrides the public access settings for individual containers in that storage account. This is crucial to prevent unauthorized public access. Public access to a container is turned off by default and must be explicitly enabled, which is not recommended unless necessary.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and allow_blob_public_access==true"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Storage Accounts.\n2. For each storage account, under the 'Security + networking' section, click Networking.\n3. Set 'Public Network Access' to 'Disabled'.\nFrom Azure CLI:\nSet 'Public Network Access' to 'Disabled' on the storage account:\naz storage account update --name <storage-account> --resource-group <resource-group> --public-network-access Disabled\nFrom PowerShell:\nSet-AzStorageAccount -ResourceGroupName <resource group name> -Name <storage account name> -PublicNetworkAccess Disabled",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/blobs/storage-manage-access-to-resources"
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/storage/common/storage-network-security?tabs=azure-portal",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der öffentliche Netzwerkzugriff für Speicherkonten deaktiviert ist",
+                    "risk": "Das Deaktivieren des öffentlichen Netzwerkzugangs für ein Speicherkonto überschreibt die öffentlichen Zugriffseinstellungen für einzelne Container in diesem Speicherkonto. Dies ist entscheidend, um unautorisierten öffentlichen Zugriff zu verhindern. Der öffentliche Zugang zu einem Container ist standardmäßig deaktiviert und muss explizit aktiviert werden, was nicht empfohlen wird, es sei denn, es ist notwendig.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu Speicherkonten.\n2. Für jedes Speicherkonto, unter dem Abschnitt 'Sicherheit + Netzwerk', klicken Sie auf Netzwerk.\n3. Stellen Sie 'Öffentlicher Netzwerkzugang' auf 'Deaktiviert'.\nVom Azure CLI:\nSetzen Sie den 'Öffentlichen Netzwerkzugang' auf 'Deaktiviert' für das Speicherkonto:\naz storage account update --name <Speicherkontoname> --resource-group <Ressourcengruppenname> --public-network-access Disabled\nVom PowerShell:\nSet-AzStorageAccount -ResourceGroupName <Ressourcengruppenname> -Name <Speicherkontoname> -PublicNetworkAccess Disabled"
+                }
+            }
+        },
+        {
+            "name": "default_network_access_deny",
+            "title": "Ensure Default Network Access Rule for Storage Accounts is Set to Deny",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Setting the default network access rule to deny for storage accounts enhances security by blocking unwanted network traffic. This setting restricts connections to only specified networks, allowing you to control access more tightly and build a secure network boundary for applications.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and storage_network_acls.default_action==Allow"
+            },
+            "remediation": {
+                "text": "From Azure Console:\n1. Go to Storage Accounts.\n2. For each storage account, click on the Networking blade.\n3. Under the Firewalls and virtual networks heading, select to allow access from Selected networks.\n4. Add rules to allow traffic from specific networks.\n5. Click Save to apply your changes.\nFrom Azure CLI:\nUpdate the default action to Deny with:\naz storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --default-action Deny",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/blobs/storage-manage-access-to-resources"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/common/storage-network-security",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Standardnetzwerkzugriffsregel für Speicherkonten auf Ablehnen gesetzt ist",
+                    "risk": "Das Einstellen der Standardnetzwerkzugriffsregel auf Ablehnen für Speicherkonten erhöht die Sicherheit, indem unerwünschter Netzwerkverkehr blockiert wird. Diese Einstellung beschränkt Verbindungen auf nur spezifizierte Netzwerke, wodurch Sie den Zugriff enger steuern und eine sichere Netzwerkgrenze für Anwendungen erstellen können.",
+                    "remediation": "Vom Azure Console:\n1. Gehen Sie zu Speicherkonten.\n2. Für jedes Speicherkonto, klicken Sie auf die Netzwerkleiste.\n3. Unter der Überschrift Firewalls und virtuelle Netzwerke, wählen Sie Zugriff von ausgewählten Netzwerken zulassen.\n4. Fügen Sie Regeln hinzu, um den Verkehr von spezifischen Netzwerken zu erlauben.\n5. Klicken Sie auf Speichern, um Ihre Änderungen anzuwenden.\nVom Azure CLI:\nAktualisieren Sie die Standardaktion auf Ablehnen mit:\naz storage account update --name <SpeicherKontoname> --resource-group <Ressourcengruppenname> --default-action Deny"
+                }
+            }
+        },
+        {
+            "name": "allow_trusted_azure_services_access",
+            "title": "Ensure 'Allow Azure services on the trusted services list to access this storage account' is Enabled",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Disabling public access and setting stringent network rules can block Azure services that need to interact with storage accounts. Enabling access for trusted Azure services ensures that these services, which use strong authentication methods, can still access storage account resources.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_storage_account) and storage_network_acls.bypass!~AzureServices"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Storage Accounts.\n2. For each storage account, click on the Networking blade.\n3. Under the Firewalls and virtual networks heading, ensure 'Enabled from selected virtual networks and IP addresses' is selected.\n4. Under the 'Exceptions' label, enable the checkbox for 'Allow Azure services on the trusted services list to access this storage account'.\n5. Click Save to apply your changes.\nFrom Azure CLI:\nUpdate to allow Azure services with:\naz storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --bypass AzureServices",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/common/storage-network-security"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/common/storage-network-security",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Zugriff von auf der vertrauenswürdigen Dienstliste befindlichen Azure-Diensten auf dieses Speicherkonto zulassen' aktiviert ist",
+                    "risk": "Das Deaktivieren des öffentlichen Zugriffs und das Festlegen strenger Netzwerkregeln können den Zugriff von Azure-Diensten, die mit Speicherkonten interagieren müssen, blockieren. Durch das Zulassen des Zugriffs für vertrauenswürdige Azure-Dienste wird sichergestellt, dass diese Dienste, die starke Authentifizierungsmethoden verwenden, weiterhin auf Ressourcen des Speicherkontos zugreifen können.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu Speicherkonten.\n2. Für jedes Speicherkonto, klicken Sie auf die Netzwerkleiste.\n3. Unter der Überschrift 'Firewalls und virtuelle Netzwerke' stellen Sie sicher, dass 'Zugriff von ausgewählten virtuellen Netzwerken und IP-Adressen' ausgewählt ist.\n4. Unter dem Label 'Ausnahmen' aktivieren Sie das Kontrollkästchen für 'Zugriff von auf der vertrauenswürdigen Dienstliste befindlichen Azure-Diensten auf dieses Speicherkonto zulassen'.\n5. Klicken Sie auf Speichern, um Ihre Änderungen anzuwenden.\nVom Azure CLI:\nAktualisieren, um Azure-Diensten den Zugriff zu erlauben mit:\naz storage account update --name <SpeicherkontoName> --resource-group <RessourcengruppenName> --bypass AzureServices"
+                }
+            }
+        },
+        {
+            "name": "private_endpoints_for_storage",
+            "title": "Ensure Private Endpoints are used to access Storage Accounts",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Using private endpoints for Azure Storage accounts ensures that data is accessed securely over a network via an encrypted Private Link. This setup prevents data from being intercepted or accessed by unauthorized external sources, as the network traffic is encrypted and traverses securely within the Virtual Network (VNet).",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and storage_private_endpoint_connections in [null, []]"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Open the Storage Accounts blade.\n2. Click on Networking under the Security + networking heading for each Storage Account.\n3. Click on the +Private endpoint button to add a new Private Endpoint.\n4. Follow the setup steps to associate the Private Endpoint with the specific Storage Account and VNet. Ensure the Region matches the storage account region and select the appropriate sub-resource and subnet.\n5. Review and create the Private Endpoint, ensuring that validation passes before creation.\nRepeat for each required Private Endpoint within every Storage Account.\nFrom Azure CLI:\nUse the following command to create a Private Endpoint:\naz network private-endpoint create --name '<name>' --resource-group '<resourceGroupName>' --vnet-name '<vnetName>' --subnet '<subnetName>' --private-connection-resource-id '<storageAccountId>' --group-id 'blob'",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/common/storage-private-endpoints"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/common/storage-network-security",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass für den Zugriff auf Speicherkonten private Endpunkte verwendet werden",
+                    "risk": "Die Verwendung privater Endpunkte für Azure-Speicherkonten stellt sicher, dass Daten über eine verschlüsselte Private Link sicher über ein Netzwerk zugegriffen werden. Diese Einrichtung verhindert, dass Daten von unbefugten externen Quellen abgefangen oder zugegriffen werden, da der Netzwerkverkehr verschlüsselt ist und sicher innerhalb des Virtual Network (VNet) übertragen wird.",
+                    "remediation": "Vom Azure-Portal:\n1. Öffnen Sie die Speicherkontenübersicht.\n2. Klicken Sie für jedes Speicherkonto unter der Überschrift Sicherheit + Netzwerk auf Netzwerk.\n3. Klicken Sie auf die Schaltfläche +Privater Endpunkt, um einen neuen privaten Endpunkt hinzuzufügen.\n4. Folgen Sie den Einrichtungsschritten, um den privaten Endpunkt mit dem spezifischen Speicherkonto und VNet zu verknüpfen. Stellen Sie sicher, dass die Region mit der Region des Speicherkontos übereinstimmt und wählen Sie die entsprechende Unterressource und das Subnetz aus.\n5. Überprüfen und erstellen Sie den privaten Endpunkt und stellen Sie sicher, dass die Validierung vor der Erstellung bestanden wird.\nWiederholen Sie dies für jeden erforderlichen privaten Endpunkt in jedem Speicherkonto."
+                }
+            }
+        },
+        {
+            "name": "enable_soft_delete",
+            "title": "Ensure Soft Delete is Enabled for Azure Containers and Blob Storage",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Soft delete in Azure Storage allows recovery of blobs or blob snapshots that are deleted. This feature prevents data loss from accidental or malicious deletions by maintaining deleted data for a specified retention period. Enabling soft delete is crucial for recovering important data like ePHI or financial records.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From the Azure home page, open the hamburger menu.\n2. Select Storage, then Storage Accounts.\n3. For each Storage Account, navigate to Data protection.\n4. Ensure that soft delete is enabled for both blobs and containers and check the retention period.\nFrom Azure CLI:\nFor Blob Storage, check the delete policy status and days with:\naz storage blob service-properties delete-policy show --account-name <StorageAccountName> --account-key <accountkey>\nFor Azure Containers, ensure the container delete retention is enabled:\naz storage account blob-service-properties show --account-name <StorageAccountName> --account-key <accountkey> --resource-group <resource_group>"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. From the Azure home page, open the hamburger menu.\n2. Select Storage, then Storage Accounts.\n3. For each Storage Account, navigate to Data protection.\n4. Enable soft delete for both blobs and containers and set the retention period as required for your organization.\nFrom Azure CLI:\nTo update blob storage soft delete settings:\naz storage blob service-properties delete-policy update --days-retained <RetentionDaysValue> --account-name <StorageAccountName> --account-key <AccountKey> --enable true\nTo update container retention settings:\naz storage account blob-service-properties update --enable-container-delete-retention true --container-delete-retention-days <days> --account-name <storage-account> --resource-group <resource_group> --account-key <AccountKey>",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-soft-delete"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/blobs/soft-delete-container-enable?tabs=azure-portal",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Soft Delete für Azure-Container und Blob Storage aktiviert ist",
+                    "risk": "Soft Delete in Azure Storage ermöglicht die Wiederherstellung von gelöschten Blobs oder Blob-Snapshots. Diese Funktion verhindert Datenverluste durch versehentliche oder böswillige Löschungen, indem gelöschte Daten für einen festgelegten Aufbewahrungszeitraum aufbewahrt werden. Das Aktivieren von Soft Delete ist entscheidend für die Wiederherstellung wichtiger Daten wie ePHI oder Finanzunterlagen.",
+                    "remediation": "Vom Azure-Portal:\n1. Öffnen Sie das Hamburger-Menü auf der Azure-Startseite.\n2. Wählen Sie Speicher und dann Speicherkonten.\n3. Navigieren Sie für jedes Speicherkonto zu Datenschutz.\n4. Aktivieren Sie Soft Delete sowohl für Blobs als auch für Container und stellen Sie den Aufbewahrungszeitraum nach Bedarf für Ihre Organisation ein.\nVom Azure CLI:\nUm die Einstellungen für Soft Delete bei Blob Storage zu aktualisieren:\naz storage blob service-properties delete-policy update --days-retained <Aufbewahrungstage> --account-name <Speicherkontoname> --account-key <Kontoschlüssel> --enable true\nUm die Einstellungen für die Aufbewahrung von Containern zu aktualisieren:\naz storage account blob-service-properties update --enable-container-delete-retention true --container-delete-retention-days <Tage> --account-name <Speicherkonto> --resource-group <Ressourcengruppe> --account-key <Kontoschlüssel>"
+                }
+            }
+        },
+        {
+            "name": "cmk_encryption",
+            "title": "Ensure Storage for Critical Data is Encrypted with Customer Managed Keys",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Using Customer Managed Keys (CMK) for data encryption at rest gives organizations control over the encryption keys and hence over access to their data. It is crucial for compliance and enhanced security measures that organizations manage their own keys rather than using Microsoft Managed Keys.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and storage_encryption.key_source!=\"Microsoft.Keyvault\""
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Storage Accounts.\n2. For each storage account, navigate to Encryption settings.\n3. Set the Encryption type to 'Customer Managed Keys'.\n4. Select the Encryption key by linking to the appropriate Key Vault and key.\n5. Click Save to apply the changes.\nEnsure that the keys are properly managed and rotated as necessary to avoid data access issues or security vulnerabilities.",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/common/storage-service-encryption"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/common/storage-service-encryption",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Speicherung für kritische Daten mit vom Kunden verwalteten Schlüsseln verschlüsselt wird",
+                    "risk": "Die Verwendung von vom Kunden verwalteten Schlüsseln (CMK) für die Datenverschlüsselung in Ruhe gibt Organisationen die Kontrolle über die Verschlüsselungsschlüssel und somit über den Zugang zu ihren Daten. Es ist entscheidend für die Einhaltung von Compliance und verbesserte Sicherheitsmaßnahmen, dass Organisationen ihre eigenen Schlüssel verwalten, anstatt Microsoft-verwaltete Schlüssel zu verwenden.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu Speicherkonten.\n2. Navigieren Sie für jedes Speicherkonto zu den Verschlüsselungseinstellungen.\n3. Stellen Sie den Verschlüsselungstyp auf 'Vom Kunden verwaltete Schlüssel' ein.\n4. Wählen Sie den Verschlüsselungsschlüssel durch Verlinkung zum entsprechenden Key Vault und Schlüssel aus.\n5. Klicken Sie auf Speichern, um die Änderungen anzuwenden.\nStellen Sie sicher, dass die Schlüssel ordnungsgemäß verwaltet und bei Bedarf gedreht werden, um Zugriffsprobleme oder Sicherheitslücken zu vermeiden."
+                }
+            }
+        },
+        {
+            "name": "logging_blob_service",
+            "title": "Ensure Storage logging is Enabled for Blob Service for 'Read', 'Write', and 'Delete' requests",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Enabling storage logging for the Blob service provides critical visibility into read, write, and delete operations, which helps in security and diagnostics. It records both successful and failed requests, offering insights that can assist in forensic and compliance investigations.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. Select Storage Accounts from the default portal page.\n2. Choose the specific Storage Account.\n3. Under the Monitoring section, click on Diagnostics settings.\n4. Go to the 'blob' tab and check the listed diagnostic setting.\n5. Ensure StorageRead, StorageWrite, and StorageDelete options are selected under Logging.\nFrom Azure CLI:\nVerify logging settings with the following command:\naz storage logging show --services b --account-name <storageAccountName>\nEnsure that the output has 'delete', 'read', and 'write' properties set to true."
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Navigate to Storage Accounts from the default portal page.\n2. Select the specific Storage Account.\n3. In the Monitoring section, click on Diagnostics settings.\n4. Access the 'blob' tab.\n5. Click '+ Add diagnostic setting'.\n6. Under the Logging section, select StorageRead, StorageWrite, and StorageDelete options to enable Storage Logging for the Blob service.\n7. Choose a destination for the logs.\nFrom Azure CLI:\nEnable Storage Logging for the Blob service using the command:\naz storage logging update --account-name <storageAccountName> --account-key <storageAccountKey> --services b --log rwd --retention 90",
+                "url": "https://docs.microsoft.com/en-us/rest/api/storageservices/about-storage-analytics-logging"
+            },
+            "url": "https://docs.microsoft.com/en-us/rest/api/storageservices/about-storage-analytics-logging",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Speicherprotokollierung für den Blob-Dienst für 'Lesen', 'Schreiben' und 'Löschen' aktiviert ist",
+                    "risk": "Die Aktivierung der Speicherprotokollierung für den Blob-Dienst bietet wichtige Einblicke in Lese-, Schreib- und Löschvorgänge, die bei Sicherheitsüberprüfungen und Diagnosen helfen. Sie zeichnet sowohl erfolgreiche als auch fehlgeschlagene Anfragen auf und bietet Einblicke, die bei forensischen Untersuchungen und Compliance-Prüfungen helfen können.",
+                    "remediation": "Vom Azure-Portal:\n1. Navigieren Sie auf der Standardportal-Seite zu Speicherkonten.\n2. Wählen Sie das spezifische Speicherkonto aus.\n3. Klicken Sie im Überwachungsbereich auf Diagnoseeinstellungen.\n4. Gehen Sie zur Registerkarte 'blob'.\n5. Klicken Sie auf '+ Diagnoseeinstellung hinzufügen'.\n6. Wählen Sie unter dem Abschnitt Logging die Optionen StorageRead, StorageWrite und StorageDelete, um die Speicherprotokollierung für den Blob-Dienst zu aktivieren.\n7. Wählen Sie ein Ziel für die Protokolle.\nVom Azure CLI:\nAktivieren Sie die Speicherprotokollierung für den Blob-Dienst mit dem Befehl:\naz storage logging update --account-name <Speicherkontoname> --account-key <SpeicherkontoSchlüssel> --services b --log rwd --retention 90"
+                }
+            }
+        },
+        {
+            "name": "logging_table_service",
+            "title": "Ensure Storage Logging is Enabled for Table Service for 'Read', 'Write', and 'Delete' Requests",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Enabling storage logging for the Azure Table service records both successful and failed requests, providing critical visibility into operations such as read, write, and delete. This detailed logging is essential for security monitoring and diagnostics, helping to detect and respond to potential security incidents.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. Select Storage Accounts from the default portal page.\n2. Choose the specific Storage Account.\n3. In the Monitoring section, click on Diagnostics settings.\n4. Go to the 'table' tab and check the diagnostic settings listed.\n5. Ensure StorageRead, StorageWrite, and StorageDelete options are enabled under the Logging section.\nFrom Azure CLI:\nCheck logging settings with:\naz storage logging show --services t --account-name <storageAccountName>\nEnsure that properties delete, read, and write are set to true."
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Navigate to Storage Accounts from the default portal page.\n2. Select the specific Storage Account.\n3. Under the Monitoring section, click on Diagnostics settings.\n4. Access the 'table' tab.\n5. Click '+ Add diagnostic setting'.\n6. Under the Logging section, select StorageRead, StorageWrite, and StorageDelete options to enable Storage Logging for the Table service.\n7. Choose a destination for your logs.\nFrom Azure CLI:\nEnable Storage Logging for the Table service using the command:\naz storage logging update --account-name <storageAccountName> --account-key <storageAccountKey> --services t --log rwd --retention 90",
+                "url": "https://docs.microsoft.com/en-us/rest/api/storageservices/about-storage-analytics-logging"
+            },
+            "url": "https://docs.microsoft.com/en-us/rest/api/storageservices/about-storage-analytics-logging",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Speicherprotokollierung für den Table-Dienst für 'Lesen', 'Schreiben' und 'Löschen' aktiviert ist",
+                    "risk": "Durch die Aktivierung der Speicherprotokollierung für den Azure Table-Dienst werden sowohl erfolgreiche als auch fehlgeschlagene Anfragen aufgezeichnet, was kritische Einblicke in Operationen wie Lesen, Schreiben und Löschen bietet. Diese detaillierte Protokollierung ist für die Sicherheitsüberwachung und Diagnose unerlässlich und hilft, potenzielle Sicherheitsvorfälle zu erkennen und darauf zu reagieren.",
+                    "remediation": "Vom Azure-Portal:\n1. Navigieren Sie auf der Standardportal-Seite zu Speicherkonten.\n2. Wählen Sie das spezifische Speicherkonto aus.\n3. Klicken Sie im Überwachungsbereich auf Diagnoseeinstellungen.\n4. Gehen Sie zur Registerkarte 'table'.\n5. Klicken Sie auf '+ Diagnoseeinstellung hinzufügen'.\n6. Wählen Sie unter dem Abschnitt Logging die Optionen StorageRead, StorageWrite und StorageDelete, um die Speicherprotokollierung für den Table-Dienst zu aktivieren.\n7. Wählen Sie ein Ziel für Ihre Protokolle.\nVom Azure CLI:\nAktivieren Sie die Speicherprotokollierung für den Table-Dienst mit dem Befehl:\naz storage logging update --account-name <Speicherkontoname> --account-key <SpeicherkontoSchlüssel> --services t --log rwd --retention 90"
+                }
+            }
+        },
+        {
+            "name": "min_tls_version_1_2",
+            "title": "Ensure the 'Minimum TLS version' for storage accounts is set to 'Version 1.2'",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Using TLS 1.0 for storage accounts exposes data to potential security risks due to known vulnerabilities in the protocol. Setting the minimum TLS version to 1.2 ensures that all connections use a more secure, modern version of the TLS protocol, protecting data in transit.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and minimum_tls_version!=\"TLS1_2\""
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Login to Azure Portal.\n2. Navigate to Storage Accounts.\n3. For each storage account, go to the Configuration under the Settings section.\n4. Set the minimum TLS version to Version 1.2 and save the changes.\nFrom Azure CLI:\nUpdate the minimum TLS version to 1.2 with:\naz storage account update --name <storage-account> --resource-group <resource-group> --min-tls-version TLS1_2\nFrom Azure PowerShell:\nSet the minimum TLS version to 1.2 using:\nSet-AzStorageAccount -AccountName <STORAGEACCOUNTNAME> -ResourceGroupName <RESOURCEGROUPNAME> -MinimumTlsVersion TLS1_2",
+                "url": "https://docs.microsoft.com/en-us/azure/storage/common/transport-layer-security-configure-minimum-version?tabs=portal"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/storage/common/transport-layer-security-configure-minimum-version?tabs=portal",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die 'Minimale TLS-Version' für Speicherkonten auf 'Version 1.2' eingestellt ist",
+                    "risk": "Die Verwendung von TLS 1.0 für Speicherkonten setzt Daten potenziellen Sicherheitsrisiken aus, da bekannte Schwachstellen in dem Protokoll existieren. Das Einstellen der minimalen TLS-Version auf 1.2 stellt sicher, dass alle Verbindungen eine sicherere, moderne Version des TLS-Protokolls verwenden, was den Schutz von Daten während der Übertragung gewährleistet.",
+                    "remediation": "Vom Azure-Portal:\n1. Melden Sie sich beim Azure Portal an.\n2. Navigieren Sie zu Speicherkonten.\n3. Gehen Sie für jedes Speicherkonto zum Abschnitt Konfiguration unter Einstellungen.\n4. Stellen Sie die minimale TLS-Version auf Version 1.2 ein und speichern Sie die Änderungen.\nVom Azure CLI:\nAktualisieren Sie die minimale TLS-Version auf 1.2 mit:\naz storage account update --name <Speicherkonto> --resource-group <Ressourcengruppe> --min-tls-version TLS1_2\nVom Azure PowerShell:\nSetzen Sie die minimale TLS-Version auf 1.2 mit:\nSet-AzStorageAccount -AccountName <STORAGEACCOUNTNAME> -ResourceGroupName <RESOURCEGROUPNAME> -MinimumTlsVersion TLS1_2"
+                }
+            }
+        },
+        {
+            "name": "cross_tenant_replication",
+            "title": "Ensure 'Cross Tenant Replication' is not enabled",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Enabling Cross Tenant Replication allows data to be replicated across different Azure tenants, which can lead to unauthorized data access, data leakage, and compliance violations. Disabling this feature ensures that data remains within the tenant boundary unless explicitly authorized, maintaining data security and compliance.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and allow_cross_tenant_replication==true"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Navigate to Storage Accounts.\n2. For each storage account, under Data Management, click on Object replication.\n3. In Advanced settings, ensure Allow cross-tenant replication is unchecked.\n4. Confirm by clicking OK.\nFrom Azure CLI:\nDisable cross-tenant replication for a storage account using:\naz storage account update --name <storageAccountName> --resource-group <resourceGroupName> --allow-cross-tenant-replication false",
+                "url": "https://learn.microsoft.com/en-us/azure/storage/blobs/object-replication-prevent-cross-tenant-policies?tabs=portal"
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/storage/blobs/object-replication-prevent-cross-tenant-policies?tabs=portal",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die 'Quermandanten-Replikation' nicht aktiviert ist",
+                    "risk": "Die Aktivierung der Quermandanten-Replikation ermöglicht die Replikation von Daten über verschiedene Azure-Mandanten hinweg, was zu unbefugtem Datenzugriff, Datenverlusten und Compliance-Verletzungen führen kann. Durch Deaktivieren dieser Funktion wird sichergestellt, dass Daten innerhalb der Mandantengrenze bleiben, es sei denn, sie sind ausdrücklich autorisiert, wodurch Datensicherheit und Compliance gewährleistet werden.",
+                    "remediation": "Vom Azure-Portal:\n1. Navigieren Sie zu Speicherkonten.\n2. Für jedes Speicherkonto klicken Sie unter Datenmanagement auf Objektreplikation.\n3. Stellen Sie in den erweiterten Einstellungen sicher, dass die Quermandanten-Replikation deaktiviert ist.\n4. Bestätigen Sie mit OK.\nVom Azure CLI:\nDeaktivieren Sie die Quermandanten-Replikation für ein Speicherkonto mit:\naz storage account update --name <Speicherkontoname> --resource-group <Ressourcengruppenname> --allow-cross-tenant-replication false"
+                }
+            }
+        },
+        {
+            "name": "blob_anonymous_access",
+            "title": "Ensure that 'Allow Blob Anonymous Access' is set to 'Disabled'",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing anonymous access to blob data in Azure Storage accounts can expose sensitive data and increase the risk of data breaches. Disabling this setting prevents unauthorized access to blob data, enhancing the security of the storage account.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_storage_account) and allow_blob_public_access==true"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Open the Storage Accounts blade.\n2. Click on each Storage Account.\n3. In the menu pane, under Settings, click Configuration.\n4. Set 'Allow Blob Anonymous Access' to 'Disabled'.\nRepeat these steps for each Storage Account.\nFrom PowerShell:\nFor every storage account in scope, run:\n$storageAccount = Get-AzStorageAccount -ResourceGroupName \"<yourResourceGroup>\" -Name \"<yourStorageAccountName>\"\n$storageAccount.AllowBlobPublicAccess = $false\nSet-AzStorageAccount -InputObject $storageAccount",
+                "url": "https://learn.microsoft.com/en-us/azure/storage/blobs/object-replication-prevent-cross-tenant-policies?tabs=portal"
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/storage/blobs/anonymous-read-access-prevent?tabs=portal",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der 'Zugriff auf Blob-Daten anonym erlaubt' deaktiviert ist",
+                    "risk": "Das Zulassen von anonymem Zugriff auf Blob-Daten in Azure-Speicherkonten kann sensible Daten freilegen und das Risiko von Datenverletzungen erhöhen. Durch Deaktivieren dieser Einstellung wird der unbefugte Zugriff auf Blob-Daten verhindert, was die Sicherheit des Speicherkontos erhöht.",
+                    "remediation": "Vom Azure-Portal:\n1. Öffnen Sie die Speicherkontenübersicht.\n2. Klicken Sie auf jedes Speicherkonto.\n3. Im Menü unter Einstellungen klicken Sie auf Konfiguration.\n4. Stellen Sie 'Zugriff auf Blob-Daten anonym erlaubt' auf 'Deaktiviert'.\nWiederholen Sie diese Schritte für jedes Speicherkonto.\nVom PowerShell:\nFür jedes betreffende Speicherkonto führen Sie aus:\n$storageAccount = Get-AzStorageAccount -ResourceGroupName \"<IhreRessourcengruppe>\" -Name \"<IhrSpeicherkontoname>\"\n$storageAccount.AllowBlobPublicAccess = $false\nSet-AzStorageAccount -InputObject $storageAccount"
+                }
+            }
+        }
+    ]
+}

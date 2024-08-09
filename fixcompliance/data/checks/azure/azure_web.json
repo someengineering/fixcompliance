@@ -1,0 +1,235 @@
+{
+    "provider": "azure",
+    "service": "web",
+    "checks": [
+        {
+            "name": "authentication",
+            "title": "Ensure App Service Authentication is set up for apps in Azure App Service",
+            "result_kinds": ["azure_web_app"],
+            "categories": ["security", "compliance"],
+            "risk": "Not implementing App Service Authentication allows anonymous requests and potentially unsecured access to the application, increasing the risk of unauthorized data access and breaches.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_web_app) and app_authentication_settings.enabled!=true"
+            },
+            "remediation": {
+                "text": "To set up App Service Authentication:\nFrom Azure Portal:\n1. Navigate to App Services and select the app.\n2. Under Settings, click on Authentication.\n3. Set App Service Authentication to Enabled and configure the identity providers as necessary.\nFrom Azure CLI:\nUse `az webapp auth update --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --enabled true` to enable authentication for the app.",
+                "url": "https://docs.microsoft.com/en-us/azure/app-service/overview-authentication-authorization"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-privileged-access#pa-3-manage-lifecycle-of-identities-and-entitlements",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Authentifizierung für Apps im Azure App Service eingerichtet ist",
+                    "risk": "Die Nichtimplementierung der App Service-Authentifizierung ermöglicht anonyme Anfragen und potenziell ungesicherten Zugriff auf die Anwendung, was das Risiko eines unbefugten Datenzugriffs und von Verstößen erhöht.",
+                    "remediation": "So richten Sie die App Service-Authentifizierung ein:\nIm Azure-Portal:\n1. Navigieren Sie zu App Services und wählen Sie die App aus.\n2. Klicken Sie unter Einstellungen auf Authentifizierung.\n3. Setzen Sie die App Service-Authentifizierung auf Aktiviert und konfigurieren Sie die Identitätsanbieter nach Bedarf.\nMit Azure CLI:\nVerwenden Sie `az webapp auth update --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --enabled true`, um die Authentifizierung für die App zu aktivieren."
+                }
+            }
+        },
+        {
+            "name": "https",
+            "title": "Ensure Web App Redirects All HTTP traffic to HTTPS in Azure App Service",
+            "result_kinds": ["azure_web_app"],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing HTTP traffic can expose sensitive data to interception or manipulation. Enforcing HTTPS-only ensures that all communications between users and the web app are encrypted.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_web_app) and https_only!=true"
+            },
+            "remediation": {
+                "text": "To enforce HTTPS-only traffic:\nFrom Azure Portal:\n1. Navigate to App Services and select the app.\n2. Under Configuration, set HTTPS Only to 'On'.\nFrom Azure CLI:\nUse `az webapp update --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --set httpsOnly=true` to enforce HTTPS-only traffic.",
+                "url": "https://docs.microsoft.com/en-us/azure/app-service/configure-ssl-bindings#enforce-https"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-3-encrypt-sensitive-data-in-transit",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Web-App allen HTTP-Verkehr zu HTTPS in Azure App Service umleitet",
+                    "risk": "Das Zulassen von HTTP-Verkehr kann dazu führen, dass sensible Daten abgefangen oder manipuliert werden. Durch die Durchsetzung von HTTPS-only wird sichergestellt, dass alle Kommunikationen zwischen Benutzern und der Web-App verschlüsselt sind.",
+                    "remediation": "Um HTTPS-only-Verkehr zu erzwingen:\nIm Azure-Portal:\n1. Navigieren Sie zu App Services und wählen Sie die App aus.\n2. Unter Konfiguration setzen Sie HTTPS Only auf 'Ein'.\nMit Azure CLI:\nVerwenden Sie `az webapp update --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --set httpsOnly=true`, um HTTPS-only-Verkehr zu erzwingen."
+                }
+            }
+        },
+        {
+            "name": "tls_version",
+            "title": "Ensure Web App is using the latest version of TLS encryption",
+            "result_kinds": ["azure_web_app"],
+            "categories": ["security", "compliance"],
+            "risk": "Using outdated TLS versions can expose web applications to vulnerabilities and attacks, compromising secure data transmission.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_web_app) and site_config.min_tls_version in [\"1.0\", \"1.1\"]"
+            },
+            "remediation": {
+                "text": "To ensure the latest TLS version is used:\nFrom Azure Portal:\n1. Navigate to App Services.\n2. Select an app and under SSL settings, set Minimum TLS Version to 1.2.\nFrom Azure CLI:\nUse `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --min-tls-version 1.2` to update the TLS version.",
+                "url": "https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-ssl#enforce-tls-versions"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-3-encrypt-sensitive-data-in-transit",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Web-App die neueste Version der TLS-Verschlüsselung verwendet",
+                    "risk": "Die Verwendung veralteter TLS-Versionen kann Webanwendungen Anfälligkeiten und Angriffen aussetzen und die sichere Datenübertragung gefährden.",
+                    "remediation": "Um sicherzustellen, dass die neueste TLS-Version verwendet wird:\nIm Azure-Portal:\n1. Navigieren Sie zu App Services.\n2. Wählen Sie eine App aus und setzen Sie unter SSL-Einstellungen die minimale TLS-Version auf 1.2.\nMit Azure CLI:\nVerwenden Sie `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --min-tls-version 1.2`, um die TLS-Version zu aktualisieren."
+                }
+            }
+        },
+        {
+            "name": "register_with_entra_id",
+            "title": "Ensure that Register with Entra ID is enabled on App Service",
+            "result_kinds": ["azure_web_app"],
+            "categories": ["security", "compliance"],
+            "risk": "Not using Managed Identity (Entra ID) exposes apps to potential security risks by retaining secrets, such as credentials in the connection strings, within the app configuration.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_web_app) and identity.type!=SystemAssigned"
+            },
+            "remediation": {
+                "text": "To enable Register with Entra ID:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Identity, and under System assigned, set Status to On.\nFrom Azure CLI:\nEnable Managed Identity with `az webapp identity assign --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME>`.",
+                "url": "https://docs.microsoft.com/en-gb/azure/app-service/app-service-web-tutorial-connect-msi"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-identity-management#im-1-use-centralized-identity-and-authentication-system",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Registrierung mit Entra ID für App Service aktiviert ist",
+                    "risk": "Das Nichtverwenden von Managed Identity (Entra ID) setzt Apps potenziellen Sicherheitsrisiken aus, indem Geheimnisse, wie Anmeldeinformationen in Verbindungsstrings, innerhalb der App-Konfiguration beibehalten werden.",
+                    "remediation": "Um die Registrierung mit Entra ID zu aktivieren:\nIm Azure-Portal:\n1. Navigieren Sie zu App Services.\n2. Wählen Sie eine App, klicken Sie auf Identität und setzen Sie unter System zugewiesen den Status auf Ein.\nMit Azure CLI:\nAktivieren Sie Managed Identity mit `az webapp identity assign --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME>`."
+                }
+            }
+        },
+        {
+            "name": "php_version",
+            "title": "Ensure that 'PHP version' is the Latest, If Used to Run the Web App",
+            "result_kinds": ["azure_web_app"],
+            "categories": ["security", "compliance"],
+            "risk": "Using outdated PHP versions can expose web applications to security vulnerabilities due to unpatched flaws and lack of current functionalities.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_web_app) and (site_config.php_version!=null and site_config.php_version!~\"^8\")"
+            },
+            "remediation": {
+                "text": "To update the PHP version to the latest:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, and then General settings.\n3. Update the PHP version to the latest stable release.\nFrom Azure CLI:\nUpdate the PHP version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --php-version <latest_version>`.",
+                "url": "https://docs.microsoft.com/en-us/azure/app-service/web-sites-configure#general-settings"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-posture-vulnerability-management#pv-6-rapidly-and-automatically-remediate-vulnerabilities",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'PHP-Version' die Neueste ist, falls verwendet, um die Web-App auszuführen",
+                    "risk": "Die Verwendung veralteter PHP-Versionen kann Webanwendungen Sicherheitsrisiken aussetzen, da ungepatchte Mängel bestehen und aktuelle Funktionalitäten fehlen.",
+                    "remediation": "Um die PHP-Version auf die neueste zu aktualisieren:\nIm Azure-Portal:\n1. Gehen Sie zu App Services.\n2. Wählen Sie eine App, klicken Sie auf Konfiguration und dann auf Allgemeine Einstellungen.\n3. Aktualisieren Sie die PHP-Version auf die neueste stabile Version.\nMit Azure CLI:\nAktualisieren Sie die PHP-Version mit `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --php-version <latest_version>`."
+                }
+            }
+        },
+        {
+            "name": "python_version",
+            "title": "Ensure that 'Python version' is the Latest Stable Version, if Used to Run the Web App",
+            "result_kinds": ["azure_web_app"],
+            "categories": ["security", "compliance"],
+            "risk": "Using outdated Python versions can expose web applications to security vulnerabilities due to unpatched flaws or missing functionalities available in newer versions.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_web_app) and (site_config.python_version!=null and site_config.python_version!~\"^3.1[1-9]\")"
+            },
+            "remediation": {
+                "text": "To update the Python version to the latest:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the Python version to the latest stable release, e.g., Python 3.11.\n\nFrom Azure CLI:\nUpdate the Python version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --linux-fx-version 'PYTHON|3.11' --windows-fx-version 'PYTHON|3.11'`.",
+                "url": "https://docs.microsoft.com/en-us/azure/app-service/web-sites-configure#general-settings"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-posture-vulnerability-management#pv-6-rapidly-and-automatically-remediate-vulnerabilities",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Python-Version' die neueste stabile Version ist, falls verwendet, um die Web-App auszuführen",
+                    "risk": "Die Verwendung veralteter Python-Versionen kann Webanwendungen Sicherheitsrisiken aussetzen, da ungepatchte Mängel bestehen und aktuelle Funktionalitäten fehlen.",
+                    "remediation": "Um die Python-Version auf die neueste zu aktualisieren:\nIm Azure-Portal:\n1. Gehen Sie zu App Services.\n2. Wählen Sie eine App, klicken Sie auf Konfiguration und dann auf Allgemeine Einstellungen.\n3. Aktualisieren Sie die Python-Version auf die neueste stabile Version, z.B. Python 3.11.\n\nMit Azure CLI:\nAktualisieren Sie die Python-Version mit `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --linux-fx-version 'PYTHON|3.11' --windows-fx-version 'PYTHON|3.11'`."
+                }
+            }
+        },
+        {
+            "name": "java_version",
+            "title": "Ensure that 'Java version' is the latest, if used to run the Web App",
+            "result_kinds": ["azure_web_app"],
+            "categories": ["security", "compliance"],
+            "risk": "Using outdated Java versions can expose web applications to security vulnerabilities due to unpatched flaws or missing functionalities available in newer versions.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_web_app) and (site_config.java_version!=null and site_config.java_version!=\"^(8|11|17|2[1-9])$\")"
+            },
+            "remediation": {
+                "text": "To update the Java version to the latest:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the Java version to the latest stable release.\n\nFrom Azure CLI:\nUpdate the Java version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --java-version <LATEST_VERSION>`.",
+                "url": "https://docs.microsoft.com/en-us/azure/app-service/web-sites-configure#general-settings"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-posture-vulnerability-management#pv-6-rapidly-and-automatically-remediate-vulnerabilities",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Java-Version' die neueste ist, falls verwendet, um die Web-App auszuführen",
+                    "risk": "Die Verwendung veralteter Java-Versionen kann Webanwendungen Sicherheitsrisiken aussetzen, da ungepatchte Mängel bestehen und aktuelle Funktionalitäten fehlen.",
+                    "remediation": "Um die Java-Version auf die neueste zu aktualisieren:\nIm Azure-Portal:\n1. Gehen Sie zu App Services.\n2. Wählen Sie eine App, klicken Sie auf Konfiguration und dann auf Allgemeine Einstellungen.\n3. Aktualisieren Sie die Java-Version auf die neueste stabile Version.\n\nMit Azure CLI:\nAktualisieren Sie die Java-Version mit `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --java-version <LATEST_VERSION>`."
+                }
+            }
+        }, {
+            "name": "http_version",
+            "title": "Ensure that 'HTTP Version' is the Latest, if Used to Run the Web App",
+            "result_kinds": ["azure_web_app"],
+            "categories": ["security", "compliance"],
+            "risk": "Using outdated HTTP versions can expose web applications to security vulnerabilities and performance inefficiencies.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_web_app) and site_config.http20_enabled==false"
+            },
+            "remediation": {
+                "text": "To update the HTTP version to 2.0:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the HTTP version to 2.0.\n\nFrom Azure CLI:\nUpdate the HTTP version with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --http20-enabled true`.",
+                "url": "https://docs.microsoft.com/en-us/azure/app-service/web-sites-configure#general-settings"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-posture-vulnerability-management#pv-3-define-and-establish-secure-configurations-for-compute-resources",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'HTTP-Version' die neueste ist, falls verwendet, um die Web-App auszuführen (Automatisch)",
+                    "risk": "Die Verwendung veralteter HTTP-Versionen kann Webanwendungen Sicherheitsrisiken und Leistungsineffizienzen aussetzen.",
+                    "remediation": "Um die HTTP-Version auf 2.0 zu aktualisieren:\nIm Azure-Portal:\n1. Gehen Sie zu App Services.\n2. Wählen Sie eine App, klicken Sie auf Konfiguration und dann auf Allgemeine Einstellungen.\n3. Aktualisieren Sie die HTTP-Version auf 2.0.\n\nMit Azure CLI:\nAktualisieren Sie die HTTP-Version mit `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --http20-enabled true`."
+                }
+            }
+        },
+        {
+            "name": "ftp_deployments_disabled",
+            "title": "Ensure FTP deployments are Disabled",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "FTP deployments can expose sensitive data and credentials over potentially unsecured connections, leading to unauthorized access.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. Navigate to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Check that FTP state is not set to 'All allowed'.\n\nFrom Azure CLI:\nVerify the FTP state with `az webapp config show --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --query ftpsState`."
+            },
+            "remediation": {
+                "text": "To disable FTP deployments:\nFrom Azure Portal:\n1. Go to App Services.\n2. Select an app, click on Configuration, then General settings.\n3. Update the FTP state to 'Disabled' or 'FTPS Only'.\n\nFrom Azure CLI:\nUpdate the FTP state with `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --ftps-state disabled`.",
+                "url": "https://docs.microsoft.com/en-us/azure/app-service/deploy-ftp"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-3-encrypt-sensitive-data-in-transit",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass FTP-Bereitstellungen deaktiviert sind",
+                    "risk": "FTP-Bereitstellungen können sensible Daten und Anmeldeinformationen über möglicherweise ungesicherte Verbindungen freigeben, was zu unbefugtem Zugriff führen kann.",
+                    "remediation": "Um FTP-Bereitstellungen zu deaktivieren:\nIm Azure-Portal:\n1. Gehen Sie zu App Services.\n2. Wählen Sie eine App, klicken Sie auf Konfiguration und dann auf Allgemeine Einstellungen.\n3. Aktualisieren Sie den FTP-Zustand auf 'Deaktiviert' oder 'FTPS Only'.\n\nMit Azure CLI:\nAktualisieren Sie den FTP-Zustand mit `az webapp config set --resource-group <RESOURCE_GROUP_NAME> --name <APP_NAME> --ftps-state disabled`."
+                }
+            }
+        },
+        {
+            "name": "key_vaults",
+            "title": "Ensure Azure Key Vaults are Used to Store Secrets",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Storing sensitive information such as credentials within applications or their configuration files exposes them to unauthorized access. Using Azure Key Vault enhances security by isolating and controlling access to secrets.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. Navigate to Key Vaults.\n2. Verify if secrets, keys, and certificates are appropriately stored within these vaults.\n\nFrom Azure CLI:\nVerify if secrets are listed within key vaults by using `Get-AzKeyVaultSecret`."
+            },
+            "remediation": {
+                "text": "To securely store secrets using Azure Key Vault:\nFrom Azure CLI:\nCreate a new key vault using `az keyvault create --name '<name>' --resource-group '<myResourceGroup>' --location myLocation`.\n\nFrom PowerShell:\nCreate a new key vault with `New-AzKeyvault -name <name> -ResourceGroupName <myResourceGroup> -Location <myLocation>`.\n\nIntegrate Key Vault with your applications to retrieve secrets without storing them within the application code or configurations.",
+                "url": "https://docs.microsoft.com/en-us/azure/app-service/app-service-key-vault-references"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-identity-management#im-3-manage-application-identities-securely-and-automatically",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Azure Key Vaults zur Speicherung von Geheimnissen verwendet werden",
+                    "risk": "Das Speichern sensibler Informationen wie Anmeldeinformationen in Anwendungen oder deren Konfigurationsdateien führt zu einem Risiko des unbefugten Zugriffs. Durch die Verwendung von Azure Key Vault wird die Sicherheit durch Isolierung und Kontrolle des Zugriffs auf Geheimnisse erhöht.",
+                    "remediation": "Um Geheimnisse sicher mit Azure Key Vault zu speichern:\nMit Azure CLI:\nErstellen Sie einen neuen Schlüsseltresor mit `az keyvault create --name '<name>' --resource-group '<myResourceGroup>' --location myLocation`.\n\nMit PowerShell:\nErstellen Sie einen neuen Schlüsseltresor mit `New-AzKeyvault -name <name> -ResourceGroupName <myResourceGroup> -Location <myLocation>`.\n\nIntegrieren Sie Key Vault in Ihre Anwendungen, um Geheimnisse abzurufen, ohne sie im Anwendungscode oder in den Konfigurationen zu speichern."
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,268 @@
+{
+    "framework": "CIS",
+    "title": "Azure CIS 2.1",
+    "version": "2.1",
+    "description": "The CIS Microsoft Azure Foundations Benchmark version 2.1 offers a comprehensive set of security guidelines for configuring Microsoft Azure environments. It aims to establish a robust baseline of security measures suitable for anyone utilizing Azure Cloud services. This document provides actionable recommendations to ensure the security of deployed Azure services, though additional, site-specific tailoring might be necessary.",
+    "clouds": ["azure"],
+    "children": [
+        {
+            "title": "1 Identity and Access Management",
+            "description": "Identity and Access Management (IAM) within Azure plays a pivotal role in securing cloud resources. The guidelines provided here focus on the necessity of enforcing strong identity verification methods. Detailed recommendations encourage the use of Multi-Factor Authentication (MFA) and Conditional Access policies to safeguard access to Azure resources, promoting a defense-in-depth security posture for cloud-based assets.",
+            "children": [
+                {
+                    "title": "1.1 Security Defaults",
+                    "description": "Security Defaults in Azure are designed to provide a simple activation of basic security settings that safeguard against common attacks. These defaults are essential for organizations that are either new to Azure or those with minimal requirements, ensuring foundational security without additional cost.",
+                    "checks": [
+                        "microsoft_entra_security_defaults_enabled",
+                        "microsoft_entra_mfa_status_enabled_privileged_users",
+                        "microsoft_entra_mfa_status_enabled_non_privileged_users",
+                        "microsoft_entra_disable_mfa_remember_trusted_devices"
+                    ]
+                },
+                {
+                    "title": "1.2 Conditional Access",
+                    "description": "Conditional Access policies are critical for adapting security settings based on the context of user sign-ins. This section discusses the importance of establishing policies that limit user access based on specific conditions such as user location, device state, and sign-in risk levels, enhancing security for Azure environments.",
+                    "checks": [
+                        "microsoft_entra_trusted_named_locations_configured",
+                        "microsoft_entra_exclusionary_geographic_access_policy",
+                        "microsoft_entra_mfa_policy_for_admin_groups",
+                        "microsoft_entra_mfa_policy_for_all_users",
+                        "microsoft_entra_mfa_mfa_for_risky_signins",
+                        "microsoft_entra_mfa_mfa_for_azure_service_management_api",
+                        "microsoft_entra_mfa_mfa_for_microsoft_admin_portals",
+                        "microsoft_entra_restrict_non_admin_users_from_creating_tenants",
+                        "microsoft_entra_review_guest_users",
+                        "microsoft_entra_number_of_methods_required_to_reset",
+                        "microsoft_entra_bad_password_list_enforced",
+                        "microsoft_entra_notify_users_on_password_resets",
+                        "microsoft_entra_notify_admins_on_admin_password_reset",
+                        "microsoft_entra_user_consent_for_applications_disabled",
+                        "microsoft_entra_user_consent_for_applications_verified_publishers",
+                        "microsoft_entra_guest_invite_restrictions_admin_only",
+                        "microsoft_entra_restrict_access_to_microsoft_entra_admin_center",
+                        "microsoft_entra_restrict_user_ability_to_access_groups_features_in_the_access_pane",
+                        "microsoft_entra_users_cannot_create_security_groups_in_azure",
+                        "microsoft_entra_owners_cannot_manage_group_membership_requests_in_access_panel",
+                        "microsoft_entra_users_cannot_create_microsoft_365_groups",
+                        "microsoft_entra_require_mfa_to_register_or_join_devices_with_microsoft_entra_id",
+                        "microsoft_entra_custom_role_for_resource_lock_administration",
+                        "microsoft_entra_restrict_subscription_movement_in_microsoft_entra_id_directory",
+                        "microsoft_entra_limit_global_administrator_assignments"
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "2 Microsoft Defender",
+            "description": "This section delves into the capabilities of Microsoft Defender and its integration with Azure. It covers the configuration of Microsoft Defender for Cloud, emphasizing its role in monitoring and protecting Azure services against cybersecurity threats. It also explores the specific features related to IoT security.",
+            "children": [
+                {
+                    "title": "2.1 Microsoft Defender for Cloud",
+                    "description": "Microsoft Defender for Cloud offers automated tools to enhance the security of cloud-based computing services. This section provides guidance on enabling Defender capabilities for comprehensive protection of Azure services.",
+                    "checks": [
+                        "azure_security_defender_for_servers_enabled",
+                        "azure_security_defender_for_app_services_enabled",
+                        "azure_security_defender_for_storage_accounts",
+                        "azure_security_defender_for_sql_databases_enabled",
+                        "azure_security_defender_for_sql_servers_on_machines_enabled",
+                        "azure_security_defender_for_open_source_databases_enabled",
+                        "azure_security_defender_for_azure_cosmos_db_enabled",
+                        "azure_security_defender_for_storage_enabled",
+                        "azure_security_defender_for_key_vault_enabled",
+                        "azure_security_defender_for_resource_manager_enabled"
+                    ]
+                },
+                {
+                    "title": "2.2 Microsoft Defender for IoT",
+                    "description": "Understanding the security requirements for Internet of Things (IoT) implementations, this subsection focuses on leveraging Microsoft Defender for IoT to protect and monitor IoT assets within the Azure ecosystem.",
+                    "checks": [
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "3 Storage Accounts",
+            "description": "The guidelines for Azure Storage Accounts focus on the implementation of security features like secure transfer requirements, encryption, and access control. These measures ensure that data stored in Azure is protected from unauthorized access and leaks.",
+            "checks": [
+                "azure_storage_secure_transfer",
+                "azure_storage_infrastructure_encryption",
+                "azure_storage_key_rotation_reminders",
+                "azure_storage_periodic_regeneration_of_access_keys",
+                "azure_storage_logging_for_queue",
+                "azure_storage_public_network_access",
+                "azure_storage_default_network_access_deny",
+                "azure_storage_allow_trusted_azure_services_access",
+                "azure_storage_private_endpoints_for_storage",
+                "azure_storage_enable_soft_delete",
+                "azure_storage_cmk_encryption",
+                "azure_storage_logging_blob_service",
+                "azure_storage_logging_table_service",
+                "azure_storage_min_tls_version_1_2",
+                "azure_storage_blob_anonymous_access"
+            ]
+        },
+        {
+            "title": "4 Database Services",
+            "description": "This section covers the security configurations necessary for various database services available on Azure, including SQL Server, PostgreSQL, MySQL, and Cosmos DB. Recommendations include enabling auditing and encryption to secure database access and data integrity.",
+            "children": [
+                {
+                    "title": "4.1 SQL Server - Auditing",
+                    "description": "This subsection emphasizes the importance of auditing in SQL Server to track and log database activities, providing an audit trail that helps in forensic analysis and compliance with security policies.",
+                    "checks": [
+                        "azure_sql_server_auditing_on",
+                        "azure_sql_server_allow_any_ip",
+                        "azure_sql_server_tde_protector_with_cmk",
+                        "azure_sql_server_admin_auth_using_entra",
+                        "azure_sql_server_db_data_encryption",
+                        "azure_sql_server_audit_retention"
+                    ]
+                },
+                {
+                    "title": "4.3 PostgreSQL Database Server",
+                    "description": "The focus here is on securing PostgreSQL Database Server deployments in Azure, detailing the activation of SSL connections and other security parameters to protect data transactions.",
+                    "checks": [
+                        "azure_postgresql_enforce_ssl",
+                        "azure_postgresql_log_checkpoints",
+                        "azure_postgresql_log_connections",
+                        "azure_postgresql_log_disconnections",
+                        "azure_postgresql_connection_throttling",
+                        "azure_postgresql_log_retention_days",
+                        "azure_postgresql_disable_access_azure_services",
+                        "azure_postgresql_infrastructure_double_encryption"
+                    ]
+                },
+                {
+                    "title": "4.4 MySQL Database",
+                    "description": "Security measures for MySQL Database Servers are detailed here, including the enforcement of SSL connections and audit log configurations to safeguard data interactions.",
+                    "checks": [
+                        "azure_mysql_enforce_ssl",
+                        "azure_mysql_tls_version",
+                        "azure_mysql_audit_log",
+                        "azure_mysql_audit_log_connection"
+                    ]
+                },
+                {
+                    "title": "4.5 Cosmos DB",
+                    "description": "This subsection provides guidelines for securing Cosmos DB, emphasizing the use of firewall rules and virtual networks to enhance data security in Azure's globally distributed database service.",
+                    "checks": [
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "5 Logging and Monitoring",
+            "description": "Effective logging and monitoring are critical for maintaining the security and integrity of cloud environments. This section provides best practices for configuring diagnostic settings in Azure, using activity log alerts, and integrating Application Insights for proactive monitoring and anomaly detection.",
+            "children": [
+                {
+                    "title": "5.1 Configuring Diagnostic Settings",
+                    "description": "Diagnostic settings in Azure enable the collection and routing of log data to different destinations, which is crucial for troubleshooting and securing Azure environments.",
+                    "checks": [
+                        "azure_monitor_subscription_diagnostic",
+                        "azure_monitor_subscription_diagnostic_captures_categories",
+                        "azure_monitor_logs_storage_encrypted_with_CMK",
+                        "azure_monitor_key_vault_logging",
+                        "azure_monitor_flow_logs_analytics",
+                        "azure_monitor_appservice_http_logs"
+                    ]
+                },
+                {
+                    "title": "5.2 Monitoring using Activity Log Alerts",
+                    "description": "Activity log alerts in Azure help in real-time monitoring of operational events, providing alerts for specified actions, thus enhancing the responsiveness to potential security incidents.",
+                    "checks": [
+                        "azure_monitor_alert_policy_assignment_change",
+                        "azure_monitor_alert_policy_assignment_delete",
+                        "azure_monitor_alert_network_security_group_change",
+                        "azure_monitor_alert_network_security_group_delete",
+                        "azure_monitor_alert_security_solution_change",
+                        "azure_monitor_alert_security_solution_delete",
+                        "azure_monitor_alert_sql_server_firewall_rule_change",
+                        "azure_monitor_alert_sql_server_firewall_rule_delete",
+                        "azure_monitor_alert_public_ip_address_rule_change",
+                        "azure_monitor_alert_public_ip_address_rule_delete"
+                    ]
+                },
+                {
+                    "title": "5.3 Configuring Application Insights",
+                    "description": "Application Insights is an extensible Application Performance Management (APM) service for web developers on multiple platforms, aiding in the monitoring of live applications and automatically detecting performance anomalies.",
+                    "checks": [
+                        "azure_monitor_application_insights_configured"
+                    ]
+                },
+                {
+                    "title": "5.4 Ensure that Azure Monitor Resource Logging is Enabled for all Services that Support it",
+                    "description": "Resource Logs in Azure capture data access activities within resources like Key Vaults, while Activity Logs monitor subscription-level operations. Currently, 95 Azure resources support this monitoring, but some back-end services lack adequate logging configurations. Given an average incident detection time of 240 days, retaining logs for at least two years is crucial for effective monitoring.",
+                    "checks": [
+                        "azure_monitor_resource_logging_enabled"
+                    ]
+                },
+                {
+                    "title": "5.5 Ensure that SKU Basic/Consumption is not used on artifacts that need to be monitored",
+                    "description": "Using Basic or Free SKUs in Azure limits monitoring and support, lacking a service SLA, and should not be used for production workloads. Upgrading to Standard SKUs ensures necessary monitoring and service level agreements for essential resources such as Public IP Addresses and VPN Gateways, supporting better management and compliance.",
+                    "checks": [
+                        "azure_monitor_avoid_basic_consumption_sku_for_production"
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "6 Networking",
+            "description": "Networking security is paramount in Azure. This section covers essential configurations such as restricting RDP and SSH access, managing network security groups, and implementing secure network architectures to prevent unauthorized access and ensure data integrity across networks.",
+            "checks": [
+                "azure_network_rdp_internet_restricted",
+                "azure_network_ssh_internet_restricted",
+                "azure_network_udp_internet_restricted",
+                "azure_network_http_access_restricted",
+                "azure_network_nsg_flow_log_retention",
+                "azure_network_watcher",
+                "azure_network_public_ip_addresses"
+            ]
+        },
+        {
+            "title": "7 Virtual Machines",
+            "description": "This section addresses security best practices for Azure Virtual Machines. It includes guidelines for securing OS and data disks, using Azure Bastion for secure access, and ensuring that only approved extensions are installed on virtual machines.",
+            "checks": [
+                "azure_compute_bastion_host",
+                "azure_compute_vms_use_managed_disks",
+                "azure_compute_disks_encrypted_with_cmk",
+                "azure_compute_approved_vm_extensions",
+                "azure_compute_endpoint_protection_on_vms",
+                "azure_compute_ensure_trusted_launch_enabled"
+            ]
+        },
+        {
+            "title": "8 Key Vault",
+            "description": "Azure Key Vault is a tool for securely storing and accessing secrets. This section outlines practices for managing keys and secrets in Key Vault, including setting expiration dates for keys and enabling access control policies.",
+            "checks": [
+                "azure_keyvault_key_expires",
+                "azure_keyvault_secret_expires",
+                "azure_keyvault_recoverability",
+                "azure_keyvault_rbac",
+                "azure_keyvault_private_endpoints",
+                "azure_keyvault_key_rotation"
+            ]
+        },
+        {
+            "title": "9 AppService",
+            "description": "Azure App Service is a platform for building, deploying, and scaling web apps. This section provides security insights for App Service, including the use of authentication methods, TLS configurations, and the disabling of FTP deployments.",
+            "checks": [
+                "azure_web_authentication",
+                "azure_web_https",
+                "azure_web_tls_version",
+                "azure_web_register_with_entra_id",
+                "azure_web_php_version",
+                "azure_web_python_version",
+                "azure_web_java_version",
+                "azure_web_http_version",
+                "azure_web_ftp_deployments_disabled",
+                "azure_web_key_vaults"
+            ]
+        },
+        {
+            "title": "10 Miscellaneous",
+            "description": "This section includes additional miscellaneous recommendations for Azure configurations not covered in other sections, focusing on securing resources and managing Azure subscriptions efficiently.",
+            "checks": [
+                "azure_resource_locks"
+            ]
+        }
+    ]
+}

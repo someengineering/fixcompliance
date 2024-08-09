@@ -1,0 +1,167 @@
+{
+    "provider": "azure",
+    "service": "network",
+    "checks": [
+        {
+            "name": "rdp_internet_restricted",
+            "title": "Ensure that RDP access from the Internet is evaluated and restricted",
+            "result_kinds": ["azure_network_security_group"],
+            "categories": ["security", "compliance"],
+            "risk": "The potential security problem with using RDP over the Internet is that attackers can use various brute force techniques to gain access to Azure Virtual Machines, potentially using them as launch points for further attacks.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_network_security_group) and security_rules[*].{source_address_prefix in [\"*\", \"internet\", \"any\", \"0.0.0.0\", \"0.0.0.0/0\", \"::/0\", \"/0\"] and destination_port_ranges[*].{start<=3389 and end>=3389} and protocol in [\"TCP\", \"*\"] and direction=Inbound and access=Allow}"
+            },
+            "remediation": {
+                "text": "Where RDP is not explicitly required and narrowly configured for resources attached to the Network Security Group, Internet-level access to your Azure resources should be restricted or eliminated. For internal access to relevant resources, configure an encrypted network tunnel such as: ExpressRoute, Site-to-site VPN, Point-to-site VPN.",
+                "url": "https://docs.microsoft.com/en-us/azure/security/azure-security-network-security-best-practices#disable-rdpssh-access-to-azure-virtual-machines"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-network-security#ns-1-establish-network-segmentation-boundaries",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der RDP-Zugriff aus dem Internet überprüft und eingeschränkt wird",
+                    "risk": "Das potenzielle Sicherheitsrisiko bei der Verwendung von RDP über das Internet besteht darin, dass Angreifer verschiedene Brute-Force-Techniken nutzen können, um Zugang zu Azure-Virtual Machines zu erhalten und diese als Ausgangspunkte für weitere Angriffe nutzen können.",
+                    "remediation": "Wenn RDP nicht ausdrücklich erforderlich und eng für Ressourcen konfiguriert ist, die an die Netzwerksicherheitsgruppe angeschlossen sind, sollte der Internetzugang zu Ihren Azure-Ressourcen eingeschränkt oder beseitigt werden. Für den internen Zugang zu relevanten Ressourcen konfigurieren Sie einen verschlüsselten Netzwerktunnel wie: ExpressRoute, Site-to-Site-VPN, Point-to-Site-VPN."
+                }
+            }
+        },
+        {
+            "name": "ssh_internet_restricted",
+            "title": "Ensure that SSH access from the Internet is evaluated and restricted",
+            "result_kinds": ["azure_network_security_group"],
+            "categories": ["security", "compliance"],
+            "risk": "The potential security problem with using SSH over the Internet is that attackers can use various brute force techniques to gain access to Azure Virtual Machines, potentially using them as launch points for further attacks.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_network_security_group) and security_rules[*].{source_address_prefix in [\"*\", \"internet\", \"any\", \"0.0.0.0\", \"0.0.0.0/0\", \"::/0\", \"/0\"] and destination_port_ranges[*].{start<=22 and end>=22} and protocol in [\"TCP\", \"*\"] and direction=Inbound and access=Allow}"
+            },
+            "remediation": {
+                "text": "Where SSH is not explicitly required and narrowly configured for resources attached to the Network Security Group, Internet-level access to your Azure resources should be restricted or eliminated. For internal access to relevant resources, configure an encrypted network tunnel such as: ExpressRoute, Site-to-site VPN, Point-to-site VPN.",
+                "url": "https://docs.microsoft.com/en-us/azure/security/azure-security-network-security-\nbest-practices#disable-rdpssh-access-to-azure-virtual-machines"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/security/azure-security-network-security-best-practices#disable-rdpssh-access-to-azure-virtual-machines",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der SSH-Zugriff aus dem Internet überprüft und eingeschränkt wird",
+                    "risk": "Das potenzielle Sicherheitsrisiko bei der Verwendung von SSH über das Internet besteht darin, dass Angreifer verschiedene Brute-Force-Techniken nutzen können, um Zugang zu Azure-Virtual Machines zu erhalten und diese als Ausgangspunkte für weitere Angriffe nutzen können.",
+                    "remediation": "Wenn SSH nicht ausdrücklich erforderlich und eng für Ressourcen konfiguriert ist, die an die Netzwerksicherheitsgruppe angeschlossen sind, sollte der Internetzugang zu Ihren Azure-Ressourcen eingeschränkt oder beseitigt werden. Für den internen Zugang zu relevanten Ressourcen konfigurieren Sie einen verschlüsselten Netzwerktunnel wie: ExpressRoute, Site-to-Site-VPN, Point-to-Site-VPN."
+                }
+            }
+        },
+        {
+            "name": "udp_internet_restricted",
+            "title": "Ensure that UDP access from the Internet is evaluated and restricted",
+            "result_kinds": ["azure_network_security_group"],
+            "categories": ["security", "compliance"],
+            "risk": "Broadly exposing UDP services over the Internet can lead to attackers using DDoS amplification techniques to reflect spoofed UDP traffic from Azure Virtual Machines, disrupting services on the Azure Virtual Network or attacking networked devices outside of Azure.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_network_security_group) and security_rules[*].{source_address_prefix in [\"*\", \"internet\", \"any\", \"0.0.0.0\", \"0.0.0.0/0\", \"::/0\", \"/0\"] and protocol=UDP and direction=Inbound and access=Allow}"
+            },
+            "remediation": {
+                "text": "Where UDP is not explicitly required and narrowly configured for resources attached to the Network Security Group, Internet-level access to your Azure resources should be restricted or eliminated. For internal access to relevant resources, configure an encrypted network tunnel such as: ExpressRoute, Site-to-site VPN, Point-to-site VPN.",
+                "url": "https://docs.microsoft.com/en-us/azure/security/fundamentals/network-best-practices#secure-your-critical-azure-service-resources-to-only-your-virtual-networks"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/security/fundamentals/ddos-best-practices",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der UDP-Zugriff aus dem Internet überprüft und eingeschränkt wird",
+                    "risk": "Eine breite Exposition von UDP-Diensten über das Internet kann dazu führen, dass Angreifer DDoS-Verstärkungstechniken nutzen, um gefälschten UDP-Verkehr von Azure-Virtual Machines zu reflektieren, wodurch Dienste im Azure-Virtual Network gestört oder vernetzte Geräte außerhalb von Azure angegriffen werden können.",
+                    "remediation": "Wenn UDP nicht ausdrücklich erforderlich und eng für Ressourcen konfiguriert ist, die an die Netzwerksicherheitsgruppe angeschlossen sind, sollte der Internetzugang zu Ihren Azure-Ressourcen eingeschränkt oder beseitigt werden. Für den internen Zugang zu relevanten Ressourcen konfigurieren Sie einen verschlüsselten Netzwerktunnel wie: ExpressRoute, Site-to-Site-VPN, Point-to-Site-VPN."
+                }
+            }
+        },
+        {
+            "name": "http_access_restricted",
+            "title": "Ensure that HTTP(S) access from the Internet is evaluated and restricted",
+            "result_kinds": ["azure_network_security_group"],
+            "categories": ["security", "compliance"],
+            "risk": "Using HTTP(S) over the Internet can pose security risks as attackers may use various brute force techniques to gain access to Azure resources and use these resources as a launch point for compromising other resources within the Azure tenant.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_network_security_group) and security_rules[*].{source_address_prefix in [\"*\", \"internet\", \"any\", \"0.0.0.0\", \"0.0.0.0/0\", \"::/0\", \"/0\"] and (destination_port_ranges[*].{start<=80 and end>=80} or destination_port_ranges[*].{start<=443 and end>=443}) and protocol in [\"TCP\", \"*\"] and direction=Inbound and access=Allow}"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Virtual machines.\n2. For each VM, open the Networking blade.\n3. Click on Inbound port rules.\n4. Delete the rule with: Port = 80/443 OR [port range containing 80/443], Protocol = TCP OR Any, Source = Any (*) OR IP Addresses(0.0.0.0/0) OR Service Tag(Internet), Action = Allow.\nFrom Azure CLI:\nRun below command to list network security groups: az network nsg list --subscription <subscription-id> --output table\n1. For each network security group, run below command to list the rules associated with the specified port: az network nsg rule list --resource-group <resource-group> --nsg-name <nsg-name> --query \"[?destinationPortRange=='80 or 443']\"\n2. Run the below command to delete the rule with: Port = 80/443 OR [port range containing 80/443], Protocol = TCP OR \"*\", Source = Any (*) OR IP Addresses(0.0.0.0/0) OR Service Tag(Internet), Action = Allow: az network nsg rule delete --resource-group <resource-group> --nsg-name <nsg-name> --name <rule-name>",
+                "url": "https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-site-to-site-resource-manager-portal"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-network-security#ns-1-establish-network-segmentation-boundaries",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der HTTP(S)-Zugriff aus dem Internet überprüft und eingeschränkt wird",
+                    "risk": "Die Verwendung von HTTP(S) über das Internet kann Sicherheitsrisiken bergen, da Angreifer verschiedene Brute-Force-Techniken nutzen können, um Zugang zu Azure-Ressourcen zu erhalten und diese als Ausgangspunkt für die Kompromittierung anderer Ressourcen innerhalb des Azure-Mandanten zu nutzen.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu Virtuelle Maschinen.\n2. Öffnen Sie für jede VM das Netzwerk-Blade.\n3. Klicken Sie auf Eingehende Portregeln.\n4. Löschen Sie die Regel mit: Port = 80/443 ODER [Portbereich mit 80/443], Protokoll = TCP ODER Beliebig, Quelle = Beliebig (*) ODER IP-Adressen (0.0.0.0/0) ODER Diensttag (Internet), Aktion = Zulassen.\nVon Azure CLI:\nFühren Sie den folgenden Befehl aus, um Netzwerksicherheitsgruppen aufzulisten: az network nsg list --subscription <subscription-id> --output table\n1. Führen Sie für jede Netzwerksicherheitsgruppe den folgenden Befehl aus, um die Regeln aufzulisten, die dem angegebenen Port zugeordnet sind: az network nsg rule list --resource-group <resource-group> --nsg-name <nsg-name> --query \"[?destinationPortRange=='80 oder 443']\"\n2. Führen Sie den folgenden Befehl aus, um die Regel zu löschen: Port = 80/443 ODER [Portbereich mit 80/443], Protokoll = TCP ODER \"*\", Quelle = Beliebig (*) ODER IP-Adressen (0.0.0.0/0) ODER Diensttag (Internet), Aktion = Zulassen: az network nsg rule delete --resource-group <resource-group> --nsg-name <nsg-name> --name <rule-name>"
+                }
+            }
+        },
+        {
+            "name": "nsg_flow_log_retention",
+            "title": "Ensure that Network Security Group Flow Log retention period is 'greater than 90 days'",
+            "result_kinds": ["azure_network_security_group"],
+            "categories": ["security", "compliance"],
+            "risk": "Not setting the NSG Flow Log retention period to at least 90 days limits the ability to retrospectively analyze traffic for anomalies or breaches, potentially missing critical insights into security incidents.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_network_security_group) with(empty, --> is(azure_flow_log) and retention_policy_parameters.days>=90)"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Network Watcher.\n2. Select NSG flow logs blade in the Logs section.\n3. Select each Network Security Group from the list.\n4. Ensure Status is set to On.\n5. Ensure Retention (days) setting greater than 90 days.\n6. Select your storage account in the Storage account field.\n7. Select Save.\nFrom Azure CLI:\nEnable the NSG flow logs and set the Retention (days) to greater than or equal to 90 days.\naz network watcher flow-log configure --nsg <NameorID of the Network Security Group> --enabled true --resource-group <resourceGroupName> --retention 91 --storage-account <NameorID of the storage account to save flow logs>",
+                "url": "https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-nsg-flow-logging-overview"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-nsg-flow-logging-overview",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Aufbewahrungszeit für Netzwerksicherheitsgruppen-Datenflussprotokolle mehr als 90 Tage beträgt",
+                    "risk": "Eine Einstellung der NSG-Flussprotokoll-Aufbewahrungszeit auf mindestens 90 Tage ist erforderlich, um den Datenverkehr rückwirkend auf Anomalien oder Verstöße analysieren zu können, was kritische Einblicke in Sicherheitsvorfälle ermöglicht.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zum Network Watcher.\n2. Wählen Sie die NSG-Datenflussprotokolle in der Protokollsektion.\n3. Wählen Sie jede Netzwerksicherheitsgruppe aus der Liste.\n4. Stellen Sie sicher, dass der Status auf 'Ein' gesetzt ist.\n5. Stellen Sie sicher, dass die Einstellung für die Aufbewahrungszeit (Tage) mehr als 90 Tage beträgt.\n6. Wählen Sie Ihr Speicherkonto im Feld 'Speicherkonto' aus.\n7. Wählen Sie 'Speichern'.\nVon Azure CLI:\nAktivieren Sie die NSG-Datenflussprotokolle und stellen Sie die Aufbewahrungszeit (Tage) auf mehr als 90 Tage ein.\naz network watcher flow-log configure --nsg <NameorID der Netzwerksicherheitsgruppe> --enabled true --resource-group <resourceGroupName> --retention 91 --storage-account <NameorID des Speicherkontos zum Speichern der Flussprotokolle>"
+                }
+            }
+        },
+        {
+            "name": "watcher",
+            "title": "Ensure that Network Watcher is 'Enabled'",
+            "result_kinds": ["azure_location"],
+            "categories": ["security", "compliance"],
+            "risk": "Disabling or not activating Network Watcher limits the ability to visualize, monitor, and diagnose conditions at a network scenario level in Azure, potentially missing critical insights into network performance and security threats.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_location) and name!=global with(empty, --> is(azure_network_watcher))"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Network Watcher.\n2. Click Create.\n3. Select a Region from the drop-down menu.\n4. Click Add.\nFrom Azure CLI:\nEnable Network Watcher in each region using the command:\naz network watcher configure --locations <region> --enabled true --resource-group <resource_group>",
+                "url": "https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-create"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-logging-threat-detection#lt-4-enable-network-logging-for-security-investigation",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Network Watcher 'aktiviert' ist",
+                    "risk": "Das Deaktivieren oder Nichtaktivieren des Network Watchers schränkt die Fähigkeit ein, Bedingungen auf der Ebene des Netzwerkszenarios in Azure zu visualisieren, zu überwachen und zu diagnostizieren, und kann dazu führen, dass kritische Einblicke in Netzwerkleistung und Sicherheitsbedrohungen fehlen.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zum Network Watcher.\n2. Klicken Sie auf Erstellen.\n3. Wählen Sie eine Region aus dem Dropdown-Menü aus.\n4. Klicken Sie auf Hinzufügen.\nVon Azure CLI:\nAktivieren Sie den Network Watcher in jeder Region mit dem Befehl:\naz network watcher configure --locations <region> --enabled true --resource-group <resource_group>"
+                }
+            }
+        },
+        {
+            "name": "public_ip_addresses",
+            "title": "Ensure that Public IP addresses are Evaluated on a Periodic Basis",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Public IP addresses that are not regularly reviewed and controlled pose a security risk by exposing Azure resources to potential threats. Unnecessary or unused public IPs can be vectors for attacks if not properly managed or decommissioned.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. Open the All Resources blade\n2. Click on Add Filter\n3. In the Add Filter window, select the following:\n  Filter: Type\n  Operator: Equals\n  Value: Public IP address\n4. Click the Apply button\n5. For each Public IP address in the list, use Overview (or Properties) to review the \"Associated to:\" field and determine if the associated resource is still relevant to your tenant environment. If it is, ensure additional controls exist to mitigate risk.\nFrom Azure CLI:\nList all Public IP addresses with the command:\naz network public-ip list\nFor each Public IP address, review the \"name\" property and determine if the associated resource is still relevant to your tenant environment. Ensure that additional controls exist to mitigate risk."
+            },
+            "remediation": {
+                "text": "Remediation involves reviewing and potentially decommissioning unnecessary Public IP addresses. Steps include:\n1. Review each Public IP address to determine its necessity and relevance to your environment.\n2. For IPs that are no longer needed, follow steps to disassociate and decommission them safely.\n3. For IPs that are required, ensure they are protected with adequate security measures such as Firewalls, VPNs, Traffic Filtering, etc.",
+                "url": "https://docs.microsoft.com/en-us/cli/azure/network/public-ip?view=azure-cli-latest#az_network_public_ip_list"
+            },
+            "url": "https://docs.microsoft.com/en-us/cli/azure/network/public-ip?view=azure-cli-latest",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass öffentliche IP-Adressen regelmäßig bewertet werden",
+                    "risk": "Öffentliche IP-Adressen, die nicht regelmäßig überprüft und kontrolliert werden, stellen ein Sicherheitsrisiko dar, indem sie Azure-Ressourcen potenziellen Bedrohungen aussetzen. Nicht benötigte oder ungenutzte öffentliche IPs können Angriffsvektoren sein, wenn sie nicht ordnungsgemäß verwaltet oder stillgelegt werden.",
+                    "remediation": "Die Abhilfemaßnahmen umfassen die Überprüfung und mögliche Stilllegung unnötiger öffentlicher IP-Adressen. Die Schritte umfassen:\n1. Überprüfen Sie jede öffentliche IP-Adresse auf ihre Notwendigkeit und Relevanz für Ihre Umgebung.\n2. Für nicht mehr benötigte IPs, folgen Sie den Schritten, um sie sicher zu dissoziieren und stillzulegen.\n3. Stellen Sie für erforderliche IPs sicher, dass sie durch angemessene Sicherheitsmaßnahmen wie Firewalls, VPNs, Verkehrsfilterung usw. geschützt sind."
+                }
+            }
+        }
+    ]
+}
