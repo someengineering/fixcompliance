@@ -29,12 +29,12 @@
         {
             "name": "defender_for_app_services_enabled",
             "title": "Ensure That Microsoft Defender for App Services Is Enabled",
-            "result_kinds": ["azure_security_pricing"],
+            "result_kinds": ["azure_web_app"],
             "categories": ["security", "compliance"],
             "risk": "Without Microsoft Defender for App Services enabled, App Services lack advanced threat detection and protection capabilities provided by the Microsoft Security Response Center (MSRC), increasing the risk of undetected security incidents.",
             "severity": "medium",
             "detect": {
-                "fix": "is(azure_security_pricing) and name==AppServices and pricing_tier!=Standard"
+                "fix": "is(azure_subscription) with(any, --> is(azure_security_pricing) and name==AppServices and pricing_tier!=Standard) --> is(azure_web_app)"
             },
             "remediation": {
                 "text": "To enable Microsoft Defender for App Services:\nFrom Azure Portal:\n1. Go to Microsoft Defender for Cloud.\n2. Select Environment Settings.\n3. Click on the subscription name.\n4. Select Defender plans.\n5. Set App Service Status to On.\n6. Select Save.\n\nFrom Azure CLI:\nRun the following command:\naz security pricing create -n Appservices --tier 'standard'\n\nFrom PowerShell:\nRun the following command:\nSet-AzSecurityPricing -Name 'AppServices' -PricingTier 'Standard'.",
@@ -48,8 +48,7 @@
                     "risk": "Ohne aktivierten Microsoft Defender für App Services fehlt den App Services die fortschrittliche Bedrohungserkennungs- und Schutzfunktionen, die vom Microsoft Security Response Center (MSRC) bereitgestellt werden, was das Risiko von unentdeckten Sicherheitsvorfällen erhöht.",
                     "remediation": "Um Microsoft Defender für App Services zu aktivieren:\nVom Azure-Portal:\n1. Gehen Sie zu Microsoft Defender for Cloud.\n2. Wählen Sie Umgebungseinstellungen.\n3. Klicken Sie auf den Abonnementnamen.\n4. Wählen Sie Defender-Pläne.\n5. Setzen Sie den App Service-Status auf Ein.\n6. Wählen Sie Speichern.\n\nVon der Azure CLI:\nFühren Sie den folgenden Befehl aus:\naz security pricing create -n Appservices --tier 'standard'\n\nVon PowerShell:\nFühren Sie den folgenden Befehl aus:\nSet-AzSecurityPricing -Name 'AppServices' -PricingTier 'Standard'."
                 }
-            },
-            "internal_notes": "TODO: apply this role to all app services (once we collect them)."
+            }
         },
         {
             "name": "defender_for_sql_databases_enabled",
@@ -102,12 +101,12 @@
         {
             "name": "defender_for_open_source_databases_enabled",
             "title": "Ensure That Microsoft Defender for Open-Source Relational Databases Is Enabled",
-            "result_kinds": ["azure_security_pricing"],
+            "result_kinds": ["azure_mysql_server", "azure_postgresql_server"],
             "categories": ["security", "compliance"],
             "risk": "Without Microsoft Defender for Open-Source Relational Databases enabled, these databases lack advanced threat detection and protection capabilities provided by the Microsoft Security Response Center (MSRC), increasing the risk of undetected security incidents.",
             "severity": "medium",
             "detect": {
-                "fix": "is(azure_security_pricing) and name==OpenSourceRelationalDatabases and pricing_tier!=Standard"
+                "fix": "is(azure_subscription) with(any, --> is(azure_security_pricing) and name==OpenSourceRelationalDatabases and pricing_tier!=Standard) --> is(azure_mysql_server, azure_postgresql_server)"
             },
             "remediation": {
                 "text": "To enable Microsoft Defender for Open-Source Relational Databases:\nFrom Azure Portal:\n1. Go to Microsoft Defender for Cloud.\n2. Select Environment Settings blade.\n3. Click on the subscription name.\n4. Select the Defender plans blade.\n5. Click Select types > in the row for Databases.\n6. Set the radio button next to Open-source relational databases to On.\n7. Select Continue.\n8. Select Save.\n\nFrom Azure CLI:\nRun the following command:\naz security pricing create -n 'OpenSourceRelationalDatabases' --tier 'standard'\n\nFrom PowerShell:\nUse the below command to enable Standard pricing tier for Open-source relational databases:\nset-azsecuritypricing -name 'OpenSourceRelationalDatabases' -pricingtier 'Standard'.",
@@ -121,8 +120,7 @@
                     "risk": "Ohne aktivierten Microsoft Defender für Open-Source-Relationale Datenbanken fehlen diesen Datenbanken die fortschrittliche Bedrohungserkennungs- und Schutzfunktionen, die vom Microsoft Security Response Center (MSRC) bereitgestellt werden, was das Risiko von unentdeckten Sicherheitsvorfällen erhöht.",
                     "remediation": "Um Microsoft Defender für Open-Source-Relationale Datenbanken zu aktivieren:\nVom Azure-Portal:\n1. Gehen Sie zu Microsoft Defender for Cloud.\n2. Wählen Sie das Blade Umgebungseinstellungen.\n3. Klicken Sie auf den Abonnementnamen.\n4. Wählen Sie das Blade Defender-Pläne.\n5. Klicken Sie auf Typen auswählen > in der Zeile für Datenbanken.\n6. Setzen Sie den Radiobutton neben Open-source relational databases auf Ein.\n7. Wählen Sie Fortfahren.\n8. Wählen Sie Speichern.\n\nVon der Azure CLI:\nFühren Sie den folgenden Befehl aus:\naz security pricing create -n 'OpenSourceRelationalDatabases' --tier 'standard'\n\nVon PowerShell:\nVerwenden Sie den folgenden Befehl, um die Standard-Preisstufe für Open-Source-Relationale Datenbanken zu aktivieren:\nset-azsecuritypricing -name 'OpenSourceRelationalDatabases' -pricingtier 'Standard'."
                 }
-            },
-            "internal_notes": "TODO: apply this role to all resources (once we collect them)."
+            }
         },
         {
             "name": "defender_for_azure_cosmos_db_enabled",
@@ -205,7 +203,7 @@
             "risk": "Without Microsoft Defender for Key Vault enabled, key vaults lack advanced threat detection and protection capabilities, increasing the risk of undetected security incidents.",
             "severity": "medium",
             "detect": {
-                "fix": "is(azure_security_pricing) and name==KeyVaults and pricing_tier==Standard"
+                "fix": "is(azure_subscription) with(any, --> is(azure_security_pricing) and name=KeyVaults and pricing_tier!=Standard) -[2]-> is(azure_key_vault)"
             },
             "remediation": {
                 "text": "To enable Microsoft Defender for Key Vault:\nFrom Azure Portal:\n1. Go to Microsoft Defender for Cloud.\n2. Select Environment Settings blade.\n3. Click on the subscription name.\n4. Select the Defender plans blade.\n5. Select On under Status for Key Vault.\n6. Select Save.\n\nFrom Azure CLI:\nEnable Standard pricing tier for Key Vault:\naz security pricing create -n 'KeyVaults' --tier 'Standard'\n\nFrom PowerShell:\nEnable Standard pricing tier for Key Vault:\nSet-AzSecurityPricing -Name 'KeyVaults' -PricingTier 'Standard'.",
@@ -219,8 +217,7 @@
                     "risk": "Ohne aktivierten Microsoft Defender für Key Vault fehlen diesen Schlüssel-Tresoren die fortschrittliche Bedrohungserkennungs- und Schutzfunktionen, was das Risiko von unentdeckten Sicherheitsvorfällen erhöht.",
                     "remediation": "Um Microsoft Defender für Key Vault zu aktivieren:\nVom Azure-Portal:\n1. Gehen Sie zu Microsoft Defender for Cloud.\n2. Wählen Sie das Blade Umgebungseinstellungen.\n3. Klicken Sie auf den Abonnementnamen.\n4. Wählen Sie das Blade Defender-Pläne.\n5. Setzen Sie den Status für Key Vault auf Ein.\n6. Wählen Sie Speichern.\n\nVon der Azure CLI:\nAktivieren Sie die Standard-Preisstufe für Key Vault:\naz security pricing create -n 'KeyVaults' --tier 'Standard'\n\nVon PowerShell:\nAktivieren Sie die Standard-Preisstufe für Key Vault:\nSet-AzSecurityPricing -Name 'KeyVaults' -PricingTier 'Standard'."
                 }
-            },
-            "internal_notes": "TODO: apply this role to all resources (once we collect them)."
+            }
         },
         {
             "name": "defender_for_resource_manager_enabled",
@@ -292,8 +289,7 @@
                     "risk": "Ohne die automatische Bereitstellung des Überwachungsagents kann die Sammlung von Sicherheitsdaten von virtuellen Maschinen unvollständig sein, was potenziell zu unentdeckten Sicherheitsproblemen führt.",
                     "remediation": "Um die automatische Bereitstellung des Log Analytics-Agents für Azure-VMs zu aktivieren:\nVom Azure-Portal:\n1. Gehen Sie zu Microsoft Defender für Cloud.\n2. Wählen Sie Umgebungseinstellungen.\n3. Wählen Sie ein Abonnement.\n4. Klicken Sie auf Einstellungen & Überwachung.\n5. Stellen Sie sicher, dass der Log Analytics-Agents/Azure Monitor-Agents auf Ein gesetzt ist.\n\nVon der Azure CLI:\nVerwenden Sie den folgenden Befehl, um die automatische Bereitstellung zu aktivieren:\naz security auto-provisioning-setting update --name default --auto-provision On\n\nVon PowerShell:\nVerwenden Sie den folgenden Befehl, um die automatische Bereitstellung zu aktivieren:\nSet-AzSecurityAutoProvisioningSetting -Name 'default' -AutoProvision On."
                 }
-            },
-            "internal_notes": "TODO: this check is wrong"
+            }
         }
     ]
 }
