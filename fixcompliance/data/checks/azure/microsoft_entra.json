@@ -1,0 +1,821 @@
+{
+    "provider": "azure",
+    "service": "entra",
+    "checks": [
+        {
+            "name": "security_defaults_enabled",
+            "title": "Ensure Security Defaults is enabled on Microsoft Entra ID",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Without Security Defaults enabled, organizations lack a basic level of security protection against common attacks, potentially exposing them to various security risks.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with(any, <-- is(microsoft_graph_organization) with(any, -[2]-> is(microsoft_graph_policy) and policy_kind=identity_security_defaults_enforcement and enabled==false))"
+            },
+            "remediation": {
+                "text": "To enable security defaults:\n1. From Azure Home, select the Portal Menu.\n2. Browse to Microsoft Entra ID > Properties.\n3. Select Manage security defaults.\n4. Set the Enable security defaults toggle to Enabled.\n5. Select Save.",
+                "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-identity-management#im-2-protect-identity-and-authentication-systems",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/concept-fundamentals-security-defaults",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Sicherheitsstandards in Microsoft Entra ID aktiviert sind",
+                    "risk": "Ohne aktivierte Sicherheitsstandards fehlt Organisationen ein grundlegender Schutz gegen häufige Angriffe, was sie potenziell verschiedenen Sicherheitsrisiken aussetzt.",
+                    "remediation": "Um Sicherheitsstandards zu aktivieren: 1. Wählen Sie im Azure-Startbildschirm das Portalmenü aus. 2. Navigieren Sie zu Microsoft Entra ID > Eigenschaften. 3. Wählen Sie Sicherheitsstandards verwalten. 4. Setzen Sie den Schalter Sicherheitsstandards aktivieren auf Aktiviert. 5. Wählen Sie Speichern."
+                }
+            }
+        },
+        {
+            "name": "mfa_status_enabled_privileged_users",
+            "title": "Ensure that 'Multi-Factor Auth Status' is 'Enabled' for all Privileged Users",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without multi-factor authentication enabled for privileged users, organizations are at a higher risk of security breaches as attackers can more easily compromise accounts with higher access levels.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select the Microsoft Entra ID blade.\n3. Select Users.\n4. Take note of all users with the role Service Co-Administrators, Owners or Contributors.\n5. Click on the Per-User MFA button in the top row menu.\n6. Ensure that MULTI-FACTOR AUTH STATUS is Enabled for all noted users.\n\nFrom REST API:\nFor Every Subscription, For Every Tenant:\nStep 1: Identify Users with Administrative Access\n1. List All Users Using Microsoft Graph API: GET https://graph.microsoft.com/v1.0/users\nCapture id and corresponding userPrincipalName ('$uid', '$userPrincipalName')\n2. List all Role Definitions Using Azure management API: https://management.azure.com/subscriptions/:subscriptionId/providers/Microsoft.Authorization/roleDefinitions?api-version=2017-05-01\nCapture Role Definition IDs/Name ('$name') and role names ('$properties/roleName') where 'properties/roleName' contains (Owner or *contributor or admin)\n3. List All Role Assignments (Mappings $A.uid to $B.name) Using Azure Management API: GET https://management.azure.com/subscriptions/:subscriptionId/providers/Microsoft.Authorization/roleassignments?api-version=2017-10-01-preview\nFind all administrative roles ($B.name) in 'Properties/roleDefinitionId' mapped with user ids ($A.id) in 'Properties/principalId' where 'Properties/principalType' == 'User'\n4. Now Match ($C.Properties/principalId) with $A.uid and get $A.userPrincipalName save this as D.userPrincipalName\nStep 2: Run MSOL PowerShell command: Get-MsolUser -All | where {$_.StrongAuthenticationMethods.Count -eq 0} | Select-Object -Property UserPrincipalName\nIf the output contains any of the $D.userPrincipalName, then this recommendation is non-compliant."
+            },
+            "remediation": {
+                "text": "To enable multi-factor authentication:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID blade.\n3. Select Users.\n4. Take note of all users with the role Service Co-Administrators, Owners or Contributors.\n5. Click on the Per-User MFA button in the top row menu.\n6. Check the box next to each noted user.\n7. Click Enable under quick steps in the right-hand panel.\n8. Click enable multi-factor auth.\n9. Click close.\n\nOther Options within Azure Portal:\nFollow Microsoft Azure documentation and enable multi-factor authentication in your environment: https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-azure-mfa\n\nEnabling and configuring MFA with conditional access policy is a multi-step process. Here are some additional resources on the process within Entra ID to enable multi-factor authentication for users within your subscriptions with conditional access policy:\nhttps://docs.microsoft.com/en-us/azure/active-directory/conditional-access/howto-conditional-access-policy-admin-mfa\nhttps://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-mfa-getstarted#enable-multi-factor-authentication-with-conditional-access\nhttps://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-mfa-mfasettings",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-azure-mfa",
+                "complexity": "medium"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/multi-factor-authentication/multi-factor-authentication",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der 'Multi-Faktor-Authentifizierungsstatus' für alle privilegierten Benutzer aktiviert ist",
+                    "risk": "Ohne aktivierte Multi-Faktor-Authentifizierung für privilegierte Benutzer sind Organisationen einem höheren Risiko von Sicherheitsverletzungen ausgesetzt, da Angreifer leichter Konten mit höherem Zugriffslevel kompromittieren können.",
+                    "remediation": "Um die Multi-Faktor-Authentifizierung zu aktivieren:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portalmenü aus.\n2. Navigieren Sie zur Microsoft Entra ID-Blade.\n3. Wählen Sie Benutzer aus.\n4. Notieren Sie alle Benutzer mit der Rolle Service Co-Administratoren, Eigentümer oder Mitwirkende.\n5. Klicken Sie auf die Schaltfläche Per-User-MFA im oberen Reihenmenü.\n6. Aktivieren Sie das Kontrollkästchen neben jedem notierten Benutzer.\n7. Klicken Sie im rechten Bereich unter Schnellschritte auf Aktivieren.\n8. Klicken Sie auf Multi-Faktor-Auth aktivieren.\n9. Klicken Sie auf Schließen.\n\nAndere Optionen im Azure-Portal:\nFolgen Sie der Microsoft Azure-Dokumentation und aktivieren Sie die Multi-Faktor-Authentifizierung in Ihrer Umgebung: https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-azure-mfa"
+                }
+            }
+        },
+        {
+            "name": "mfa_status_enabled_non_privileged_users",
+            "title": "Ensure that 'Multi-Factor Auth Status' is 'Enabled' for all Non-Privileged Users",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without multi-factor authentication enabled for non-privileged users, organizations are at a higher risk of security breaches as attackers can more easily compromise accounts, leading to potential security risks.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select the Microsoft Entra ID blade.\n3. Select Users.\n4. Take note of all users with the role Service Co-Administrators, Owners or Contributors.\n5. Click on the Per-User MFA button in the top row menu.\n6. Ensure that MULTI-FACTOR AUTH STATUS is Enabled for all noted users.\n\nFrom REST API:\nFor Every Subscription, For Every Tenant:\nStep 1: Identify Users with non-administrative Access\n1. List All Users Using Microsoft Graph API: GET https://graph.microsoft.com/v1.0/users\nCapture id and corresponding userPrincipalName ($uid, $userPrincipalName)\n2. List all Role Definitions Using Azure management API: https://management.azure.com/subscriptions/<subscriptionId>/providers/Microsoft.Authorization/roleDefinitions?api-version=2017-05-01\nCapture Role Definition IDs/Name ($name) and role names ($properties/roleName) where 'properties/roleName' does NOT contain (Owner or *contributor or admin)\n3. List All Role Assignments (Mappings $A.uid to $B.name) Using Azure Management API: GET https://management.azure.com/subscriptions/<subscriptionId>/providers/Microsoft.Authorization/roleassignments?api-version=2017-10-01-preview\nFind all non-administrative roles ($B.name) in 'Properties/roleDefinitionId' mapped with user ids ($A.id) in 'Properties/principalId' where 'Properties/principalType' == 'User'\n4. Now Match ($C.Properties/principalId) with $A.uid and get $A.userPrincipalName save this as D.userPrincipalName\nStep 2: Run MSOL PowerShell command: Get-MsolUser -All | where {$_.StrongAuthenticationMethods.Count -eq 0} | Select-Object -Property UserPrincipalName\nIf the output contains any of the $D.userPrincipalName, then this recommendation is non-compliant."
+            },
+            "remediation": {
+                "text": "To enable multi-factor authentication:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID blade.\n3. Select Users.\n4. Take note of all users with the role Service Co-Administrators, Owners or Contributors.\n5. Click on the Per-User MFA button in the top row menu.\n6. Check the box next to each noted user.\n7. Click Enable under quick steps in the right-hand panel.\n8. Click enable multi-factor auth.\n9. Click close.\n\nOther Options within Azure Portal:\nFollow Microsoft Azure documentation and enable multi-factor authentication in your environment: https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-azure-mfa\n\nEnabling and configuring MFA is a multi-step process. Here are some additional resources on the process within Microsoft Entra ID:\nhttps://learn.microsoft.com/en-us/entra/identity/conditional-access/howto-conditional-access-policy-admin-mfa\nhttps://learn.microsoft.com/en-us/entra/identity/authentication/howto-mfa-getstarted#enable-multi-factor-authentication-with-conditional-access\nhttps://learn.microsoft.com/en-us/entra/identity/authentication/howto-mfa-mfasettings",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-azure-mfa",
+                "complexity": "medium"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/multi-factor-authentication/multi-factor-authentication",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der 'Multi-Faktor-Authentifizierungsstatus' für alle nicht privilegierten Benutzer aktiviert ist",
+                    "risk": "Ohne aktivierte Multi-Faktor-Authentifizierung für nicht privilegierte Benutzer sind Organisationen einem höheren Risiko von Sicherheitsverletzungen ausgesetzt, da Angreifer leichter Konten kompromittieren können, was zu potenziellen Sicherheitsrisiken führt.",
+                    "remediation": "Um die Multi-Faktor-Authentifizierung zu aktivieren:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portalmenü aus.\n2. Navigieren Sie zur Microsoft Entra ID-Blade.\n3. Wählen Sie Benutzer aus.\n4. Notieren Sie alle Benutzer mit der Rolle Service Co-Administratoren, Eigentümer oder Mitwirkende.\n5. Klicken Sie auf die Schaltfläche Per-User-MFA im oberen Reihenmenü.\n6. Aktivieren Sie das Kontrollkästchen neben jedem notierten Benutzer.\n7. Klicken Sie im rechten Bereich unter Schnellschritte auf Aktivieren.\n8. Klicken Sie auf Multi-Faktor-Auth aktivieren.\n9. Klicken Sie auf Schließen.\n\nAndere Optionen im Azure-Portal:\nFolgen Sie der Microsoft Azure-Dokumentation und aktivieren Sie die Multi-Faktor-Authentifizierung in Ihrer Umgebung: https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-azure-mfa"
+                }
+            }
+        },
+        {
+            "name": "disable_mfa_remember_trusted_devices",
+            "title": "Ensure that 'Allow users to remember multi-factor authentication on devices they trust' is Disabled",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing users to remember multi-factor authentication on devices they trust can reduce security by enabling users to bypass MFA for a set period. This can increase the risk if an account or device is compromised.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Users.\n4. Click the Per-user MFA button on the top bar.\n5. Click on service settings.\n6. Ensure that 'Allow users to remember multi-factor authentication on devices they trust' is not enabled."
+            },
+            "remediation": {
+                "text": "To disable 'Allow users to remember multi-factor authentication on devices they trust':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Users.\n4. Click the Per-user MFA button on the top bar.\n5. Click on service settings.\n6. Uncheck the box next to 'Allow users to remember multi-factor authentication on devices they trust'.",
+                "url": "https://learn.microsoft.com/en-us/entra/identity/authentication/howto-mfa-mfasettings#remember-multi-factor-authentication-for-devices-that-users-trust",
+                "complexity": "low"
+            },
+            "url": "https://learn.microsoft.com/en-us/entra/identity/authentication/howto-mfa-mfasettings#remember-multi-factor-authentication-for-devices-that-users-trust",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Benutzern erlauben, die Multi-Faktor-Authentifizierung auf vertrauenswürdigen Geräten zu speichern' deaktiviert ist",
+                    "risk": "Das Erlauben von Benutzern, die Multi-Faktor-Authentifizierung auf vertrauenswürdigen Geräten zu speichern, kann die Sicherheit verringern, da Benutzer die MFA für einen festgelegten Zeitraum umgehen können. Dies kann das Risiko erhöhen, wenn ein Konto oder Gerät kompromittiert wird.",
+                    "remediation": "Um 'Benutzern erlauben, die Multi-Faktor-Authentifizierung auf vertrauenswürdigen Geräten zu speichern' zu deaktivieren:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portalmenü aus.\n2. Navigieren Sie zur Microsoft Entra ID.\n3. Wählen Sie Benutzer.\n4. Klicken Sie auf die Schaltfläche 'Per-user MFA' in der oberen Leiste.\n5. Klicken Sie auf Dienst-Einstellungen.\n6. Deaktivieren Sie das Kontrollkästchen neben 'Benutzern erlauben, die Multi-Faktor-Authentifizierung auf vertrauenswürdigen Geräten zu speichern'."
+                }
+            }
+        },
+        {
+            "name": "trusted_named_locations_configured",
+            "title": "Ensure that Named Locations are Configured and Marked as Trusted",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without configuring trusted named locations, organizations cannot effectively enforce Conditional Access policies based on trusted or untrusted IP addresses and ranges, potentially leading to less secure access control.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. In the Azure Portal, navigate to Microsoft Entra ID Conditional Access.\n2. Click on Manage.\n3. Click on Named Locations.\n4. Ensure there are IP ranges location settings configured and marked as Trusted.\n\nFrom PowerShell:\nGet-AzureADMSNamedLocationPolicy\nIn the output from the above command, for each Named location group, make sure at least one entry contains the IsTrusted parameter with a value of True. Otherwise, if there is no output as a result of the above command or all of the entries contain the IsTrusted parameter with an empty value, a NULL value, or a value of False, the results are out of compliance with this check."
+            },
+            "remediation": {
+                "text": "To configure trusted named locations:\nFrom Azure Portal:\n1. Navigate to the Microsoft Entra ID Conditional Access Blade.\n2. Click on the Named locations blade.\n3. Within the Named locations blade, click on IP ranges location.\n4. Enter a name for this location setting in the Name text box.\n5. Click on the + sign.\n6. Add an IP Address Range in CIDR notation inside the text box that appears.\n7. Click on the Add button.\n8. Repeat steps 5 through 7 for each IP Range that needs to be added.\n9. If the information entered are trusted ranges, select the Mark as trusted location check box.\n10. Once finished, click on Create.\n\nFrom PowerShell:\nCreate a new trusted IP-based Named location policy:\n[System.Collections.Generic.List`1[Microsoft.Open.MSGraph.Model.IpRange]]$ipRanges = @()\n$ipRanges.Add('<first IP range in CIDR notation>')\n$ipRanges.Add('<second IP range in CIDR notation>')\n$ipRanges.Add('<third IP range in CIDR notation>')\nNew-AzureADMSNamedLocationPolicy -OdataType '#microsoft.graph.ipNamedLocation' -DisplayName '<name of IP Named location policy>' -IsTrusted $true -IpRanges $ipRanges\n\nSet an existing IP-based Named location policy to trusted:\nSet-AzureADMSNamedLocationPolicy -PolicyId '<ID of the policy>' -OdataType '#microsoft.graph.ipNamedLocation' -IsTrusted $true.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/location-condition",
+                "complexity": "medium"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/location-condition",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass benannte Standorte konfiguriert und als vertrauenswürdig markiert sind",
+                    "risk": "Ohne die Konfiguration vertrauenswürdiger benannter Standorte können Organisationen keine wirksamen Zugriffsrichtlinien basierend auf vertrauenswürdigen oder nicht vertrauenswürdigen IP-Adressen und Bereichen durchsetzen, was zu weniger sicherer Zugriffskontrolle führen kann.",
+                    "remediation": "Um vertrauenswürdige benannte Standorte zu konfigurieren:\nVom Azure-Portal:\n1. Navigieren Sie zur Microsoft Entra ID Conditional Access Blade.\n2. Klicken Sie auf die Named locations blade.\n3. Klicken Sie innerhalb der Named locations blade auf IP ranges location.\n4. Geben Sie einen Namen für diese Standortseinstellung im Name-Textfeld ein.\n5. Klicken Sie auf das + Zeichen.\n6. Fügen Sie eine IP-Adressbereich in CIDR-Notation in das erscheinende Textfeld ein.\n7. Klicken Sie auf die Schaltfläche Hinzufügen.\n8. Wiederholen Sie die Schritte 5 bis 7 für jeden IP-Bereich, der hinzugefügt werden muss.\n9. Wenn die eingegebenen Informationen vertrauenswürdige Bereiche sind, aktivieren Sie das Kontrollkästchen Mark as trusted location.\n10. Klicken Sie abschließend auf Create.\n\nVom PowerShell:\nErstellen Sie eine neue vertrauenswürdige IP-basierte Named location policy:\n[System.Collections.Generic.List`1[Microsoft.Open.MSGraph.Model.IpRange]]$ipRanges = @()\n$ipRanges.Add('<first IP range in CIDR notation>')\n$ipRanges.Add('<second IP range in CIDR notation>')\n$ipRanges.Add('<third IP range in CIDR notation>')\nNew-AzureADMSNamedLocationPolicy -OdataType '#microsoft.graph.ipNamedLocation' -DisplayName '<name of IP Named location policy>' -IsTrusted $true -IpRanges $ipRanges\n\nSetzen Sie eine bestehende IP-basierte Named location policy auf vertrauenswürdig:\nSet-AzureADMSNamedLocationPolicy -PolicyId '<ID der Richtlinie>' -OdataType '#microsoft.graph.ipNamedLocation' -IsTrusted $true."
+                }
+            }
+        },
+        {
+            "name": "exclusionary_geographic_access_policy",
+            "title": "Ensure that an Exclusionary Geographic Access Policy is Considered",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without an exclusionary geographic access policy, organizations cannot effectively control access based on geographic locations, potentially leading to unauthorized access from untrusted regions and increasing exposure to international threats.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home open the Portal menu in the top left, and select Microsoft Entra ID.\n2. Scroll down in the menu on the left, and select Security.\n3. Select Conditional Access.\n4. Select the policy you wish to audit, then:\n  - Under Assignments, review the Users and Groups for the personnel the policy will apply to.\n  - Under Assignments, review the Cloud apps or actions for the systems the policy will apply to.\n  - Under Conditions, review the Include locations for those that should be blocked.\n  - Under Conditions, review the Exclude locations for those that should be allowed (Note: locations set up in the previous recommendation for Trusted Location should be in the Exclude list).\n  - Under Access Controls > Grant, confirm that Block Access is selected.\n\nFrom PowerShell:\n$conditionalAccessPolicies = Get-AzureADMSConditionalAccessPolicy\nforeach($policy in $conditionalAccessPolicies) {\n  $policy | Select-Object @{N='Policy ID'; E={$policy.id}}, @{N='Included Locations'; E={$policy.Conditions.Locations.IncludeLocations}}, @{N='Excluded Locations'; E={$policy.Conditions.Locations.ExcludeLocations}}, @{N='BuiltIn GrantControls'; E={$policy.GrantControls.BuiltInControls}}\n}\nMake sure there is at least 1 row in the output of the above PowerShell command that contains Block under the BuiltIn GrantControls column and location IDs under the Included Locations and Excluded Locations columns. If not, a policy containing these options has not been created and is considered a finding."
+            },
+            "remediation": {
+                "text": "To create an exclusionary geographic access policy:\n\nPart 1 of 2 - Create the policy and enable it in Report-only mode:\n1. From Azure Home open the portal menu in the top left, and select Microsoft Entra ID.\n2. Scroll down in the menu on the left, and select Security.\n3. Select Conditional Access.\n4. Click the + New policy button, then:\n  - Provide a name for the policy.\n  - Under Assignments, select Users or workload identities then:\n    - Under Include, select All users.\n    - Under Exclude, check Users and groups and only select emergency access accounts and service accounts (NOTE: Service accounts are excluded here because service accounts are non-interactive and cannot complete MFA).\n  - Under Assignments, select Cloud apps or actions then:\n    - Under Include, select All cloud apps.\n    - Leave Exclude blank unless you have a well-defined exception.\n  - Under Conditions, select Locations then:\n    - Select Include, then add entries for locations for those that should be blocked.\n    - Select Exclude, then add entries for those that should be allowed (IMPORTANT: Ensure that all Trusted Locations are in the Exclude list).\n  - Under Access Controls, select Grant and confirm that Block Access is selected.\n  - Set Enable policy to Report-only.\n  - Click Create.\nNOTE: The policy is not yet 'live,' since Report-only is being used to audit the effect of the policy.\n\nPart 2 of 2 - Confirm that the policy is not blocking access that should be granted, then toggle to On:\n1. With your policy now in report-only mode, return to the Microsoft Entra blade and click on Sign-in logs.\n2. Review the recent sign-in events - click an event then review the event details (specifically the Report-only tab) to ensure:\n  - The sign-in event you're reviewing occurred after turning on the policy in report-only mode.\n  - The policy name from step 5 above is listed in the Policy Name column.\n  - The Result column for the new policy shows that the policy was Not applied (indicating the location origin was not blocked).\n3. If the above conditions are present, navigate back to the policy name in Conditional Access and open it.\n4. Toggle the policy from Report-only to On.\n5. Click Save.\n\nFrom PowerShell:\nFirst, set up the conditions objects values before updating an existing conditional access policy or before creating a new one. You may need to use additional PowerShell cmdlets to retrieve specific IDs such as the Get-AzureADMSNamedLocationPolicy which outputs the Location IDs for use with conditional access policies.\n\n$conditions = New-Object -TypeName Microsoft.Open.MSGraph.Model.ConditionalAccessConditionSet\n$conditions.Applications = New-Object -TypeName Microsoft.Open.MSGraph.Model.ConditionalAccessApplicationCondition\n$conditions.Applications.IncludeApplications = <'All' | 'Office365' | 'app ID' | @('app ID 1', 'app ID 2', etc...)>\n$conditions.Applications.ExcludeApplications = <'Office365' | 'app ID' | @('app ID 1', 'app ID 2', etc...)>\n$conditions.Users = New-Object -TypeName Microsoft.Open.MSGraph.Model.ConditionalAccessUserCondition\n$conditions.Users.IncludeUsers = <'All' | 'None' | 'GuestsOrExternalUsers' | 'Specific User ID' | @('User ID 1', 'User ID 2', etc.)>\n$conditions.Users.ExcludeUsers = <'GuestsOrExternalUsers' | 'Specific User ID' | @('User ID 1', 'User ID 2', etc...)>\n$conditions.Users.IncludeGroups = <'group ID' | 'All' | @('Group ID 1', 'Group ID 2', etc...)>\n$conditions.Users.ExcludeGroups = <'group ID' | @('Group ID 1', 'Group ID 2', etc...)>\n$conditions.Users.IncludeRoles = <'Role ID' | 'All' | @('Role ID 1', 'Role ID 2', etc...)>\n$conditions.Users.ExcludeRoles = <'Role ID' | @('Role ID 1', 'Role ID 2', etc...)>\n$conditions.Locations = New-Object -TypeName Microsoft.Open.MSGraph.Model.ConditionalAccessLocationCondition\n$conditions.Locations.IncludeLocations = <'Location ID' | @('Location ID 1', 'Location ID 2', etc...)>\n$conditions.Locations.ExcludeLocations = <'AllTrusted' | 'Location ID' | @('Location ID 1', 'Location ID 2', etc...)>\n$controls = New-Object -TypeName Microsoft.Open.MSGraph.Model.ConditionalAccessGrantControls\n$controls._Operator = 'OR'\n$controls.BuiltInControls = 'block'\nNext, update the existing conditional access policy with the condition set options configured with the previous commands.\nSet-AzureADMSConditionalAccessPolicy -PolicyId <policy ID> -Conditions $conditions -GrantControls $controls\nTo create a new conditional access policy that complies with this best practice, run the following commands after creating the condition set above:\nNew-AzureADMSConditionalAccessPolicy -Name 'Policy Name' -State <enabled|disabled> -Conditions $conditions -GrantControls $controls.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/howto-conditional-access-policy-location",
+                "complexity": "high"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/howto-conditional-access-policy-location",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine ausschließende geografische Zugriffsrichtlinie in Betracht gezogen wird",
+                    "risk": "Ohne eine ausschließende geografische Zugriffsrichtlinie können Organisationen den Zugriff basierend auf geografischen Standorten nicht effektiv kontrollieren, was möglicherweise zu unbefugtem Zugriff aus unzuverlässigen Regionen und einer erhöhten Exposition gegenüber internationalen Bedrohungen führt.",
+                    "remediation": "Um eine ausschließende geografische Zugriffsrichtlinie zu erstellen:\n\nTeil 1 von 2 - Erstellen Sie die Richtlinie und aktivieren Sie sie im Nur-Bericht-Modus:\n1. Öffnen Sie das Portalmenü oben links im Azure-Startbildschirm und wählen Sie Microsoft Entra ID.\n2. Scrollen Sie im Menü links nach unten und wählen Sie Sicherheit.\n3. Wählen Sie Bedingter Zugriff.\n4. Klicken Sie auf die Schaltfläche + Neue Richtlinie, und dann:\n  - Geben Sie einen Namen für die Richtlinie an.\n  - Wählen Sie unter Zuweisungen Benutzer oder Arbeitslast-Identitäten aus, dann:\n    - Unter Einschließen, wählen Sie Alle Benutzer.\n    - Unter Ausschließen, markieren Sie Benutzer und Gruppen und wählen Sie nur Notfallzugangskonten und Dienstkonten (HINWEIS: Dienstkonten sind hier ausgeschlossen, da sie nicht interaktiv sind und keine MFA durchführen können).\n  - Wählen Sie unter Zuweisungen Cloud-Apps oder Aktionen aus, dann:\n    - Unter Einschließen, wählen Sie Alle Cloud-Apps.\n    - Lassen Sie Ausschließen leer, es sei denn, Sie haben eine gut definierte Ausnahme.\n  - Wählen Sie unter Bedingungen Standorte aus, dann:\n    - Wählen Sie Einschließen, dann fügen Sie Einträge für Standorte hinzu, die blockiert werden sollen.\n    - Wählen Sie Ausschließen, dann fügen Sie Einträge für Standorte hinzu, die erlaubt sein sollen (WICHTIG: Stellen Sie sicher, dass alle vertrauenswürdigen Standorte in der Ausschlussliste enthalten sind).\n  - Wählen Sie unter Zugriffskontrollen Gewähren aus und bestätigen Sie, dass Blockzugriff ausgewählt ist.\n  - Setzen Sie die Richtlinie auf Nur-Bericht-Modus.\n  - Klicken Sie auf Erstellen.\nHINWEIS: Die Richtlinie ist noch nicht 'live', da der Nur-Bericht-Modus verwendet wird, um die Auswirkung der Richtlinie zu prüfen.\n\nTeil 2 von 2 - Bestätigen Sie, dass die Richtlinie keinen Zugriff blockiert, der gewährt werden sollte, und schalten Sie sie dann auf Ein:\n1. Mit Ihrer Richtlinie jetzt im Nur-Bericht-Modus, kehren Sie zur Microsoft Entra-Klinge zurück und klicken auf Anmeldeprotokolle.\n2. Überprüfen Sie die letzten Anmeldeereignisse - klicken Sie auf ein Ereignis und überprüfen Sie die Ereignisdetails (insbesondere die Registerkarte Nur-Bericht), um sicherzustellen:\n  - Das Anmeldeereignis, das Sie überprüfen, ist nach dem Einschalten der Richtlinie im Nur-Bericht-Modus aufgetreten.\n  - Der Richtlinienname aus Schritt 5 oben ist in der Spalte Richtlinienname aufgeführt.\n  - Die Ergebnisspalte für die neue Richtlinie zeigt, dass die Richtlinie nicht angewendet wurde (was darauf hinweist, dass der Standortursprung nicht blockiert wurde).\n3. Wenn die oben genannten Bedingungen erfüllt sind, navigieren Sie zurück zum Richtliniennamen im Bedingten Zugriff und öffnen Sie ihn.\n4. Schalten Sie die Richtlinie von Nur-Bericht auf Ein.\n5. Klicken Sie auf Speichern.\n\nVom PowerShell:\nRichten Sie zuerst die Bedingungen-Objektwerte ein, bevor Sie eine bestehende bedingte Zugriffsrichtlinie aktualisieren oder eine neue erstellen. Möglicherweise müssen Sie zusätzliche PowerShell-Cmdlets verwenden, um spezifische IDs wie das Get-AzureADMSNamedLocationPolicy abzurufen, das die Standort-IDs für die Verwendung mit bedingten Zugriffsrichtlinien ausgibt.\n\n$conditions = New-Object -TypeName Microsoft.Open.MSGraph.Model.ConditionalAccessConditionSet\n$conditions.Applications = New-Object -TypeName Microsoft.Open.MSGraph.Model.ConditionalAccessApplicationCondition\n$conditions.Applications.IncludeApplications = <'All' | 'Office365' | 'app ID' | @('app ID 1', 'app ID 2', etc...)>\n$conditions.Applications.ExcludeApplications = <'Office365' | 'app ID' | @('app ID 1', 'app ID 2', etc...)>\n$conditions.Users = New-Object -TypeName Microsoft.Open.MSGraph.Model.ConditionalAccessUserCondition\n$conditions.Users.IncludeUsers = <'All' | 'None' | 'GuestsOrExternalUsers' | 'Specific User ID' | @('User ID 1', 'User ID 2', etc.)>\n$conditions.Users.ExcludeUsers = <'GuestsOrExternalUsers' | 'Specific User ID' | @('User ID 1', 'User ID 2', etc...)>\n$conditions.Users.IncludeGroups = <'group ID' | 'All' | @('Group ID 1', 'Group ID 2', etc...)>\n$conditions.Users.ExcludeGroups = <'group ID' | @('Group ID 1', 'Group ID 2', etc...)>\n$conditions.Users.IncludeRoles = <'Role ID' | 'All' | @('Role ID 1', 'Role ID 2', etc...)>\n$conditions.Users.ExcludeRoles = <'Role ID' | @('Role ID 1', 'Role ID 2', etc...)>\n$conditions.Locations = New-Object -TypeName Microsoft.Open.MSGraph.Model.ConditionalAccessLocationCondition\n$conditions.Locations.IncludeLocations = <'Location ID' | @('Location ID 1', 'Location ID 2', etc...)>\n$conditions.Locations.ExcludeLocations = <'AllTrusted' | 'Location ID' | @('Location ID 1', 'Location ID 2', etc...)>\n$controls = New-Object -TypeName Microsoft.Open.MSGraph.Model.ConditionalAccessGrantControls\n$controls._Operator = 'OR'\n$controls.BuiltInControls = 'block'\nAktualisieren Sie dann die bestehende bedingte Zugriffsrichtlinie mit den zuvor konfigurierten Optionswerten für das Bedingungsset.\nSet-AzureADMSConditionalAccessPolicy -PolicyId <policy ID> -Conditions $conditions -GrantControls $controls\nUm eine neue bedingte Zugriffsrichtlinie zu erstellen, die diesen Best Practices entspricht, führen Sie die folgenden Befehle nach dem Erstellen des Bedingungssets oben aus:\nNew-AzureADMSConditionalAccessPolicy -Name 'Richtlinienname' -State <enabled|disabled> -Conditions $conditions -GrantControls $controls."
+                }
+            }
+        },
+        {
+            "name": "mfa_policy_for_admin_groups",
+            "title": "Ensure that a Multi-factor Authentication Policy Exists for Administrative Groups",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without a multi-factor authentication policy for administrative groups, there is a higher risk of unauthorized access to administrative accounts, which could lead to security breaches and unauthorized changes.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home open the Portal Menu in the top left, and select Microsoft Entra ID.\n2. Select Security.\n3. Select Conditional Access.\n4. Select the policy you wish to audit.\n5. View under Users and Groups the corresponding users and groups to whom the policy is applied. Be certain the emergency access account is not in the list.\n6. View under Exclude to determine which users and groups to whom the policy is not applied."
+            },
+            "remediation": {
+                "text": "To create a multi-factor authentication policy for administrative groups:\nFrom Azure Portal:\n1. From Azure Home open the Portal Menu in top left, and select Microsoft Entra ID.\n2. Select Security.\n3. Select Conditional Access.\n4. Click + New policy.\n5. Enter a name for the policy.\n6. Select Users or workload identities.\n7. Check Users and groups.\n8. Select administrative groups this policy should apply to and click Select.\n9. Under Exclude, check Users and groups.\n10. Select users this policy should not apply to and click Select.\n11. Select Cloud apps or actions.\n12. Select All cloud apps.\n13. Select Grant.\n14. Under Grant access, check Require multifactor authentication and click Select.\n15. Set Enable policy to Report-only.\n16. Click Create.\nAfter testing the policy in report-only mode, update the Enable policy setting from Report-only to On.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/howto-conditional-access-policy-admin-mfa",
+                "complexity": "medium"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/howto-conditional-access-policy-admin-mfa",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Multi-Faktor-Authentifizierungsrichtlinie für administrative Gruppen vorhanden ist",
+                    "risk": "Ohne eine Multi-Faktor-Authentifizierungsrichtlinie für administrative Gruppen besteht ein höheres Risiko eines unbefugten Zugriffs auf administrative Konten, was zu Sicherheitsverletzungen und unbefugten Änderungen führen könnte.",
+                    "remediation": "Um eine Multi-Faktor-Authentifizierungsrichtlinie für administrative Gruppen zu erstellen:\nVom Azure-Portal:\n1. Öffnen Sie das Portalmenü oben links im Azure-Startbildschirm und wählen Sie Microsoft Entra ID.\n2. Wählen Sie Sicherheit.\n3. Wählen Sie Bedingter Zugriff.\n4. Klicken Sie auf + Neue Richtlinie.\n5. Geben Sie einen Namen für die Richtlinie ein.\n6. Wählen Sie Benutzer oder Arbeitslast-Identitäten.\n7. Markieren Sie Benutzer und Gruppen.\n8. Wählen Sie administrative Gruppen aus, auf die diese Richtlinie angewendet werden soll, und klicken Sie auf Auswählen.\n9. Unter Ausschließen, markieren Sie Benutzer und Gruppen.\n10. Wählen Sie Benutzer aus, auf die diese Richtlinie nicht angewendet werden soll, und klicken Sie auf Auswählen.\n11. Wählen Sie Cloud-Apps oder Aktionen.\n12. Wählen Sie Alle Cloud-Apps.\n13. Wählen Sie Gewähren.\n14. Unter Zugriff gewähren, markieren Sie Multi-Faktor-Authentifizierung erforderlich und klicken Sie auf Auswählen.\n15. Setzen Sie die Richtlinie auf Nur-Bericht.\n16. Klicken Sie auf Erstellen.\nNach dem Testen der Richtlinie im Nur-Bericht-Modus, ändern Sie die Einstellung Richtlinie aktivieren von Nur-Bericht auf Ein."
+                }
+            }
+        },
+        {
+            "name": "mfa_policy_for_all_users",
+            "title": "Ensure that a Multi-factor Authentication Policy Exists for All Users",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without a multi-factor authentication policy for all users, there is a higher risk of unauthorized access to accounts, which could lead to security breaches and unauthorized access to sensitive data.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home open the Portal Menu in the top left, and select Microsoft Entra ID.\n2. Scroll down in the menu on the left, and select Security.\n3. Select Conditional Access.\n4. Select the policy you wish to audit.\n5. View under Users and Groups the corresponding users and groups to whom the policy is applied.\n6. View under Exclude to determine which users and groups to whom the policy is not applied."
+            },
+            "remediation": {
+                "text": "To create a multi-factor authentication policy for all users:\nFrom Azure Portal:\n1. From Azure Home open Portal menu in the top left, and select Microsoft Entra ID.\n2. Select Security.\n3. Select Conditional Access.\n4. Click + New policy.\n5. Enter a name for the policy.\n6. Select Users or workload identities.\n7. Under Include, select All users.\n8. Under Exclude, check Users and groups.\n9. Select users this policy should not apply to and click Select.\n10. Select Cloud apps or actions.\n11. Select All cloud apps.\n12. Select Grant.\n13. Under Grant access, check Require multifactor authentication and click Select.\n14. Set Enable policy to Report-only.\n15. Click Create.\nAfter testing the policy in report-only mode, update the Enable policy setting from Report-only to On.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/howto-conditional-access-policy-all-users-mfa",
+                "complexity": "medium"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/howto-conditional-access-policy-all-users-mfa",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Multi-Faktor-Authentifizierungsrichtlinie für alle Benutzer vorhanden ist",
+                    "risk": "Ohne eine Multi-Faktor-Authentifizierungsrichtlinie für alle Benutzer besteht ein höheres Risiko eines unbefugten Zugriffs auf Konten, was zu Sicherheitsverletzungen und unbefugtem Zugriff auf sensible Daten führen könnte.",
+                    "remediation": "Um eine Multi-Faktor-Authentifizierungsrichtlinie für alle Benutzer zu erstellen:\nVom Azure-Portal:\n1. Öffnen Sie das Portalmenü oben links im Azure-Startbildschirm und wählen Sie Microsoft Entra ID.\n2. Wählen Sie Sicherheit.\n3. Wählen Sie Bedingter Zugriff.\n4. Klicken Sie auf + Neue Richtlinie.\n5. Geben Sie einen Namen für die Richtlinie ein.\n6. Wählen Sie Benutzer oder Arbeitslast-Identitäten.\n7. Unter Einschließen, wählen Sie Alle Benutzer.\n8. Unter Ausschließen, markieren Sie Benutzer und Gruppen.\n9. Wählen Sie Benutzer aus, auf die diese Richtlinie nicht angewendet werden soll, und klicken Sie auf Auswählen.\n10. Wählen Sie Cloud-Apps oder Aktionen.\n11. Wählen Sie Alle Cloud-Apps.\n12. Wählen Sie Gewähren.\n13. Unter Zugriff gewähren, markieren Sie Multi-Faktor-Authentifizierung erforderlich und klicken Sie auf Auswählen.\n14. Setzen Sie die Richtlinie auf Nur-Bericht.\n15. Klicken Sie auf Erstellen.\nNach dem Testen der Richtlinie im Nur-Bericht-Modus, ändern Sie die Einstellung Richtlinie aktivieren von Nur-Bericht auf Ein."
+                }
+            }
+        },
+        {
+            "name": "mfa_for_risky_signins",
+            "title": "Ensure Multi-factor Authentication is Required for Risky Sign-ins",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without requiring multi-factor authentication for risky sign-ins, there is a higher risk of unauthorized access to accounts, which could lead to security breaches and unauthorized access to sensitive data.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu in the top left, and select Microsoft Entra ID.\n2. Select Security.\n3. Select Conditional Access.\n4. Select the policy you wish to audit.\n5. View under Users and Groups the corresponding users and groups to whom the policy is applied.\n6. View under Exclude to determine which users and groups to whom the policy is not applied."
+            },
+            "remediation": {
+                "text": "To create a multi-factor authentication policy for risky sign-ins:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu in the top left, and select Microsoft Entra ID.\n2. Select Security.\n3. Select Conditional Access.\n4. Click + New policy.\n5. Enter a name for the policy.\n6. Select Users or workload identities.\n7. Under Include, select All users.\n8. Under Exclude, check Users and groups.\n9. Select users this policy should not apply to and click Select.\n10. Select Cloud apps or actions.\n11. Select All cloud apps.\n12. Select Conditions.\n13. Select Sign-in risk.\n14. Update the Configure toggle to Yes.\n15. Check the sign-in risk level this policy should apply to, e.g. High and Medium.\n16. Select Done.\n17. Click the blue text under Grant access and check Require multifactor authentication then click the Select button.\n18. Click the blue text under Session then check Sign-in frequency and select Every time and click the Select button.\n19. Set Enable policy to Report-only.\n20. Click Create.\nAfter testing the policy in report-only mode, update the Enable policy setting from Report-only to On.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/howto-conditional-access-policy-risk",
+                "complexity": "medium"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/howto-conditional-access-policy-risk",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Multi-Faktor-Authentifizierung für riskante Anmeldungen erforderlich ist",
+                    "risk": "Ohne die Anforderung einer Multi-Faktor-Authentifizierung für riskante Anmeldungen besteht ein höheres Risiko eines unbefugten Zugriffs auf Konten, was zu Sicherheitsverletzungen und unbefugtem Zugriff auf sensible Daten führen könnte.",
+                    "remediation": "Um eine Multi-Faktor-Authentifizierungsrichtlinie für riskante Anmeldungen zu erstellen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portalmenü oben links aus und wählen Sie Microsoft Entra ID.\n2. Wählen Sie Sicherheit.\n3. Wählen Sie Bedingter Zugriff.\n4. Klicken Sie auf + Neue Richtlinie.\n5. Geben Sie einen Namen für die Richtlinie ein.\n6. Wählen Sie Benutzer oder Arbeitslast-Identitäten.\n7. Unter Einschließen, wählen Sie Alle Benutzer.\n8. Unter Ausschließen, markieren Sie Benutzer und Gruppen.\n9. Wählen Sie Benutzer aus, auf die diese Richtlinie nicht angewendet werden soll, und klicken Sie auf Auswählen.\n10. Wählen Sie Cloud-Apps oder Aktionen.\n11. Wählen Sie Alle Cloud-Apps.\n12. Wählen Sie Bedingungen.\n13. Wählen Sie Anmelderisiko.\n14. Aktualisieren Sie den Konfiguration-Schalter auf Ja.\n15. Markieren Sie das Anmelderisiko-Level, auf das diese Richtlinie angewendet werden soll, z.B. Hoch und Mittel.\n16. Wählen Sie Fertig.\n17. Klicken Sie auf den blauen Text unter Zugriff gewähren und markieren Sie Multi-Faktor-Authentifizierung erforderlich, dann klicken Sie auf die Schaltfläche Auswählen.\n18. Klicken Sie auf den blauen Text unter Sitzung und markieren Sie Anmeldefrequenz und wählen Sie Jedes Mal und klicken Sie auf die Schaltfläche Auswählen.\n19. Setzen Sie die Richtlinie auf Nur-Bericht.\n20. Klicken Sie auf Erstellen.\nNach dem Testen der Richtlinie im Nur-Bericht-Modus, ändern Sie die Einstellung Richtlinie aktivieren von Nur-Bericht auf Ein."
+                }
+            }
+        },
+        {
+            "name": "mfa_for_azure_service_management_api",
+            "title": "Ensure Multi-factor Authentication is Required for Windows Azure Service Management API",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without requiring multi-factor authentication for accessing the Windows Azure Service Management API, there is a higher risk of unauthorized administrative actions, which could lead to security breaches and unauthorized changes to administrative settings.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From the Azure Admin Portal dashboard, open Microsoft Entra ID.\n2. In the menu on the left of the Entra ID blade, click Security.\n3. In the menu on the left of the Security blade, click Conditional Access.\n4. In the menu on the left of the Conditional Access blade, click Policies.\n5. Click on the name of the policy you wish to audit.\n6. Click the blue text under Users.\n7. Under the Include section of Users, review Users and Groups to ensure that All Users is selected.\n8. Under the Exclude section of Users, review the Users and Groups that are excluded from the policy (NOTE: this should be limited to break-glass emergency access accounts, non-interactive service accounts, and other carefully considered exceptions).\n9. On the left side, click the blue text under Target Resources.\n10. Select what this policy applies to should have Cloud apps selected.\n11. Under the Include section of Target Resources, the Select apps radio button should be selected.\n12. Click the blue text under Select.\n13. From the select prompt that appears, the checkbox for Windows Azure Service Management API should be checked."
+            },
+            "remediation": {
+                "text": "To create a multi-factor authentication policy for the Windows Azure Service Management API:\nFrom Azure Portal:\n1. From the Azure Admin Portal dashboard, open Microsoft Entra ID.\n2. Click Security in the Entra ID blade.\n3. Click Conditional Access in the Security blade.\n4. Click Policies in the Conditional Access blade.\n5. Click + New policy.\n6. Enter a name for the policy.\n7. Click the blue text under Users.\n8. Under Include, select All users.\n9. Under Exclude, check Users and groups.\n10. Select users or groups to be exempted from this policy (e.g. break-glass emergency accounts, and non-interactive service accounts) then click the Select button.\n11. Click the blue text under Target Resources.\n12. Under Include, click the Select apps radio button.\n13. Click the blue text under Select.\n14. Check the box next to Windows Azure Service Management APIs then click the Select button.\n15. Click the blue text under Grant.\n16. Under Grant access check the box for Require multifactor authentication then click the Select button.\n17. Before creating, set Enable policy to Report-only.\n18. Click Create.\nAfter testing the policy in report-only mode, update the Enable policy setting from Report-only to On.",
+                "url": "https://learn.microsoft.com/en-us/entra/identity/conditional-access/howto-conditional-access-policy-azure-management",
+                "complexity": "medium"
+            },
+            "url": "https://learn.microsoft.com/en-us/entra/identity/conditional-access/howto-conditional-access-policy-azure-management",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Multi-Faktor-Authentifizierung für Windows Azure Service Management API erforderlich ist",
+                    "risk": "Ohne die Anforderung einer Multi-Faktor-Authentifizierung für den Zugriff auf die Windows Azure Service Management API besteht ein höheres Risiko unbefugter administrativer Aktionen, was zu Sicherheitsverletzungen und unbefugten Änderungen an administrativen Einstellungen führen könnte.",
+                    "remediation": "Um eine Multi-Faktor-Authentifizierungsrichtlinie für die Windows Azure Service Management API zu erstellen:\nVom Azure-Portal:\n1. Öffnen Sie das Azure Admin Portal-Dashboard und wählen Sie Microsoft Entra ID.\n2. Klicken Sie im Entra ID-Blade auf Sicherheit.\n3. Klicken Sie im Sicherheits-Blade auf Bedingter Zugriff.\n4. Klicken Sie im Bedingter Zugriff-Blade auf Richtlinien.\n5. Klicken Sie auf + Neue Richtlinie.\n6. Geben Sie einen Namen für die Richtlinie ein.\n7. Klicken Sie auf den blauen Text unter Benutzer.\n8. Unter Einschließen, wählen Sie Alle Benutzer.\n9. Unter Ausschließen, markieren Sie Benutzer und Gruppen.\n10. Wählen Sie Benutzer oder Gruppen, die von dieser Richtlinie ausgenommen werden sollen (z.B. Notfallzugangskonten und nicht interaktive Dienstkonten) und klicken Sie dann auf die Schaltfläche Auswählen.\n11. Klicken Sie auf den blauen Text unter Zielressourcen.\n12. Unter Einschließen, klicken Sie auf das Radio-Button 'Apps auswählen'.\n13. Klicken Sie auf den blauen Text unter Auswählen.\n14. Markieren Sie das Kontrollkästchen neben Windows Azure Service Management APIs und klicken Sie dann auf die Schaltfläche Auswählen.\n15. Klicken Sie auf den blauen Text unter Gewähren.\n16. Unter Zugriff gewähren markieren Sie das Kontrollkästchen für Multi-Faktor-Authentifizierung erforderlich und klicken Sie dann auf die Schaltfläche Auswählen.\n17. Bevor Sie die Richtlinie erstellen, setzen Sie die Einstellung Richtlinie aktivieren auf Nur-Bericht.\n18. Klicken Sie auf Erstellen.\nNach dem Testen der Richtlinie im Nur-Bericht-Modus, ändern Sie die Einstellung Richtlinie aktivieren von Nur-Bericht auf Ein."
+                }
+            }
+        },
+        {
+            "name": "mfa_for_microsoft_admin_portals",
+            "title": "Ensure Multi-factor Authentication is Required to Access Microsoft Admin Portals",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without requiring multi-factor authentication for accessing Microsoft Admin Portals, there is a higher risk of unauthorized administrative actions, which could lead to security breaches and unauthorized changes to administrative settings.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From the Azure Admin Portal dashboard, open Microsoft Entra ID.\n2. In the menu on the left of the Entra ID blade, click Security.\n3. In the menu on the left of the Security blade, click Conditional Access.\n4. In the menu on the left of the Conditional Access blade, click Policies.\n5. Click on the name of the policy you wish to audit.\n6. Click the blue text under Users.\n7. Under the Include section of Users, review Users and Groups to ensure that All Users is selected.\n8. Under the Exclude section of Users, review the Users and Groups that are excluded from the policy (NOTE: this should be limited to break-glass emergency access accounts, non-interactive service accounts, and other carefully considered exceptions).\n9. On the left side, click the blue text under Target Resources.\n10. Select what this policy applies to should have Cloud apps selected.\n11. Under the Include section of Target Resources, the Select apps radio button should be selected.\n12. Click the blue text under Select.\n13. From the select prompt that appears, the checkbox for Microsoft Admin Portals should be checked."
+            },
+            "remediation": {
+                "text": "To create a multi-factor authentication policy for Microsoft Admin Portals:\nFrom Azure Portal:\n1. From the Azure Admin Portal dashboard, open Microsoft Entra ID.\n2. Click Security in the Entra ID blade.\n3. Click Conditional Access in the Security blade.\n4. Click Policies in the Conditional Access blade.\n5. Click + New policy.\n6. Enter a name for the policy.\n7. Click the blue text under Users.\n8. Under Include, select All users.\n9. Under Exclude, check Users and groups.\n10. Select users or groups to be exempted from this policy (e.g. break-glass emergency accounts, and non-interactive service accounts) then click the Select button.\n11. Click the blue text under Target Resources.\n12. Under Include, click the Select apps radio button.\n13. Click the blue text under Select.\n14. Check the box next to Microsoft Admin Portals then click the Select button.\n15. Click the blue text under Grant.\n16. Under Grant access check the box for Require multifactor authentication then click the Select button.\n17. Before creating, set Enable policy to Report-only.\n18. Click Create.\nAfter testing the policy in report-only mode, update the Enable policy setting from Report-only to On.",
+                "url": "https://learn.microsoft.com/en-us/entra/identity/conditional-access/how-to-policy-mfa-admin-portals",
+                "complexity": "medium"
+            },
+            "url": "https://learn.microsoft.com/en-us/entra/identity/conditional-access/how-to-policy-mfa-admin-portals",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Multi-Faktor-Authentifizierung für den Zugriff auf Microsoft Admin Portale erforderlich ist",
+                    "risk": "Ohne die Anforderung einer Multi-Faktor-Authentifizierung für den Zugriff auf Microsoft Admin Portale besteht ein höheres Risiko unbefugter administrativer Aktionen, was zu Sicherheitsverletzungen und unbefugten Änderungen an administrativen Einstellungen führen könnte.",
+                    "remediation": "Um eine Multi-Faktor-Authentifizierungsrichtlinie für Microsoft Admin Portale zu erstellen:\nVom Azure-Portal:\n1. Öffnen Sie das Azure Admin Portal-Dashboard und wählen Sie Microsoft Entra ID.\n2. Klicken Sie im Entra ID-Blade auf Sicherheit.\n3. Klicken Sie im Sicherheits-Blade auf Bedingter Zugriff.\n4. Klicken Sie im Bedingter Zugriff-Blade auf Richtlinien.\n5. Klicken Sie auf + Neue Richtlinie.\n6. Geben Sie einen Namen für die Richtlinie ein.\n7. Klicken Sie auf den blauen Text unter Benutzer.\n8. Unter Einschließen, wählen Sie Alle Benutzer.\n9. Unter Ausschließen, markieren Sie Benutzer und Gruppen.\n10. Wählen Sie Benutzer oder Gruppen, die von dieser Richtlinie ausgenommen werden sollen (z.B. Notfallzugangskonten und nicht interaktive Dienstkonten) und klicken Sie dann auf die Schaltfläche Auswählen.\n11. Klicken Sie auf den blauen Text unter Zielressourcen.\n12. Unter Einschließen, klicken Sie auf das Radio-Button 'Apps auswählen'.\n13. Klicken Sie auf den blauen Text unter Auswählen.\n14. Markieren Sie das Kontrollkästchen neben Microsoft Admin Portale und klicken Sie dann auf die Schaltfläche Auswählen.\n15. Klicken Sie auf den blauen Text unter Gewähren.\n16. Unter Zugriff gewähren markieren Sie das Kontrollkästchen für Multi-Faktor-Authentifizierung erforderlich und klicken Sie dann auf die Schaltfläche Auswählen.\n17. Bevor Sie die Richtlinie erstellen, setzen Sie die Einstellung Richtlinie aktivieren auf Nur-Bericht.\n18. Klicken Sie auf Erstellen.\nNach dem Testen der Richtlinie im Nur-Bericht-Modus, ändern Sie die Einstellung Richtlinie aktivieren von Nur-Bericht auf Ein."
+                }
+            }
+        },
+        {
+            "name": "restrict_non_admin_users_from_creating_tenants",
+            "title": "Ensure that 'Restrict non-admin users from creating tenants' is set to 'Yes'",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Without restricting non-admin users from creating tenants, unauthorized users might create new Microsoft Entra ID or Azure AD B2C tenants, potentially leading to security vulnerabilities and administrative overhead.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with(any, <-- is(microsoft_graph_organization) with(any, -[2]-> is(microsoft_graph_policy) and id=authorizationPolicy and policy.default_user_role_permissions.allowed_to_create_tenants==true))"
+            },
+            "remediation": {
+                "text": "To restrict non-admin users from creating tenants:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Users.\n4. Select User settings.\n5. Set Restrict non-admin users from creating tenants to Yes.\n\nFrom PowerShell:\nImport-Module Microsoft.Graph.Identity.SignIns\nConnect-MgGraph -Scopes 'Policy.ReadWrite.Authorization'\nSelect-MgProfile -Name beta\n$params = @{\nDefaultUserRolePermissions = @{\nAllowedToCreateTenants = $false\n}\n}\nUpdate-MgPolicyAuthorizationPolicy -AuthorizationPolicyId -BodyParameter $params.",
+                "url": "https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/users-default-permissions",
+                "complexity": "low"
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/users-default-permissions",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Einschränkung der Erstellung von Mandanten durch Nicht-Administratoren' auf 'Ja' gesetzt ist",
+                    "risk": "Ohne die Einschränkung der Erstellung von Mandanten durch Nicht-Administratoren könnten unbefugte Benutzer neue Microsoft Entra ID oder Azure AD B2C Mandanten erstellen, was zu Sicherheitslücken und administrativen Problemen führen könnte.",
+                    "remediation": "Um die Erstellung von Mandanten durch Nicht-Administratoren einzuschränken:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Benutzer.\n4. Wählen Sie Benutzereinstellungen.\n5. Setzen Sie die Einstellung 'Einschränkung der Erstellung von Mandanten durch Nicht-Administratoren' auf Ja.\n\nVon PowerShell:\nImport-Module Microsoft.Graph.Identity.SignIns\nConnect-MgGraph -Scopes 'Policy.ReadWrite.Authorization'\nSelect-MgProfile -Name beta\n$params = @{\nDefaultUserRolePermissions = @{\nAllowedToCreateTenants = $false\n}\n}\nUpdate-MgPolicyAuthorizationPolicy -AuthorizationPolicyId -BodyParameter $params."
+                }
+            }
+        },
+        {
+            "name": "review_guest_users",
+            "title": "Ensure Guest Users Are Reviewed on a Regular Basis",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Inactive and unneeded guest user accounts might pose security vulnerabilities if not regularly reviewed and removed.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Users.\n4. Click on Add filter.\n5. Select User type.\n6. Select Guest from the Value dropdown.\n7. Click Apply.\n8. Audit the listed guest users to ensure all are still required and not inactive.\n\nFrom Azure CLI:\naz ad user list --query \"[?userType=='Guest']\"\nEnsure all users listed are still required and not inactive.\n\nFrom Azure PowerShell:\nGet-AzureADUser | Where-Object {$_.UserType -like 'Guest'} | Select-Object DisplayName, UserPrincipalName, UserType -Unique\nEnsure all users listed are still required and not inactive."
+            },
+            "remediation": {
+                "text": "To review and remove unnecessary guest users:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Users.\n4. Click on Add filter.\n5. Select User type.\n6. Select Guest from the Value dropdown.\n7. Click Apply.\n8. Delete all Guest users that are no longer required or are inactive.\n\nFrom Azure CLI:\nBefore deleting the user, set it to inactive using the ID from the Audit Procedure to determine if there are any dependent systems.\naz ad user update --id <exampleaccountid@domain.com> --account-enabled {false}\nAfter determining that there are no dependent systems delete the user.\nRemove-AzureADUser -ObjectId <exampleaccountid@domain.com>\n\nFrom Azure PowerShell:\nBefore deleting the user, set it to inactive using the ID from the Audit Procedure to determine if there are any dependent systems.\nSet-AzureADUser -ObjectId \"<exampleaccountid@domain.com>\" -AccountEnabled false\nAfter determining that there are no dependent systems delete the user.\nRemove-AzureADUser -ObjectId <exampleaccountid@domain.com>",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/b2b/user-properties",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/b2b/user-properties",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Gastbenutzer regelmäßig überprüft werden",
+                    "risk": "Inaktive und unnötige Gastbenutzerkonten können Sicherheitslücken darstellen, wenn sie nicht regelmäßig überprüft und entfernt werden.",
+                    "remediation": "Um unnötige Gastbenutzer zu überprüfen und zu entfernen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Benutzer.\n4. Klicken Sie auf Filter hinzufügen.\n5. Wählen Sie Benutzerart.\n6. Wählen Sie Gast aus dem Dropdown-Wert.\n7. Klicken Sie auf Anwenden.\n8. Überprüfen und löschen Sie inaktive oder unnötige Gastbenutzer."
+                }
+            }
+        },
+        {
+            "name": "number_of_methods_required_to_reset",
+            "title": "Ensure That 'Number of methods required to reset' is set to '2'",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without requiring two methods for password reset, an attacker only needs to compromise one method to reset a user's password, posing a security risk.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Then Users.\n4. Select Password reset.\n5. Then Authentication methods.\n6. Ensure that 'Number of methods required to reset' is set to 2."
+            },
+            "remediation": {
+                "text": "To set the number of methods required to reset to 2:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Then Users.\n4. Select Password reset.\n5. Then Authentication methods.\n6. Set the 'Number of methods required to reset' to 2.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-sspr",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-sspr",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Anzahl der Methoden zur Zurücksetzung' auf '2' gesetzt ist",
+                    "risk": "Ohne die Anforderung von zwei Methoden zur Zurücksetzung des Passworts muss ein Angreifer nur eine Methode kompromittieren, um das Passwort eines Benutzers zurückzusetzen, was ein Sicherheitsrisiko darstellt.",
+                    "remediation": "Um die Anzahl der Methoden zur Zurücksetzung auf 2 zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie dann Benutzer.\n4. Wählen Sie Passwort zurücksetzen.\n5. Wählen Sie dann Authentifizierungsmethoden.\n6. Setzen Sie die 'Anzahl der Methoden zur Zurücksetzung' auf 2."
+                }
+            }
+        }, {
+            "name": "bad_password_list_enforced",
+            "title": "Ensure that a Custom Bad Password List is set to 'Enforce' for your Organization",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without enforcing a custom bad password list, users may use weak and easily guessable passwords, increasing the risk of unauthorized access to Azure resources.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select 'Security'.\n4. Under Manage, select Authentication Methods.\n5. Select Password Protection.\n6. Ensure Enforce custom list is set to Yes.\n7. Scroll through the list to view the enforced passwords."
+            },
+            "remediation": {
+                "text": "To set the custom bad password list to 'Enforce':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Security.\n4. Under Manage, select Authentication Methods.\n5. Select Password Protection.\n6. Set the Enforce custom list option to Yes.\n7. Double click the custom banned password list to add a string.",
+                "url": "https://learn.microsoft.com/en-us/entra/identity/authentication/concept-password-ban-bad-combined-policy",
+                "complexity": "low"
+            },
+            "url": "https://learn.microsoft.com/en-us/entra/identity/authentication/concept-password-ban-bad-combined-policy",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine benutzerdefinierte schlechte Passwortliste auf 'Durchsetzen' für Ihre Organisation gesetzt ist",
+                    "risk": "Ohne Durchsetzung einer benutzerdefinierten schlechten Passwortliste können Benutzer schwache und leicht zu erratende Passwörter verwenden, was das Risiko eines unbefugten Zugriffs auf Azure-Ressourcen erhöht.",
+                    "remediation": "Um die benutzerdefinierte schlechte Passwortliste auf 'Durchsetzen' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Sicherheit.\n4. Unter Verwalten wählen Sie Authentifizierungsmethoden.\n5. Wählen Sie Passwortschutz.\n6. Setzen Sie die Option 'Benutzerdefinierte Liste durchsetzen' auf Ja.\n7. Doppelklicken Sie auf die benutzerdefinierte schlechte Passwortliste, um eine Zeichenfolge hinzuzufügen."
+                }
+            }
+        },
+        {
+            "name": "reconfirm_authentication_information",
+            "title": "Ensure that 'Number of days before users are asked to re-confirm their authentication information' is not set to '0'",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "If users are not regularly asked to re-confirm their authentication information, it increases the risk of outdated and insecure authentication methods being used.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_subscription) with(any, <-- is(microsoft_graph_organization) with(any, -[2]-> is(microsoft_graph_policy) and id=authenticationMethodsPolicy and policy.registration_enforcement.authentication_methods_registration_campaign.snooze_duration_in_days<1))"
+            },
+            "remediation": {
+                "text": "To set the number of days before users are asked to re-confirm their authentication information:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Security.\n4. Under Manage, select Authentication Methods.\n5. Set the 'Number of days before users are asked to re-confirm their authentication information' to a value greater than '0'.",
+                "url": "https://learn.microsoft.com/en-us/azure/active-directory/authentication/tutorial-configure-custom-password-protection",
+                "complexity": "low"
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/active-directory/authentication/tutorial-configure-custom-password-protection",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die 'Anzahl der Tage, bevor Benutzer aufgefordert werden, ihre Authentifizierungsinformationen erneut zu bestätigen' nicht auf '0' gesetzt ist",
+                    "risk": "Wenn Benutzer nicht regelmäßig aufgefordert werden, ihre Authentifizierungsinformationen erneut zu bestätigen, erhöht sich das Risiko der Verwendung veralteter und unsicherer Authentifizierungsmethoden.",
+                    "remediation": "Um die Anzahl der Tage festzulegen, bevor Benutzer aufgefordert werden, ihre Authentifizierungsinformationen erneut zu bestätigen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Sicherheit.\n4. Unter Verwalten wählen Sie Authentifizierungsmethoden.\n5. Setzen Sie die 'Anzahl der Tage, bevor Benutzer aufgefordert werden, ihre Authentifizierungsinformationen erneut zu bestätigen' auf einen Wert größer als '0'."
+                }
+            }
+        },
+        {
+            "name": "notify_users_on_password_resets",
+            "title": "Ensure that 'Notify users on password resets?' is set to 'Yes'",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without notifying users on password resets, unauthorized password changes might go unnoticed, increasing the risk of unauthorized access.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Users.\n4. Go to Password reset.\n5. Under Manage, select Notifications.\n6. Ensure that 'Notify users on password resets?' is set to Yes."
+            },
+            "remediation": {
+                "text": "To enable notifications for password resets:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Users.\n4. Go to Password reset.\n5. Under Manage, select Notifications.\n6. Set 'Notify users on password resets?' to Yes.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-sspr-deployment",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-sspr-deployment",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Benutzer bei Kennwortzurücksetzungen benachrichtigen?' auf 'Ja' gesetzt ist",
+                    "risk": "Ohne Benachrichtigung der Benutzer bei Kennwortzurücksetzungen könnten unbefugte Kennwortänderungen unbemerkt bleiben, was das Risiko eines unbefugten Zugriffs erhöht.",
+                    "remediation": "Um Benachrichtigungen für Kennwortzurücksetzungen zu aktivieren:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Benutzer.\n4. Gehen Sie zu Kennwortzurücksetzung.\n5. Wählen Sie unter Verwalten Benachrichtigungen.\n6. Setzen Sie 'Benutzer bei Kennwortzurücksetzungen benachrichtigen?' auf Ja."
+                }
+            }
+        },
+        {
+            "name": "notify_admins_on_admin_password_reset",
+            "title": "Ensure That 'Notify all admins when other admins reset their password?' is set to 'Yes'",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without notifying all admins when other admins reset their passwords, unauthorized password resets might go unnoticed, increasing the risk of unauthorized access to Global Administrator accounts.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Users.\n4. Select Password reset.\n5. Under Manage, select Notifications.\n6. Ensure that 'Notify all admins when other admins reset their password?' is set to Yes."
+            },
+            "remediation": {
+                "text": "To enable notifications for admin password resets:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Users.\n4. Select Password reset.\n5. Under Manage, select Notifications.\n6. Set 'Notify all admins when other admins reset their password?' to Yes.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-sspr#set-up-notifications-and-customizations",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/authentication/tutorial-enable-sspr#set-up-notifications-and-customizations",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Benachrichtigen Sie alle Administratoren, wenn andere Administratoren ihr Passwort zurücksetzen?' auf 'Ja' gesetzt ist",
+                    "risk": "Ohne die Benachrichtigung aller Administratoren bei der Zurücksetzung der Passwörter durch andere Administratoren könnten unbefugte Zurücksetzungen unbemerkt bleiben, was das Risiko eines unbefugten Zugriffs auf Global-Administrator-Konten erhöht.",
+                    "remediation": "Um Benachrichtigungen für die Zurücksetzung von Administratorpasswörtern zu aktivieren:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Benutzer.\n4. Wählen Sie Kennwort zurücksetzen.\n5. Wählen Sie unter Verwalten Benachrichtigungen.\n6. Setzen Sie 'Benachrichtigen Sie alle Administratoren, wenn andere Administratoren ihr Passwort zurücksetzen?' auf Ja."
+                }
+            }
+        },
+        {
+            "name": "user_consent_for_applications_disabled",
+            "title": "Ensure 'User consent for applications' is set to 'Do not allow user consent'",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing users to consent to applications can lead to malicious applications gaining access to organizational data and abusing user privileges.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with(any, <-- is(microsoft_graph_organization) with(any, -[2]-> is(microsoft_graph_policy) and id=authorizationPolicy and policy.default_user_role_permissions.permission_grant_policies_assigned[*]~\"ManagePermissionGrantsForSelf\"))"
+            },
+            "remediation": {
+                "text": "To disable user consent for applications:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Enterprise Applications.\n4. Select Consent and permissions.\n5. Select User consent settings.\n6. Set 'User consent for applications' to 'Do not allow user consent'.\n7. Click save.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/configure-user-consent#configure-user-consent-to-applications",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/configure-user-consent#configure-user-consent-to-applications",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Benutzerzustimmung für Anwendungen' auf 'Benutzerzustimmung nicht zulassen' gesetzt ist",
+                    "risk": "Wenn Benutzer der Zustimmung zu Anwendungen zustimmen dürfen, können böswillige Anwendungen Zugriff auf organisatorische Daten erhalten und Benutzerprivilegien missbrauchen.",
+                    "remediation": "Um die Benutzerzustimmung für Anwendungen zu deaktivieren:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Enterprise-Anwendungen.\n4. Wählen Sie Zustimmung und Berechtigungen.\n5. Wählen Sie Benutzereinstellungen.\n6. Setzen Sie 'Benutzerzustimmung für Anwendungen' auf 'Benutzerzustimmung nicht zulassen'.\n7. Klicken Sie auf Speichern."
+                }
+            }
+        },
+        {
+            "name": "user_consent_for_applications_verified_publishers",
+            "title": "Ensure 'User consent for applications' Is Set To 'Allow for Verified Publishers'",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing users to consent to applications without verification can lead to malicious applications gaining access to organizational data and abusing user privileges.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with(any, <-- is(microsoft_graph_organization) with(any, -[2]-> is(microsoft_graph_policy) and id=authorizationPolicy and policy.default_user_role_permissions.permission_grant_policies_assigned[*]==\"ManagePermissionGrantsForSelf.microsoft-user-default-legacy\"))"
+            },
+            "remediation": {
+                "text": "To set user consent for applications to 'Allow for Verified Publishers':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Enterprise Applications.\n4. Select Consent and permissions.\n5. Select User consent settings.\n6. Under User consent for applications, select 'Allow user consent for apps from verified publishers, for selected permissions'.\n7. Select Save.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/configure-user-consent#configure-user-consent-to-applications",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/configure-user-consent#configure-user-consent-to-applications",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Benutzerzustimmung für Anwendungen' auf 'Benutzerzustimmung nur für verifizierte Herausgeber zulassen' gesetzt ist",
+                    "risk": "Wenn Benutzer der Zustimmung zu Anwendungen ohne Überprüfung zustimmen dürfen, können böswillige Anwendungen Zugriff auf organisatorische Daten erhalten und Benutzerprivilegien missbrauchen.",
+                    "remediation": "Um die Benutzerzustimmung für Anwendungen auf 'Nur für verifizierte Herausgeber zulassen' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Enterprise-Anwendungen.\n4. Wählen Sie Zustimmung und Berechtigungen.\n5. Wählen Sie Benutzereinstellungen.\n6. Wählen Sie unter Benutzerzustimmung für Anwendungen die Option 'Benutzerzustimmung nur für Apps von verifizierten Herausgebern und ausgewählten Berechtigungen zulassen'.\n7. Wählen Sie Speichern."
+                }
+            }
+        },
+        {
+            "name": "users_cannot_add_gallery_apps_to_my_apps",
+            "title": "Ensure 'Users can add gallery apps to My Apps' is set to 'No'",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing users to add gallery apps to My Apps can lead to unauthorized access and potential exposure of sensitive information.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Then Enterprise applications.\n4. Select User settings.\n5. Ensure that 'Users can add gallery apps to My Apps' is set to 'No'.\n\nFrom API:\n1. Query the user settings endpoint:\n   curl -X GET \"https://graph.microsoft.com/v1.0/settings\" -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\"\n2. Check the 'usersCanAddGalleryAppsToMyApps' property."
+            },
+            "remediation": {
+                "text": "To set 'Users can add gallery apps to My Apps' to 'No':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Then Enterprise applications.\n4. Select User settings.\n5. Set 'Users can add gallery apps to My Apps' to 'No'.",
+                "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+                "complexity": "low"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Benutzer können Galerien-Apps zu 'Meine Apps' hinzufügen' auf 'Nein' gesetzt ist",
+                    "risk": "Das Zulassen, dass Benutzer Galerien-Apps zu 'Meine Apps' hinzufügen, kann zu unbefugtem Zugriff und potenzieller Offenlegung sensibler Informationen führen.",
+                    "remediation": "Um 'Benutzer können Galerien-Apps zu 'Meine Apps' hinzufügen' auf 'Nein' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie dann Unternehmensanwendungen.\n4. Wählen Sie Benutzereinstellungen.\n5. Setzen Sie 'Benutzer können Galerien-Apps zu 'Meine Apps' hinzufügen' auf 'Nein'."
+                }
+            }
+        },
+        {
+            "name": "users_cannot_register_applications",
+            "title": "Ensure 'Users Can Register Applications' Is Set to 'No'",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Require administrators or appropriately delegated users to register third-party applications. Allowing regular users to register applications can lead to the introduction of insecure or malicious applications without proper oversight.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with(any, <-- is(microsoft_graph_organization) with(any, -[2]-> is(microsoft_graph_policy) and id=authorizationPolicy and policy.default_user_role_permissions.allowed_to_create_apps==true))"
+            },
+            "remediation": {
+                "text": "To set 'Users can register applications' to 'No':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Users.\n4. Select User settings.\n5. Set 'Users can register applications' to 'No'.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/roles/delegate-app-roles#restrict-who-can-create-applications",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/roles/delegate-app-roles#restrict-who-can-create-applications",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Benutzer können Anwendungen registrieren' auf 'Nein' gesetzt ist",
+                    "risk": "Erfordern Sie, dass Administratoren oder entsprechend delegierte Benutzer Drittanbieteranwendungen registrieren. Das Zulassen, dass reguläre Benutzer Anwendungen registrieren, kann zur Einführung unsicherer oder bösartiger Anwendungen ohne ordnungsgemäße Aufsicht führen.",
+                    "remediation": "Um 'Benutzer können Anwendungen registrieren' auf 'Nein' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Benutzer.\n4. Wählen Sie Benutzereinstellungen.\n5. Setzen Sie 'Benutzer können Anwendungen registrieren' auf 'Nein'."
+                }
+            }
+        },
+        {
+            "name": "guest_users_access_restrictions_most_restrictive",
+            "title": "Ensure 'Guest users access restrictions' is set to 'Guest user access is restricted to properties and memberships of their own directory objects'",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Limiting guest user permissions ensures that guest accounts do not have permission for certain directory tasks, such as enumerating users, groups, or other directory resources, and cannot be assigned to administrative roles in your directory. This setting helps protect sensitive directory information from unauthorized access by guest users.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with(any, <-- is(microsoft_graph_organization) with(any, -[2]-> is(microsoft_graph_policy) and id=authorizationPolicy and policy.default_user_role_permissions.guest_user_role_id!=\"2af84b1e-32c8-42b7-82bc-daa82404023b\"))"
+            },
+            "remediation": {
+                "text": "To set 'Guest user access restrictions' to 'Guest user access is restricted to properties and memberships of their own directory objects':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Then External Identities.\n4. Select External collaboration settings.\n5. Under Guest user access, change 'Guest user access restrictions' to 'Guest user access is restricted to properties and memberships of their own directory objects'.\n\nFrom PowerShell:\n1. Enter the following command: Set-AzureADMSAuthorizationPolicy -GuestUserRoleId '2af84b1e-32c8-42b7-82bc-daa82404023b'\n2. Verify the setting by entering: Get-AzureADMSAuthorizationPolicy\n3. Ensure that the 'GuestUserRoleId' is equal to '2af84b1e-32c8-42b7-82bc-daa82404023b'.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/enterprise-users/users-restrict-guest-permissions",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/enterprise-users/users-restrict-guest-permissions",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Einschränkungen des Gastbenutzerzugriffs' auf 'Gastbenutzerzugriff ist auf Eigenschaften und Mitgliedschaften ihrer eigenen Verzeichnisobjekte beschränkt' gesetzt ist",
+                    "risk": "Das Einschränken der Berechtigungen von Gastbenutzern stellt sicher, dass Gastkonten keine Berechtigung für bestimmte Verzeichnisaufgaben haben, wie z. B. das Auflisten von Benutzern, Gruppen oder anderen Verzeichnisressourcen, und keine administrativen Rollen in Ihrem Verzeichnis zugewiesen werden können. Diese Einstellung hilft, sensible Verzeichnisinformationen vor unbefugtem Zugriff durch Gastbenutzer zu schützen.",
+                    "remediation": "Um 'Einschränkungen des Gastbenutzerzugriffs' auf 'Gastbenutzerzugriff ist auf Eigenschaften und Mitgliedschaften ihrer eigenen Verzeichnisobjekte beschränkt' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie dann Externe Identitäten.\n4. Wählen Sie Einstellungen für externe Zusammenarbeit.\n5. Ändern Sie unter Gastbenutzerzugriff die Einstellung 'Einschränkungen des Gastbenutzerzugriffs' in 'Gastbenutzerzugriff ist auf Eigenschaften und Mitgliedschaften ihrer eigenen Verzeichnisobjekte beschränkt'.\n\nVom PowerShell:\n1. Geben Sie den folgenden Befehl ein: Set-AzureADMSAuthorizationPolicy -GuestUserRoleId '2af84b1e-32c8-42b7-82bc-daa82404023b'\n2. Überprüfen Sie die Einstellung, indem Sie eingeben: Get-AzureADMSAuthorizationPolicy\n3. Stellen Sie sicher, dass die 'GuestUserRoleId' gleich '2af84b1e-32c8-42b7-82bc-daa82404023b' ist."
+                }
+            }
+        },
+        {
+            "name": "guest_invite_restrictions_admin_only",
+            "title": "Ensure 'Guest invite restrictions' is set to 'Only users assigned to specific admin roles can invite guest users'",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Restricting guest invites to specific admin roles ensures only authorized users can grant access to cloud resources, maintaining security and data privacy.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) <-- is(microsoft_graph_organization) -[2]-> is(microsoft_graph_policy) and id=authorizationPolicy and policy.allow_invites_from not in [\"none\", \"adminsAndGuestInviters\"]"
+            },
+            "remediation": {
+                "text": "To set 'Guest invite restrictions' to 'Only users assigned to specific admin roles can invite guest users':\nFrom Azure Portal:\n1. Go to Microsoft Entra ID.\n2. Select External Identities > External collaboration settings.\n3. Set 'Guest invite restrictions' to 'Only users assigned to specific admin roles can invite guest users'.",
+                "url": "https://docs.microsoft.com/en-us/azure/active-directory/active-directory-b2b-delegate-invitations",
+                "complexity": "low"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/active-directory/active-directory-b2b-delegate-invitations",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Einladungsbeschränkungen für Gäste' auf 'Nur Benutzern mit bestimmten Administratorrollen können Gäste einladen' gesetzt ist",
+                    "risk": "Das Einschränken von Gasteinladungen auf bestimmte Administratorrollen stellt sicher, dass nur autorisierte Benutzer Zugriff auf Cloud-Ressourcen gewähren können, was die Sicherheit und den Datenschutz gewährleistet.",
+                    "remediation": "Um 'Einladungsbeschränkungen für Gäste' auf 'Nur Benutzern mit bestimmten Administratorrollen können Gäste einladen' zu setzen:\nVom Azure-Portal:\n1. Gehen Sie zu Microsoft Entra ID.\n2. Wählen Sie Externe Identitäten > Einstellungen für externe Zusammenarbeit.\n3. Setzen Sie 'Einladungsbeschränkungen für Gäste' auf 'Nur Benutzern mit bestimmten Administratorrollen können Gäste einladen'."
+                }
+            }
+        },
+        {
+            "name": "restrict_access_to_microsoft_entra_admin_center",
+            "title": "Ensure That 'Restrict access to Microsoft Entra admin center' is Set to 'Yes'",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Restricting access to the Microsoft Entra ID administration center to administrators helps prevent unauthorized access and potential exposure of sensitive information.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Then Users.\n4. Select User settings.\n5. Ensure that 'Restrict access to Microsoft Entra admin center' is set to 'Yes'."
+            },
+            "remediation": {
+                "text": "To set 'Restrict access to Microsoft Entra admin center' to 'Yes':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Then Users.\n4. Select User settings.\n5. Set 'Restrict access to Microsoft Entra admin center' to 'Yes'.",
+                "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+                "complexity": "low"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Zugang zum Microsoft Entra Admin-Center auf 'Ja' gesetzt ist",
+                    "risk": "Die Beschränkung des Zugangs zum Microsoft Entra ID-Verwaltungszentrum auf Administratoren verhindert unbefugten Zugriff und potenzielle Offenlegung sensibler Informationen.",
+                    "remediation": "Um den Zugang zum Microsoft Entra Admin-Center auf 'Ja' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie dann Benutzer.\n4. Wählen Sie Benutzereinstellungen.\n5. Setzen Sie den Zugang zum Microsoft Entra Admin-Center auf 'Ja'."
+                }
+            }
+        },
+        {
+            "name": "restrict_user_ability_to_access_groups_features_in_the_access_pane",
+            "title": "Ensure that 'Restrict user ability to access groups features in the Access Pane' is Set to 'Yes'",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing all users access to self-service group management can lead to unauthorized changes and potential security breaches.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Groups.\n4. Select General under Settings.\n5. Ensure that 'Restrict user ability to access groups features in My Groups' is set to 'Yes'."
+            },
+            "remediation": {
+                "text": "To restrict user ability to access groups features in My Groups to 'Yes':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Groups.\n4. Select General under Settings.\n5. Set 'Restrict user ability to access groups features in My Groups' to 'Yes'.",
+                "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+                "complexity": "low"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Zugriff auf Gruppenfunktionen im Zugangsbereich auf 'Ja' gesetzt ist",
+                    "risk": "Die Bereitstellung des Zugriffs auf Selbstbedienungsgruppenverwaltung für alle Benutzer kann zu unbefugten Änderungen und potenziellen Sicherheitsverletzungen führen.",
+                    "remediation": "Um den Zugriff auf Gruppenfunktionen in meinen Gruppen auf 'Ja' zu beschränken:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Gruppen.\n4. Wählen Sie unter Einstellungen Allgemein.\n5. Setzen Sie den Zugriff auf Gruppenfunktionen in meinen Gruppen auf 'Ja'."
+                }
+            }
+        },
+        {
+            "name": "users_cannot_create_security_groups_in_azure",
+            "title": "Ensure that 'Users can create security groups in Azure portals, API or PowerShell' is set to 'No'",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing all users to create security groups can lead to unauthorized group management and potential security vulnerabilities.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Groups.\n4. Select General under Settings.\n5. Ensure that 'Users can create security groups in Azure portals, API or PowerShell' is set to 'No'."
+            },
+            "remediation": {
+                "text": "To set 'Users can create security groups in Azure portals, API or PowerShell' to 'No':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Groups.\n4. Select General under Settings.\n5. Set 'Users can create security groups in Azure portals, API or PowerShell' to 'No'.",
+                "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+                "complexity": "low"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Benutzer können Sicherheitsgruppen in Azure-Portalen, API oder PowerShell erstellen' auf 'Nein' gesetzt ist",
+                    "risk": "Das Zulassen, dass alle Benutzer Sicherheitsgruppen erstellen können, führt zu unbefugtem Gruppenmanagement und potenziellen Sicherheitsrisiken.",
+                    "remediation": "Um 'Benutzer können Sicherheitsgruppen in Azure-Portalen, API oder PowerShell' auf 'Nein' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Gruppen.\n4. Wählen Sie unter Einstellungen Allgemein.\n5. Setzen Sie 'Benutzer können Sicherheitsgruppen in Azure-Portalen, API oder PowerShell' auf 'Nein'."
+                }
+            }
+        },
+        {
+            "name": "owners_cannot_manage_group_membership_requests_in_access_panel",
+            "title": "Ensure that 'Owners can manage group membership requests in the Access Panel' is set to 'No'",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing owners to manage group membership requests can lead to unauthorized changes and potential security vulnerabilities in group membership.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Then Groups.\n4. Select General in settings.\n5. Ensure that 'Owners can manage group membership requests in the Access Panel' is set to 'No'."
+            },
+            "remediation": {
+                "text": "To set 'Owners can manage group membership requests in the Access Panel' to 'No':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Then Groups.\n4. Select General in settings.\n5. Set 'Owners can manage group membership requests in the Access Panel' to 'No'.",
+                "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+                "complexity": "low"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Besitzer können Gruppenmitgliedschaftsanfragen im Zugangsbereich verwalten' auf 'Nein' gesetzt ist",
+                    "risk": "Das Zulassen, dass Besitzer Gruppenmitgliedschaftsanfragen verwalten können, führt zu unbefugten Änderungen und potenziellen Sicherheitsrisiken in der Gruppenmitgliedschaft.",
+                    "remediation": "Um 'Besitzer können Gruppenmitgliedschaftsanfragen im Zugangsbereich verwalten' auf 'Nein' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Gruppen.\n4. Wählen Sie unter Einstellungen Allgemein.\n5. Setzen Sie 'Besitzer können Gruppenmitgliedschaftsanfragen im Zugangsbereich verwalten' auf 'Nein'."
+                }
+            }
+        },
+        {
+            "name": "users_cannot_create_microsoft_365_groups",
+            "title": "Ensure that 'Users can create Microsoft 365 groups in Azure portals, API or PowerShell' is set to 'No'",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing all users to create Microsoft 365 groups can lead to uncontrolled group proliferation and potential mismanagement of resources.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Then Groups.\n4. Select General in settings.\n5. Ensure that 'Users can create Microsoft 365 groups in Azure portals, API or PowerShell' is set to 'No'."
+            },
+            "remediation": {
+                "text": "To set 'Users can create Microsoft 365 groups in Azure portals, API or PowerShell' to 'No':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Then Groups.\n4. Select General in settings.\n5. Set 'Users can create Microsoft 365 groups in Azure portals, API or PowerShell' to 'No'.",
+                "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+                "complexity": "low"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Benutzer können Microsoft 365 Gruppen in Azure-Portalen, API oder PowerShell erstellen' auf 'Nein' gesetzt ist",
+                    "risk": "Das Zulassen, dass alle Benutzer Microsoft 365 Gruppen erstellen können, führt zu unkontrollierter Gruppenvermehrung und potenziellem Missmanagement von Ressourcen.",
+                    "remediation": "Um 'Benutzer können Microsoft 365 Gruppen in Azure-Portalen, API oder PowerShell' auf 'Nein' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Gruppen.\n4. Wählen Sie unter Einstellungen Allgemein.\n5. Setzen Sie 'Benutzer können Microsoft 365 Gruppen in Azure-Portalen, API oder PowerShell' auf 'Nein'."
+                }
+            }
+        },
+        {
+            "name": "require_mfa_to_register_or_join_devices_with_microsoft_entra_id",
+            "title": "Ensure that 'Require Multi-Factor Authentication to register or join devices with Microsoft Entra ID' is set to 'Yes'",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Not requiring Multi-Factor Authentication for registering or joining devices may allow unauthorized devices to be added to the network, compromising security.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Devices.\n4. Select Device settings.\n5. Ensure that 'Require Multi-Factor Authentication to register or join devices with Microsoft Entra' is set to 'Yes'."
+            },
+            "remediation": {
+                "text": "To set 'Require Multi-Factor Authentication to register or join devices with Microsoft Entra' to 'Yes':\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Entra ID.\n3. Select Devices.\n4. Select Device settings.\n5. Set 'Require Multi-Factor Authentication to register or join devices with Microsoft Entra' to 'Yes'.",
+                "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-identity-management#im-6-use-strong-authentication-controls",
+                "complexity": "medium"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-identity-management#im-6-use-strong-authentication-controls",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Erforderliche Mehrfaktorauthentifizierung, um Geräte mit Microsoft Entra ID zu registrieren oder beizutreten' auf 'Ja' gesetzt ist",
+                    "risk": "Das Nichterfordern der Mehrfaktorauthentifizierung bei der Registrierung oder dem Beitritt von Geräten kann dazu führen, dass unbefugte Geräte dem Netzwerk hinzugefügt werden, was die Sicherheit gefährdet.",
+                    "remediation": "Um 'Erforderliche Mehrfaktorauthentifizierung, um Geräte mit Microsoft Entra ID zu registrieren oder beizutreten' auf 'Ja' zu setzen:\nVom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Microsoft Entra ID.\n3. Wählen Sie Geräte.\n4. Wählen Sie Geräteeinstellungen.\n5. Setzen Sie 'Erforderliche Mehrfaktorauthentifizierung, um Geräte mit Microsoft Entra ID zu registrieren oder beizutreten' auf 'Ja'."
+                }
+            }
+        },
+        {
+            "name": "no_custom_subscription_administrator_roles",
+            "title": "Ensure That No Custom Subscription Administrator Roles Exist",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing custom roles with potentially excessive privileges can lead to unauthorized actions and compromise of Azure resources.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Subscriptions.\n3. Select Access control (IAM).\n4. Select Roles.\n5. Click Type and select CustomRole from the drop down menu.\n6. View each role and check JSON for assignableScopes set to the subscription, and actions set to '*'.\n7. Repeat for each custom role."
+            },
+            "remediation": {
+                "text": "From Azure Portal\n1. From Azure Home select the Portal Menu.\n2. Select Subscriptions.\n3. Select Access control (IAM).\n4. Select Roles.\n5. Click Type and select CustomRole from the drop down menu.\n6. Check the box next to each role which grants subscription administrator privileges.\n7. Select Remove.\n8. Confirm by selecting Yes.",
+                "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-privileged-access#pa-1-separate-and-limit-highly-privilegedadministrative-users"
+            },
+            "default_value": "By default, no custom owner roles are created.",
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-privileged-access#pa-7-follow-just-enough-administration-least-privilege-principle",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass keine benutzerdefinierten Abonnement-Administratorrollen existieren",
+                    "risk": "Das Zulassen von benutzerdefinierten Rollen mit potenziell übermäßigen Berechtigungen kann zu unbefugten Aktionen und Kompromittierung von Azure-Ressourcen führen.",
+                    "remediation": "Vom Azure-Portal:\n1. Wählen Sie im Azure-Startbildschirm das Portal-Menü.\n2. Wählen Sie Abonnements.\n3. Wählen Sie Zugriffskontrolle (IAM).\n4. Wählen Sie Rollen.\n5. Klicken Sie auf Typ und wählen Sie CustomRole aus dem Dropdown-Menü.\n6. Markieren Sie das Kästchen neben jeder Rolle, die Abonnement-Administratorrechte gewährt.\n7. Wählen Sie Entfernen.\n8. Bestätigen Sie mit Ja."
+                }
+            }
+        },
+        {
+            "name": "custom_role_for_resource_lock_administration",
+            "title": "Ensure a Custom Role is Assigned Permissions for Administering Resource Locks",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without a dedicated role for resource lock administration, there is a higher risk of unauthorized or accidental modifications to resource locks.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. In the Azure portal, open a subscription or resource group where you want to view assigned roles.\n2. Select Access control (IAM).\n3. Select Roles.\n4. Search for the custom role named 'Resource Lock Administrator'.\n5. Ensure that the role is assigned to the appropriate users."
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. In the Azure portal, open a subscription or resource group where you want the custom role to be assigned.\n2. Select Access control (IAM).\n3. Click Add.\n4. Select Add custom role.\n5. In the Custom Role Name field, enter 'Resource Lock Administrator'.\n6. Enter a description.\n7. For Baseline permissions, select Start from scratch.\n8. Go to the Permissions tab and select Add permissions.\n9. Search and select 'Microsoft.Authorization/locks'.\n10. Add the permission and review.\n11. Create the role and assign it to the appropriate user.",
+                "url": "https://docs.microsoft.com/en-us/azure/role-based-access-control/check-access"
+            },
+            "default_value": "By default, no custom role specifically for resource lock administration is created.",
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-governance-strategy#gs-6-define-and-implement-identity-and-privileged-access-strategy",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine benutzerdefinierte Rolle Berechtigungen für die Verwaltung von Ressourcensperren zugewiesen ist",
+                    "risk": "Ohne eine spezielle Rolle für die Verwaltung von Ressourcensperren besteht ein höheres Risiko für unbefugte oder versehentliche Änderungen an den Sperren.",
+                    "remediation": "Vom Azure-Portal:\n1. Öffnen Sie im Azure-Portal ein Abonnement oder eine Ressourcengruppe, wo die benutzerdefinierte Rolle zugewiesen werden soll.\n2. Wählen Sie Zugriffskontrolle (IAM).\n3. Klicken Sie auf Hinzufügen.\n4. Wählen Sie Benutzerdefinierte Rolle hinzufügen.\n5. Geben Sie im Feld für den Rollennamen 'Resource Lock Administrator' ein.\n6. Geben Sie eine Beschreibung ein.\n7. Wählen Sie bei Basisberechtigungen 'Von Grund auf neu starten'.\n8. Gehen Sie zur Registerkarte Berechtigungen und wählen Sie Berechtigungen hinzufügen.\n9. Suchen und wählen Sie 'Microsoft.Authorization/locks'.\n10. Fügen Sie die Berechtigung hinzu und überprüfen Sie diese.\n11. Erstellen Sie die Rolle und weisen Sie sie dem entsprechenden Benutzer zu."
+                }
+            }
+        },
+        {
+            "name": "restrict_subscription_movement_in_microsoft_entra_id_directory",
+            "title": "Ensure That 'Subscription leaving Microsoft Entra ID directory' and 'Subscription entering Microsoft Entra ID directory' Is Set To ‘Permit No One’",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing unrestricted movement of subscriptions into and out of the Microsoft Entra ID directory can expose sensitive resources to unauthorized access or potential bad actors.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From the Azure Portal Home select the portal menu.\n2. Select Subscriptions.\n3. In the Advanced options drop-down menu, select Manage Policies.\n4. Ensure 'Subscription leaving Microsoft Entra ID directory' and 'Subscription entering Microsoft Entra ID directory' are set to 'Permit no one'."
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. From the Azure Portal Home select the portal menu.\n2. Select Subscriptions.\n3. In the Advanced options drop-down menu, select Manage Policies.\n4. Under 'Subscription leaving Microsoft Entra ID directory' and 'Subscription entering Microsoft Entra ID directory' select 'Permit no one'.",
+                "url": "https://docs.microsoft.com/en-us/azure/cost-management-billing/manage/manage-azure-subscription-policy"
+            },
+            "default_value": "By default, 'Subscription leaving Microsoft Entra ID directory' and 'Subscription entering Microsoft Entra ID directory' are set to 'Allow everyone' (default).",
+            "url": "https://docs.microsoft.com/en-us/azure/cost-management-billing/manage/manage-azure-subscription-policy",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Abonnement verlässt Microsoft Entra ID Verzeichnis' und 'Abonnement tritt Microsoft Entra ID Verzeichnis bei' auf 'Niemandem erlauben' gesetzt ist",
+                    "risk": "Das uneingeschränkte Bewegen von Abonnements in und aus dem Microsoft Entra ID Verzeichnis kann sensible Ressourcen unautorisiertem Zugriff oder potenziellen böswilligen Akteuren aussetzen.",
+                    "remediation": "Vom Azure-Portal:\n1. Wählen Sie im Startbildschirm des Azure-Portals das Portal-Menü.\n2. Wählen Sie Abonnements.\n3. Wählen Sie im Dropdown-Menü Erweiterte Optionen die Option Richtlinien verwalten.\n4. Stellen Sie sicher, dass 'Abonnement verlässt Microsoft Entra ID Verzeichnis' und 'Abonnement tritt Microsoft Entra ID Verzeichnis bei' auf 'Niemandem erlauben' gesetzt ist."
+                }
+            }
+        },
+        {
+            "name": "limit_global_administrator_assignments",
+            "title": "Ensure fewer than 5 users have global administrator assignment",
+            "result_kinds": ["microsoft_graph_organization"],
+            "categories": ["security", "compliance"],
+            "risk": "Having too many users with the Global Administrator role increases the risk of security breaches, unauthorized access, and potential misuse of elevated privileges.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) <-- is(microsoft_graph_organization)  with(count>4, -[2]-> is(microsoft_graph_user) with(any, --> is(microsoft_graph_role) and name==\"Global Administrator\"))"
+            },
+            "remediation": {
+                "text": "If more than 4 users are assigned:\n1. Remove the Global Administrator role for users which do not or no longer require the role.\n2. Assign the Global Administrator role via PIM which can be activated when required.\n3. Assign more granular roles to users to conduct their duties.\nIf only one user is assigned:\n1. Provide the Global Administrator role to a trusted user or create a 'break glass' admin account.",
+                "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/add-users/about-admin-roles?view=o365-worldwide#security-guidelines-for-assigning-roles"
+            },
+            "default_value": "By default, the number of Global Administrators is not restricted.",
+            "url": "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/best-practices#5-limit-the-number-of-global-administrators-to-less-than-5",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass weniger als 5 Benutzer die Rolle des globalen Administrators zugewiesen haben",
+                    "risk": "Zu viele Benutzer mit der Rolle des Globalen Administrators erhöhen das Risiko von Sicherheitsverletzungen, unbefugtem Zugriff und potenziellem Missbrauch von erweiterten Berechtigungen.",
+                    "remediation": "Wenn mehr als 4 Benutzer zugewiesen sind:\n1. Entfernen Sie die Rolle des Globalen Administrators bei Benutzern, die diese nicht mehr benötigen.\n2. Weisen Sie die Rolle des Globalen Administrators über PIM zu, die bei Bedarf aktiviert werden kann.\n3. Weisen Sie den Benutzern spezifischere Rollen zu, um ihre Aufgaben durchzuführen.\nWenn nur ein Benutzer zugewiesen ist:\n1. Weisen Sie die Rolle des Globalen Administrators einem vertrauenswürdigen Benutzer zu oder erstellen Sie ein 'Break Glass' Admin-Konto."
+                }
+            }
+        }
+    ]
+}

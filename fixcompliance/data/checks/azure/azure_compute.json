@@ -1,0 +1,146 @@
+{
+    "provider": "azure",
+    "service": "compute",
+    "checks": [
+        {
+            "name": "bastion_host",
+            "title": "Ensure an Azure Bastion Host Exists",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not using Azure Bastion can expose virtual machines to security risks by requiring direct public IP access for Remote Desktop Protocol (RDP) or Secure Shell (SSH). Azure Bastion provides a more secure, seamless RDP/SSH experience directly through Azure Portal over SSL.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_virtual_machine_base) <-[2]- is(azure_subscription) with(empty, -[2]-> is(azure_bastion_host))"
+            },
+            "remediation": {
+                "text": "To manually enable Azure Bastion in each region:\nFrom Azure Portal:\n1. Click on Bastions\n2. Select the Subscription\n3. Select the Resource group\n4. Type a Name for the new Bastion host\n5. Select a Region\n6. Choose Standard next to Tier\n7. Set the Instance count\n8. Select or Create a new Virtual network and specify the Subnet named AzureBastionSubnet using a /26 CIDR range\n9. Choose the appropriate Public IP address option\n10. Click Create\nFrom Azure CLI:\nUse `az network bastion create --location <location> --name <name> --public-ip-address <public IP address name or ID> --resource-group <resource group name> --vnet-name <virtual network name> --sku Standard`",
+                "url": "https://docs.microsoft.com/en-us/azure/bastion/bastion-create-host-portal"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-logging-threat-detection#lt-4-enable-network-logging-for-security-investigation",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass ein Azure Bastion-Host vorhanden ist",
+                    "risk": "Die Nichtverwendung von Azure Bastion kann virtuelle Maschinen Sicherheitsrisiken aussetzen, da für den Fernzugriff über Remote Desktop Protocol (RDP) oder Secure Shell (SSH) direkte öffentliche IP-Zugänge erforderlich sind. Azure Bastion bietet ein sichereres, nahtloses RDP/SSH-Erlebnis direkt über das Azure Portal über SSL.",
+                    "remediation": "Um Azure Bastion manuell in jeder Region zu aktivieren:\nVom Azure Portal:\n1. Klicken Sie auf Bastionen\n2. Wählen Sie das Abonnement\n3. Wählen Sie die Ressourcengruppe\n4. Geben Sie einen Namen für den neuen Bastion-Host ein\n5. Wählen Sie eine Region\n6. Wählen Sie neben Tier Standard\n7. Legen Sie die Instanzenanzahl fest\n8. Wählen Sie oder erstellen Sie ein neues virtuelles Netzwerk und geben Sie das Subnetz AzureBastionSubnet mit einem /26 CIDR-Bereich an\n9. Wählen Sie die geeignete Option für die öffentliche IP-Adresse\n10. Klicken Sie auf Erstellen\nVon Azure CLI:\nVerwenden Sie `az network bastion create --location <location> --name <name> --public-ip-address <public IP address name or ID> --resource-group <resource group name> --vnet-name <virtual network name> --sku Standard`"
+                }
+            }
+        },
+        {
+            "name": "vms_use_managed_disks",
+            "title": "Ensure Virtual Machines are utilizing Managed Disks",
+            "result_kinds": ["azure_virtual_machine"],
+            "categories": ["security", "compliance"],
+            "risk": "Using unmanaged disks can lead to higher costs and lower resilience. Managed disks offer better management features, including automatic encryption and redundancy to ensure data durability and availability.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_virtual_machine) with(empty, --> is(azure_disk))"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Using the search feature, go to Virtual Machines.\n2. Select the virtual machine you would like to convert.\n3. Select Disks in the menu for the VM.\n4. At the top select Migrate to managed disks.\n5. Follow the prompts to convert the disk and finish by selecting Migrate to start the process.\nNote: VMs will be stopped and restarted after migration is complete.\nFrom PowerShell:\nRun: Stop-AzVM -ResourceGroupName $rgName -Name $vmName -Force\nConvertTo-AzVMManagedDisk -ResourceGroupName $rgName -VMName $vmName\nStart-AzVM -ResourceGroupName $rgName -Name $vmName",
+                "url": "https://docs.microsoft.com/en-us/azure/virtual-machines/windows/convert-unmanaged-to-managed-disks"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-4-enable-data-at-rest-encryption-by-default",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass virtuelle Maschinen Managed Disks verwenden",
+                    "risk": "Die Verwendung nicht verwalteter Disks kann zu höheren Kosten und geringerer Belastbarkeit führen. Verwaltete Disks bieten bessere Verwaltungsfunktionen, einschließlich automatischer Verschlüsselung und Redundanz, um die Haltbarkeit und Verfügbarkeit der Daten zu gewährleisten.",
+                    "remediation": "Vom Azure-Portal:\n1. Verwenden Sie die Suchfunktion, gehen Sie zu Virtuelle Maschinen.\n2. Wählen Sie die virtuelle Maschine aus, die Sie konvertieren möchten.\n3. Wählen Sie im Menü der VM Disks aus.\n4. Wählen Sie oben Migrate to managed disks.\n5. Folgen Sie den Anweisungen, um die Disk zu konvertieren und schließen Sie den Vorgang ab, indem Sie Migrate auswählen, um den Prozess zu starten.\nHinweis: VMs werden nach der Migration gestoppt und neu gestartet.\nVon PowerShell:\nAusführen: Stop-AzVM -ResourceGroupName $rgName -Name $vmName -Force\nConvertTo-AzVMManagedDisk -ResourceGroupName $rgName -VMName $vmName\nStart-AzVM -ResourceGroupName $rgName -Name $vmName"
+                }
+            }
+        },
+        {
+            "name": "disks_encrypted_with_cmk",
+            "title": "Ensure that 'OS and Data' disks are encrypted with Customer Managed Key (CMK)",
+            "result_kinds": ["azure_disk"],
+            "categories": ["security", "compliance"],
+            "risk": "Not using Customer Managed Keys (CMK) for disk encryption reduces control over key management and limits the ability to apply organizational policies to key usage and lifecycle. This potentially exposes sensitive data at rest to higher risk of unauthorized access.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_disk) and disk_encryption.type==EncryptionAtRestWithPlatformKey"
+            },
+            "remediation": {
+                "text": "To change the encryption for disks to use CMK:\nFrom Azure Portal:\n1. Go to Virtual machines\n2. Select the virtual machine you wish to convert\n3. Select Disks from the menu\n4. Detach the disk that needs encryption change\n5. Search for Disks in the portal and select the disk\n6. Click on Encryption, change the type to use your encryption, select your key\n7. Save the changes\n8. Re-attach the disk to the VM\nFrom PowerShell:\nStop the VM with `Stop-AzVM -ResourceGroupName $rgName -Name $vmName -Force`, then convert with `Set-AzVMDiskEncryptionExtension` and start the VM again with `Start-AzVM`.",
+                "url": "https://docs.microsoft.com/en-us/azure/virtual-machines/windows/disks-enable-customer-managed-keys-powershell"
+            },
+            "url": "https://docs.microsoft.com/azure/security/fundamentals/data-encryption-best-practices#protect-data-at-rest",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Betriebssystem- und Datenträger' mit einem vom Kunden verwalteten Schlüssel (CMK) verschlüsselt sind",
+                    "risk": "Die Nichtverwendung von vom Kunden verwalteten Schlüsseln (CMK) für die Datenträgerverschlüsselung verringert die Kontrolle über das Schlüsselmanagement und schränkt die Fähigkeit ein, Organisationsrichtlinien für Schlüsselverwendung und -lebenszyklus anzuwenden. Dies kann sensible Daten im Ruhezustand einem höheren Risiko unbefugten Zugriffs aussetzen.",
+                    "remediation": "Um die Verschlüsselung für Datenträger auf CMK zu ändern:\nVom Azure-Portal:\n1. Gehen Sie zu Virtuelle Maschinen\n2. Wählen Sie die virtuelle Maschine aus, die Sie umwandeln möchten\n3. Wählen Sie Datenträger aus dem Menü\n4. Trennen Sie den Datenträger, der eine Verschlüsselungsänderung benötigt\n5. Suchen Sie nach Datenträgern im Portal und wählen Sie den Datenträger\n6. Klicken Sie auf Verschlüsselung, ändern Sie den Typ, um Ihre Verschlüsselung zu verwenden, wählen Sie Ihren Schlüssel\n7. Speichern Sie die Änderungen\n8. Verbinden Sie den Datenträger wieder mit der VM\nVon PowerShell:\nStoppen Sie die VM mit `Stop-AzVM -ResourceGroupName $rgName -Name $vmName -Force`, konvertieren Sie mit `Set-AzVMDiskEncryptionExtension` und starten Sie die VM erneut mit `Start-AzVM`."
+                }
+            }
+        },
+        {
+            "name": "approved_vm_extensions",
+            "title": "Ensure that Only Approved Extensions Are Installed",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Installing unauthorized Azure VM extensions can introduce security vulnerabilities or operational issues, as these extensions run with administrative privileges and have broad access to the virtual machine.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. Go to Virtual machines.\n2. For each virtual machine, click on the server name.\n3. Click on Extensions + applications under Settings.\n4. Review the list to ensure all extensions are organization-approved.\nFrom Azure CLI:\nRun `az vm extension list --vm-name <vmName> --resource-group <sourceGroupName> --query '[*].name'` to list extensions.\nFrom PowerShell:\nUse `Get-AzVM` to list VMs, then `Get-AzVMExtension -ResourceGroupName <VM Resource Group> -VMName <VM Name>` to check extensions.",
+                "url": "https://docs.microsoft.com/en-us/azure/virtual-machines/windows/extensions-features"
+            },
+            "remediation": {
+                "text": "To remove unapproved extensions:\nFrom Azure Portal:\n1. Go to Virtual machines.\n2. For each VM, go to Extensions + applications.\n3. Uninstall any unapproved extensions.\nFrom Azure CLI:\nUse `az vm extension delete --resource-group <resourceGroupName> --vm-name <vmName> --name <extensionName>` to remove an unapproved extension.\nFrom PowerShell:\nRun `Remove-AzVMExtension -ResourceGroupName <ResourceGroupName> -Name <ExtensionName> -VMName <VirtualMachineName>` for each unapproved extension identified.",
+                "url": "https://docs.microsoft.com/en-us/powershell/module/az.compute/remove-azvmextension?view=azps-7.5.0"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-asset-management#am-5-use-only-approved-applications-in-virtual-machine",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass nur genehmigte Erweiterungen installiert sind",
+                    "risk": "Das Installieren von nicht autorisierten Azure-VM-Erweiterungen kann Sicherheitsrisiken oder Betriebsprobleme einführen, da diese Erweiterungen mit administrativen Privilegien laufen und breiten Zugriff auf die virtuelle Maschine haben.",
+                    "remediation": "Um nicht genehmigte Erweiterungen zu entfernen:\nIm Azure-Portal:\n1. Gehen Sie zu Virtuelle Maschinen.\n2. Für jede VM gehen Sie zu Erweiterungen + Anwendungen.\n3. Deinstallieren Sie alle nicht genehmigten Erweiterungen.\nMit Azure CLI:\nVerwenden Sie `az vm extension delete --resource-group <resourceGroupName> --vm-name <vmName> --name <extensionName>`, um eine nicht genehmigte Erweiterung zu entfernen.\nMit PowerShell:\nFühren Sie `Remove-AzVMExtension -ResourceGroupName <ResourceGroupName> -Name <ExtensionName> -VMName <VirtualMachineName>` für jede identifizierte nicht genehmigte Erweiterung aus."
+                }
+            }
+        },
+        {
+            "name": "endpoint_protection_on_vms",
+            "title": "Ensure that Endpoint Protection for all Virtual Machines is installed",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Without endpoint protection, virtual machines are vulnerable to malware and other malicious attacks, which can compromise data integrity and privacy.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. Go to Security Center.\n2. Click on Recommendations.\n3. Check for any recommendations indicating that Endpoint Protection is not installed on Azure VMs.\nFrom Azure CLI:\nRun `az vm show -g <MyResourceGroup> -n <MyVm> -d --query \"resources[?type=='Microsoft.Compute/virtualMachines/extensions'].{ExtensionName:name}\" -o table` to list the installed extensions.",
+                "url": "https://docs.microsoft.com/en-us/azure/security-center/security-center-install-endpoint-protection"
+            },
+            "remediation": {
+                "text": "To install endpoint protection:\nFrom Azure Portal:\n1. Go to Security Center.\n2. Follow the instructions to install endpoint protection as recommended.\nAlternatively, use your preferred endpoint protection tool following its specific installation guide for the operating system on your VMs.",
+                "url": "https://docs.microsoft.com/en-us/azure/security-center/security-center-install-endpoint-protection"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-endpoint-security#es-1-use-endpoint-detection-and-response-edr",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass auf allen virtuellen Maschinen ein Endpunktschutz installiert ist",
+                    "risk": "Ohne Endpunktschutz sind virtuelle Maschinen anfällig für Malware und andere bösartige Angriffe, die die Datenintegrität und die Privatsphäre beeinträchtigen können.",
+                    "remediation": "So installieren Sie den Endpunktschutz:\nIm Azure-Portal:\n1. Gehen Sie zum Security Center.\n2. Folgen Sie den Anweisungen zur Installation des Endpunktschutzes, wie empfohlen.\nAlternativ verwenden Sie Ihr bevorzugtes Endpunktschutz-Tool und folgen dessen spezifischer Installationsanleitung für das Betriebssystem Ihrer VMs."
+                }
+            }
+        },
+        {
+            "name": "ensure_trusted_launch_enabled",
+            "title": "Ensure Trusted Launch is enabled on Virtual Machines",
+            "result_kinds": ["azure_virtual_machine"],
+            "categories": ["security", "compliance"],
+            "risk": "Not enabling Trusted Launch on Azure VMs may expose them to various boot-level attacks such as rootkits and bootkits, which can compromise the VM's integrity and data security.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_virtual_machine) and virtual_machine_security_profile.uefi_settings.{v_tpm_enabled=false or secure_boot_enabled=false}"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Virtual Machines.\n2. For each VM, under Settings, click on Configuration.\n3. Under Security Type, select 'Trusted Launch Virtual Machines'.\n4. Check 'Enable Secure Boot' & 'Enable vTPM'.\n5. Click Apply.\nNote: Trusted launch is not supported on Azure Generation 1 VMs.",
+                "url": "https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-existing-vm?tabs=portal#enable-trusted-launch-on-existing-vm"
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch#secure-boot",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Trusted Launch auf virtuellen Maschinen aktiviert ist",
+                    "risk": "Das Nichtaktivieren von Trusted Launch auf Azure-VMs kann diese verschiedenen Angriffen auf Boot-Ebene wie Rootkits und Bootkits aussetzen, die die Integrität und Datensicherheit der VM gefährden können.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu Virtuelle Maschinen.\n2. Für jede VM klicken Sie unter Einstellungen auf Konfiguration.\n3. Unter Sicherheitstyp wählen Sie 'Trusted Launch Virtual Machines'.\n4. Aktivieren Sie 'Secure Boot' und 'vTPM'.\n5. Klicken Sie auf Anwenden.\nHinweis: Trusted Launch wird nicht auf Azure Generation 1 VMs unterstützt."
+                }
+            }
+        }
+    ]
+}

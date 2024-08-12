@@ -1,0 +1,31 @@
+{
+    "provider": "azure",
+    "service": "resource",
+    "checks": [
+        {
+            "name": "locks",
+            "title": "Ensure that Resource Locks are set for Mission-Critical Azure Resources",
+            "result_kinds": [],
+            "categories": ["security", "governance"],
+            "risk": "Without resource locks, critical Azure resources can be accidentally or maliciously modified or deleted, potentially leading to service disruptions or data loss.",
+            "severity": "high",
+            "detect": {
+                "manual": "Review the locks for each resource within Azure Portal or via Azure CLI and PowerShell commands to ensure they are properly set to either 'CanNotDelete' or 'ReadOnly'.",
+                "url": "https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-lock-resources"
+            },
+            "remediation": {
+                "text": "For each critical resource, apply the appropriate lock through the Azure Portal, Azure CLI, or PowerShell. Set the lock type based on the necessity of preventing deletions or modifications.",
+                "url": "https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-subscription-governance#azure-resource-locks"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-asset-management#am-4-limit-access-to-asset-management",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Ressourcensperren für missionskritische Azure-Ressourcen gesetzt sind",
+                    "risk": "Ohne Ressourcensperren können kritische Azure-Ressourcen versehentlich oder böswillig geändert oder gelöscht werden, was zu Dienstunterbrechungen oder Datenverlust führen kann.",
+                    "remediation": "Legen Sie für jede kritische Ressource eine entsprechende Sperre über das Azure Portal, Azure CLI oder PowerShell fest. Wählen Sie den Sperrtyp basierend auf der Notwendigkeit, Löschungen oder Änderungen zu verhindern."
+                }
+            }
+        }
+
+    ]
+}

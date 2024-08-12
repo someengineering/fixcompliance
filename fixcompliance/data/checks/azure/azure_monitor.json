@@ -1,0 +1,443 @@
+{
+    "provider": "azure",
+    "service": "monitor",
+    "checks": [
+        {
+            "name": "subscription_diagnostic",
+            "title": "Ensure that a 'Diagnostic Setting' exists for Subscription Activity Logs",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["compliance", "security"],
+            "risk": "Lack of diagnostic settings for activity logs may lead to insufficient logging and inability to track or analyze security-related activities, breaches, or compliance across Azure resources.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(azure_subscription) with(empty, -[2]-> is(azure_monitor_diagnostic_settings))"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Monitor.\n2. Click on Activity Log.\n3. Click on Export Activity Logs.\n4. Click + Add diagnostic setting.\n5. Enter a Diagnostic setting name.\n6. Select Categories for the diagnostic settings.\n7. Select the appropriate Destination details (Log Analytics, Storage Account, Event Hub, or Partner solution).\n8. Click Save.\nFrom Azure CLI:\nCreate Diagnostic Settings for a subscription:\naz monitor diagnostic-settings subscription create --subscription <subscription id> --name <diagnostic settings name> --logs \"[{category: 'Security', enabled: true}, {category: 'Administrative', enabled: true}]\" --storage-account <storage account ID> --workspace <log analytics workspace ID>",
+                "url": "https://learn.microsoft.com/en-us/cli/azure/monitor/diagnostic-settings?view=azure-cli-latest"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/activity-log-collect",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine 'Diagnoseeinstellung' für die Aktivitätsprotokolle des Abonnements existiert",
+                    "risk": "Das Fehlen von Diagnoseeinstellungen für Aktivitätsprotokolle kann zu unzureichender Protokollierung und der Unfähigkeit führen, sicherheitsrelevante Aktivitäten, Verstöße oder Compliance über Azure-Ressourcen hinweg zu verfolgen oder zu analysieren.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu Monitor.\n2. Klicken Sie auf Aktivitätsprotokoll.\n3. Klicken Sie auf Aktivitätsprotokolle exportieren.\n4. Klicken Sie auf + Diagnoseeinstellung hinzufügen.\n5. Geben Sie einen Namen für die Diagnoseeinstellung ein.\n6. Wählen Sie Kategorien für die Diagnoseeinstellungen.\n7. Wählen Sie die entsprechenden Zielangaben (Log Analytics, Speicherkonto, Event Hub oder Partnerlösung).\n8. Klicken Sie auf Speichern.\nVom Azure CLI:\nErstellen Sie Diagnoseeinstellungen für ein Abonnement:\naz monitor diagnostic-settings subscription create --subscription <Abonnement-ID> --name <Name der Diagnoseeinstellungen> --logs \"[{category: 'Security', enabled: true}, {category: 'Administrative', enabled: true}]\" --storage-account <Speicherkonto-ID> --workspace <Log-Analytics-Workspace-ID>"
+                }
+            }
+        },
+        {
+            "name": "subscription_diagnostic_captures_categories",
+            "title": "Ensure Diagnostic Setting captures appropriate categories for Subscription Activity Logs",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["compliance", "security"],
+            "risk": "Without proper diagnostic settings, capturing crucial management plane activities may be neglected, leading to insufficient oversight and inability to respond to or detect breaches effectively.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(azure_subscription) with(empty, -[2]-> is(azure_monitor_diagnostic_settings) and logs.administrative.enabled==true and logs.alert.enabled=true and logs.policy.enabled=true and logs.security.enabled=true)"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to Azure Monitor.\n2. Click Activity log.\n3. Click on Export Activity Logs.\n4. Select the Subscription from the drop down menu.\n5. Click on Add diagnostic setting.\n6. Enter a name for your new Diagnostic Setting.\n7. Ensure the categories Administrative, Alert, Policy, and Security are selected.\n8. Choose the destination details according to your organization's needs.\nFrom Azure CLI:\nConfigure Diagnostic Settings to capture specific categories:\naz monitor diagnostic-settings subscription create --subscription <subscription id> --name <diagnostic settings name> --logs \"[{category: 'Security', enabled: true}, {category: 'Administrative', enabled: true}, {category: 'Alert', enabled: true}, {category: 'Policy', enabled: true}]\" --destination <destination details>\nFrom PowerShell:\nSetup Diagnostic Settings with specified categories enabled:\n$LogCategories = @('Administrative', 'Alert', 'Policy', 'Security') | ForEach-Object { New-AzDiagnosticSettingSubscriptionLogSettingsObject -Category $_ -Enabled $true }\nNew-AzSubscriptionDiagnosticSetting -SubscriptionId <subscription ID> -Name <Diagnostic settings name> -Log $LogCategories",
+                "url": "https://learn.microsoft.com/en-us/cli/azure/monitor/diagnostic-settings?view=azure-cli-latest"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/diagnostic-settings",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Diagnoseeinstellung angemessene Kategorien für Abonnement-Aktivitätsprotokolle erfasst",
+                    "risk": "Ohne angemessene Diagnoseeinstellungen kann die Erfassung wichtiger Managementebenen-Aktivitäten vernachlässigt werden, was zu unzureichender Überwachung und Unfähigkeit führt, effektiv auf Sicherheitsverletzungen zu reagieren oder diese zu erkennen.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu Azure Monitor.\n2. Klicken Sie auf Aktivitätsprotokoll.\n3. Klicken Sie auf Aktivitätsprotokolle exportieren.\n4. Wählen Sie das Abonnement aus dem Dropdown-Menü.\n5. Klicken Sie auf Diagnoseeinstellung hinzufügen.\n6. Geben Sie einen Namen für Ihre neue Diagnoseeinstellung ein.\n7. Stellen Sie sicher, dass die Kategorien Administrative, Alert, Policy und Security ausgewählt sind.\n8. Wählen Sie die Zielangaben gemäß den Bedürfnissen Ihrer Organisation.\nVom Azure CLI:\nKonfigurieren Sie Diagnoseeinstellungen, um spezifische Kategorien zu erfassen:\naz monitor diagnostic-settings subscription create --subscription <Abonnement-ID> --name <Name der Diagnoseeinstellungen> --logs \"[{category: 'Security', enabled: true}, {category: 'Administrative', enabled: true}, {category: 'Alert', enabled: true}, {category: 'Policy', enabled: true}]\" --destination <Zielangaben>\nVom PowerShell:\nRichten Sie Diagnoseeinstellungen mit aktivierten spezifizierten Kategorien ein:\n$LogCategories = @('Administrative', 'Alert', 'Policy', 'Security') | ForEach-Object { New-AzDiagnosticSettingSubscriptionLogSettingsObject -Category $_ -Enabled $true }\nNew-AzSubscriptionDiagnosticSetting -SubscriptionId <Abonnement-ID> -Name <Name der Diagnoseeinstellungen> -Log $LogCategories"
+                }
+            }
+        },
+        {
+            "name": "logs_storage_encrypted_with_CMK",
+            "title": "Ensure the storage account containing the container with activity logs is encrypted with Customer Managed Key (CMK)",
+            "result_kinds": ["azure_storage_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Using default encryption for activity logs stored in storage accounts might not meet certain security compliance requirements. Configuring Customer Managed Keys (CMK) provides greater control over the encryption keys and ensures data confidentiality.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_monitor_subscription_diagnostic_settings) --> is(azure_storage_account) and storage_encryption.key_source!=\"Microsoft.Keyvault\""
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Navigate to the Storage accounts blade.\n2. Click on the storage account.\n3. Under Security + networking, click Encryption.\n4. Select Customer-managed keys and configure the key.\nFrom Azure CLI:\nUpdate the storage account to use a customer-managed key:\naz storage account update --name <storage account name> --resource-group <resource group> --encryption-key-source Microsoft.Keyvault --encryption-key-vault <Key Vault URI> --encryption-key-name <Key Name> --encryption-key-version <Key Version>\nFrom PowerShell:\nConfigure the storage account to use a customer-managed key:\nSet-AzStorageAccount -ResourceGroupName <resource group name> -Name <storage account name> -KeyVaultEncryption -KeyVaultUri <key vault URI> -KeyName <key name>",
+                "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-data-protection#dp-5-use-customer-managed-key-option-in-data-at-rest-encryption-when-required"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log-manage-storage",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass das Speicherkonto, das den Container mit Aktivitätsprotokollen enthält, mit einem vom Kunden verwalteten Schlüssel (CMK) verschlüsselt ist",
+                    "risk": "Die Verwendung der Standardverschlüsselung für in Speicherkonten gespeicherte Aktivitätsprotokolle entspricht möglicherweise nicht bestimmten Sicherheitsanforderungen. Die Konfiguration von vom Kunden verwalteten Schlüsseln (CMK) bietet eine größere Kontrolle über die Verschlüsselungsschlüssel und gewährleistet die Vertraulichkeit der Daten.",
+                    "remediation": "Vom Azure-Portal:\n1. Navigieren Sie zur Speicherkonten-Kachel.\n2. Klicken Sie auf das Speicherkonto.\n3. Unter Sicherheit + Netzwerk, klicken Sie auf Verschlüsselung.\n4. Wählen Sie Vom Kunden verwaltete Schlüssel und konfigurieren Sie den Schlüssel.\nVom Azure CLI:\nAktualisieren Sie das Speicherkonto, um einen vom Kunden verwalteten Schlüssel zu verwenden:\naz storage account update --name <Name des Speicherkontos> --resource-group <Ressourcengruppe> --encryption-key-source Microsoft.Keyvault --encryption-key-vault <Key Vault URI> --encryption-key-name <Schlüsselname> --encryption-key-version <Schlüsselversion>\nVom PowerShell:\nKonfigurieren Sie das Speicherkonto zur Verwendung eines vom Kunden verwalteten Schlüssels:\nSet-AzStorageAccount -ResourceGroupName <Ressourcengruppe> -Name <Name des Speicherkontos> -KeyVaultEncryption -KeyVaultUri <Key Vault URI> -KeyName <Schlüsselname>"
+                }
+            }
+        },
+        {
+            "name": "key_vault_logging",
+            "title": "Ensure that logging for Azure Key Vault is 'Enabled'",
+            "result_kinds": ["azure_key_vault"],
+            "categories": ["security", "compliance"],
+            "risk": "Not enabling logging for interactions with Azure Key Vault can prevent tracking of access and operations, potentially obscuring unauthorized access or operational errors.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_key_vault) with(empty, --> is(azure_monitor_diagnostic_settings) and logs.audit.enabled==true and logs.all_logs.enabled==true)"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Navigate to Key Vaults.\n2. For each Key Vault, access Diagnostic settings.\n3. Add or edit settings to enable logging, ensuring categories like 'audit' and 'allLogs' are selected.\nFrom Azure CLI:\nCreate or update diagnostic settings for each Key Vault to enable necessary logging categories.\nFrom PowerShell:\nSet up or adjust diagnostic settings to ensure comprehensive logging for each Key Vault.",
+                "url": "https://docs.microsoft.com/en-us/azure/key-vault/general/howto-logging"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/key-vault/general/monitoring",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Protokollierung für Azure Key Vault aktiviert ist",
+                    "risk": "Das Nichtaktivieren der Protokollierung für Interaktionen mit Azure Key Vault kann das Nachverfolgen von Zugriffen und Operationen verhindern, wodurch unbefugter Zugriff oder Betriebsfehler möglicherweise nicht erkannt werden.",
+                    "remediation": "Vom Azure-Portal:\n1. Navigieren Sie zu Key Vaults.\n2. Überprüfen Sie für jeden Key Vault die diagnostischen Einstellungen, um sicherzustellen, dass die Protokollierung aktiviert und richtig konfiguriert ist.\nVom Azure CLI:\nListen Sie alle Key Vaults auf und überprüfen Sie die diagnostischen Einstellungen für jeden, um zu bestätigen, dass die Protokollierung aktiviert ist.\nVom PowerShell:\nAbrufen und Überprüfen der diagnostischen Einstellungen für jeden Key Vault, um sicherzustellen, dass Protokollierungskategorien wie 'audit' und 'allLogs' aktiv sind."
+                }
+            }
+        },
+        {
+            "name": "flow_logs_analytics",
+            "title": "Ensure that Network Security Group Flow logs are captured and sent to Log Analytics",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Not capturing Network Security Group Flow logs limits visibility into network traffic, potentially obscuring unauthorized network activities or other security threats.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. Navigate to Network Watcher.\n2. Select NSG flow logs.\n3. Verify each NSG flow log's settings to ensure they are configured to send data to Log Analytics.\nFrom Azure Policy:\nRefer to policy IDs that ensure all NSG flow logs are enabled and properly configured."
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Navigate to Network Watcher.\n2. Select NSG flow logs and create a new flow log or update an existing one.\n3. Configure the flow log to send data to Log Analytics, ensuring rich analytics and appropriate retention settings.\n4. Review and create the flow log, confirming all settings are correct before finalizing.",
+                "url": "https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-nsg-flow-logging-portal"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-nsg-flow-logging-portal",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Netzwerksicherheitsgruppen-Datenflussprotokolle erfasst und an Log Analytics gesendet werden",
+                    "risk": "Das Nichterfassen von Netzwerksicherheitsgruppen-Datenflussprotokollen schränkt die Sichtbarkeit des Netzwerkverkehrs ein und kann unbefugte Netzwerkaktivitäten oder andere Sicherheitsbedrohungen verschleiern.",
+                    "remediation": "Vom Azure-Portal:\n1. Navigieren Sie zum Network Watcher.\n2. Wählen Sie NSG-Datenflussprotokolle und erstellen Sie ein neues Datenflussprotokoll oder aktualisieren Sie ein vorhandenes.\n3. Konfigurieren Sie das Datenflussprotokoll so, dass Daten an Log Analytics gesendet werden, wobei reichhaltige Analysen und angemessene Aufbewahrungseinstellungen sichergestellt sind.\n4. Überprüfen und erstellen Sie das Datenflussprotokoll und bestätigen Sie, dass alle Einstellungen korrekt sind."
+                }
+            }
+        },
+        {
+            "name": "appservice_http_logs",
+            "title": "Ensure that logging for Azure AppService 'HTTP logs' is enabled",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Not capturing HTTP logs for Azure App Services may result in missing critical data needed for security analysis and incident response.",
+            "severity": "medium",
+            "detect": {
+                "manual": "From Azure Portal:\n1. Navigate to App Services.\n2. For each App Service, go to Diagnostic Settings.\n3. Verify that 'HTTP logs' is configured to log to a destination suitable for your organization’s log consumption needs."
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Navigate to App Services.\n2. For each App Service, go to Diagnostic Settings.\n3. Click Add Diagnostic Setting.\n4. Check the checkbox next to 'HTTP logs'.\n5. Configure the log destination according to your organization's logging strategy (e.g., stream to an event hub for SIEM integration).",
+                "url": "https://docs.microsoft.com/en-us/azure/app-service/troubleshoot-diagnostic-logs"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/app-service/troubleshoot-diagnostic-logs",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass das Logging für Azure AppService 'HTTP-Logs' aktiviert ist",
+                    "risk": "Das Nichterfassen von HTTP-Logs für Azure App Services kann dazu führen, dass kritische Daten, die für die Sicherheitsanalyse und die Reaktion auf Vorfälle benötigt werden, fehlen.",
+                    "remediation": "Vom Azure-Portal:\n1. Navigieren Sie zu App Services.\n2. Für jeden App Service gehen Sie zu den Diagnoseeinstellungen.\n3. Klicken Sie auf Diagnoseeinstellung hinzufügen.\n4. Aktivieren Sie das Kontrollkästchen neben 'HTTP-Logs'.\n5. Konfigurieren Sie das Ziel des Logs gemäß der Protokollstrategie Ihrer Organisation (z.B. Stream zu einem Ereignishub für SIEM-Integration)."
+                }
+            }
+        },
+        {
+            "name": "alert_policy_assignment_change",
+            "title": "Ensure that Activity Log Alert exists for Create Policy Assignment",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Without monitoring create policy assignment events, unsolicited changes may go unnoticed, potentially compromising Azure policy configurations.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Authorization/policyAssignments/write\"})"
+            },
+            "remediation": {
+                "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Select Alert rule.\n4. Apply the condition for Create policy assignment and set up an action group to notify appropriate personnel.",
+                "url": "https://docs.microsoft.com/en-in/rest/api/monitor/activitylogalerts/createorupdate"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für die Erstellung von Richtlinienzuweisungen vorhanden ist",
+                    "risk": "Ohne Überwachung von Ereignissen zur Erstellung von Richtlinienzuweisungen können unerwünschte Änderungen unbemerkt bleiben, was potenziell die Azure-Richtlinienkonfigurationen gefährdet.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wählen Sie Warnregel.\n4. Wenden Sie die Bedingung für die Erstellung einer Richtlinienzuweisung an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_policy_assignment_delete",
+            "title": "Ensure that Activity Log Alert exists for Delete Policy Assignment",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring delete policy assignment events can delay detection of unsolicited changes, potentially exposing Azure environments to compliance risks and unauthorized modifications.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Authorization/policyAssignments/delete\"})"
+            },
+            "remediation": {
+                "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete policy assignment and set up an action group to notify appropriate personnel.",
+                "url": "https://docs.microsoft.com/en-in/rest/api/monitor/activitylogalerts/createorupdate"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Löschen von Richtlinienzuweisungen vorhanden ist",
+                    "risk": "Nicht Überwachung von Ereignissen zum Löschen von Richtlinienzuweisungen kann die Erkennung unerwünschter Änderungen verzögern, was möglicherweise Azure-Umgebungen Compliance-Risiken und unbefugten Änderungen aussetzt.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Löschen einer Richtlinienzuweisung an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_network_security_group_change",
+            "title": "Ensure that Activity Log Alert exists for Create or Update Network Security Group",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Create or Update Network Security Group events can delay detection of suspicious network configuration changes, potentially exposing Azure environments to security risks.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/networkSecurityGroups/write\"})"
+            },
+            "remediation": {
+                "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create or Update Network Security Group and set up an action group to notify appropriate personnel.",
+                "url": "https://docs.microsoft.com/en-in/rest/api/monitor/activitylogalerts/createorupdate"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Erstellen oder Aktualisieren einer Netzwerksicherheitsgruppe vorhanden ist",
+                    "risk": "Nicht Überwachung von Ereignissen zum Erstellen oder Aktualisieren von Netzwerksicherheitsgruppen kann die Erkennung verdächtiger Netzwerkkonfigurationsänderungen verzögern, was möglicherweise Azure-Umgebungen Sicherheitsrisiken aussetzt.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Erstellen oder Aktualisieren einer Netzwerksicherheitsgruppe an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_network_security_group_delete",
+            "title": "Ensure that Activity Log Alert exists for Delete Network Security Group",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Delete Network Security Group events can delay the detection of unauthorized network changes, potentially leading to security breaches.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals in [\"Microsoft.Network/networkSecurityGroups/delete\", \"Microsoft.ClassicNetwork/networkSecurityGroups/delete\"]})"
+            },
+            "remediation": {
+                "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete Network Security Group and set up an action group to notify appropriate personnel.",
+                "url": "https://docs.microsoft.com/en-in/rest/api/monitor/activitylogalerts/createorupdate"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Löschen einer Netzwerksicherheitsgruppe vorhanden ist",
+                    "risk": "Nicht Überwachung von Löschen der Netzwerksicherheitsgruppen-Ereignisse kann die Erkennung von unbefugten Netzwerkänderungen verzögern, was potenziell zu Sicherheitsverletzungen führen könnte.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Löschen der Netzwerksicherheitsgruppe an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_security_solution_change",
+            "title": "Ensure that Activity Log Alert exists for Create or Update Security Solution",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Create or Update Security Solution events may delay the detection of unauthorized changes to security solutions, potentially leading to vulnerabilities.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Security/securitySolutions/write\"})"
+            },
+            "remediation": {
+                "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create or Update Security Solutions and set up an action group to notify appropriate personnel.",
+                "url": "https://docs.microsoft.com/en-in/rest/api/monitor/activitylogalerts/createorupdate"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Erstellen oder Aktualisieren einer Sicherheitslösung vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Ereignissen zum Erstellen oder Aktualisieren von Sicherheitslösungen kann die Erkennung von unbefugten Änderungen an Sicherheitslösungen verzögern, was möglicherweise zu Sicherheitslücken führt.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Erstellen oder Aktualisieren von Sicherheitslösungen an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_security_solution_delete",
+            "title": "Ensure that Activity Log Alert exists for Delete Security Solution",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Delete Security Solution events may delay the detection of unauthorized changes to security measures, potentially leaving the system vulnerable.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Security/securitySolutions/delete\"})"
+            },
+            "remediation": {
+                "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete Security Solutions and set up an action group to notify appropriate personnel.",
+                "url": "https://docs.microsoft.com/en-in/rest/api/monitor/activitylogalerts/createorupdate"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Löschen einer Sicherheitslösung vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Löschereignissen für Sicherheitslösungen kann die Erkennung von unbefugten Änderungen an Sicherheitsmaßnahmen verzögern und das System möglicherweise verwundbar machen.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Löschen von Sicherheitslösungen an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_sql_server_firewall_rule_change",
+            "title": "Ensure that Activity Log Alert exists for Create or Update SQL Server Firewall Rule",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Create or Update SQL Server Firewall Rule events can delay the detection of unauthorized network access changes, potentially exposing the SQL Server to external threats.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Sql/servers/firewallRules/write\"})"
+            },
+            "remediation": {
+                "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create/Update server firewall rule and set up an action group to notify appropriate personnel.",
+                "url": "https://docs.microsoft.com/en-in/rest/api/monitor/activitylogalerts/createorupdate"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Erstellen oder Aktualisieren von SQL Server-Firewallregeln vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Ereignissen zum Erstellen oder Aktualisieren von SQL Server-Firewallregeln kann die Erkennung von unbefugten Netzwerkzugriffsänderungen verzögern und den SQL Server potenziellen Bedrohungen aussetzen.",
+                    "remediation": "Um eine Warnung im Azure-Portal zu erstellen:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen, dann Erstellen.\n3. Wenden Sie die Bedingung für das Erstellen/Aktualisieren der Server-Firewallregel an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_sql_server_firewall_rule_delete",
+            "title": "Ensure that Activity Log Alert exists for Delete SQL Server Firewall Rule",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Delete SQL Server Firewall Rule events can lead to delayed detection of unauthorized changes to SQL Server network access, increasing the risk of security breaches.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Sql/servers/firewallRules/delete\"})"
+            },
+            "remediation": {
+                "text": "To set up an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete server firewall rule and set up an action group to notify appropriate personnel.",
+                "url": "https://docs.microsoft.com/en-in/rest/api/monitor/activitylogalerts/createorupdate"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für das Löschen von SQL Server-Firewallregeln vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Ereignissen zum Löschen von SQL Server-Firewallregeln kann die Erkennung von unbefugten Änderungen am Netzwerkzugriff des SQL Servers verzögern und das Risiko von Sicherheitsverletzungen erhöhen.",
+                    "remediation": "Um eine Warnung im Azure-Portal einzurichten:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen und dann auf Erstellen.\n3. Wenden Sie die Bedingung für das Löschen der Server-Firewallregel an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_public_ip_address_rule_change",
+            "title": "Ensure that Activity Log Alert exists for Create or Update Public IP Addresses rule",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Create or Update Public IP Address events can lead to delayed detection of unauthorized network access changes, increasing the risk of security breaches.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/publicIPAddresses/write\"})"
+            },
+            "remediation": {
+                "text": "To set up an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create or Update Public IP Address and set up an action group to notify appropriate personnel.",
+                "url": "https://docs.microsoft.com/en-in/rest/api/monitor/activitylogalerts/createorupdate"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für die Erstellung oder Aktualisierung von öffentlichen IP-Adressregeln vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Ereignissen zur Erstellung oder Aktualisierung öffentlicher IP-Adressen kann die Erkennung von unbefugten Netzwerkzugriffsänderungen verzögern und das Risiko von Sicherheitsverletzungen erhöhen.",
+                    "remediation": "Um eine Warnung im Azure-Portal einzurichten:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Klicken Sie auf Warnungen und dann auf Erstellen.\n3. Wenden Sie die Bedingung für die Erstellung oder Aktualisierung der öffentlichen IP-Adresse an und richten Sie eine Aktionsgruppe ein, um das entsprechende Personal zu benachrichtigen."
+                }
+            }
+        },
+        {
+            "name": "alert_public_ip_address_rule_delete",
+            "title": "Ensure that Activity Log Alert exists for Delete Public IP Address rule",
+            "result_kinds": ["azure_subscription"],
+            "categories": ["security", "compliance"],
+            "risk": "Not monitoring Delete Public IP Address events can obscure visibility into network access changes, potentially delaying the detection of suspicious activity.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/publicIPAddresses/delete\"})"
+            },
+            "remediation": {
+                "text": "To set up an alert in Azure Portal:\n1. Navigate to the Monitor blade.\n2. Select Alerts.\n3. Select Create.\n4. Select Alert rule.\n5. Choose a subscription.\n6. Select Apply.\n7. Select the Condition tab.\n8. Click See all signals.\n9. Select Delete Public IP Address.\n10. Click Apply.\n11. Select the Actions tab.\n12. Click Select action groups to select an existing action group, or Create action group to create a new one.\n13. Follow the prompts to choose or create an action group.\n14. Select the Details tab.\n15. Select a Resource group, provide an Alert rule name and an optional description.\n16. Click Review + create.\n17. Click Create.",
+                "url": "https://docs.microsoft.com/en-in/rest/api/monitor/activitylogalerts/createorupdate"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass eine Aktivitätsprotokollwarnung für die Löschung von öffentlichen IP-Adressregeln vorhanden ist",
+                    "risk": "Das Nichtüberwachen von Löschereignissen für öffentliche IP-Adressen kann die Sichtbarkeit von Netzwerkzugriffsänderungen verschleiern und die Erkennung verdächtiger Aktivitäten verzögern.",
+                    "remediation": "Um eine Warnung im Azure-Portal einzurichten:\n1. Navigieren Sie zur Monitor-Klinge.\n2. Wählen Sie Warnungen.\n3. Wählen Sie Erstellen.\n4. Wählen Sie Warnungsregel.\n5. Wählen Sie ein Abonnement.\n6. Wenden Sie an.\n7. Wählen Sie die Bedingung.\n8. Klicken Sie auf Alle Signale anzeigen.\n9. Wählen Sie Löschung der öffentlichen IP-Adresse.\n10. Wenden Sie an.\n11. Wählen Sie die Aktionen.\n12. Wählen Sie Aktionsgruppen aus, um eine vorhandene Gruppe zu wählen oder eine neue zu erstellen.\n13. Folgen Sie den Anweisungen, um eine Aktionsgruppe zu wählen oder zu erstellen.\n14. Wählen Sie die Details.\n15. Wählen Sie eine Ressourcengruppe, geben Sie einen Namen für die Warnungsregel und eine optionale Beschreibung an.\n16. Klicken Sie auf Überprüfen + erstellen.\n17. Klicken Sie auf Erstellen."
+                }
+            }
+        },
+        {
+            "name": "application_insights_configured",
+            "title": "Ensure Application Insights are Configured",
+            "result_kinds": [],
+            "categories": ["security", "performance"],
+            "risk": "Not configuring Application Insights may lead to missed opportunities for improving application performance and identifying the sources of potential incidents, impacting both cost efficiency and security.",
+            "severity": "high",
+            "detect": {
+                "manual": "To manually verify if Application Insights is configured:\n1. Log into the Azure Portal.\n2. Navigate to 'Application Insights' under Azure services or use the search bar to find it.\n3. Check if there is an existing Application Insights resource. Verify the configuration details within each Application Insights instance to ensure they are properly set up, including checking for linked resources such as the associated Log Analytics workspace.\n4. Optionally, use Azure CLI to run the following command to list Application Insights components: az monitor app-insights component show --query \"[].{ID:appId, Name:name, Tenant:tenantId, Location:location, Provisioning_State:provisioningState}\"\n5. Review the output to ensure each Application Insights component is active and properly configured as expected."
+            },
+            "remediation": {
+                "text": "To configure Application Insights in Azure Portal:\n1. Navigate to Application Insights.\n2. Under the Basics tab in the PROJECT DETAILS section, select your Subscription.\n3. Select the Resource group.\n4. Enter a Name in INSTANCE DETAILS.\n5. Select a Region.\n6. Choose 'Workspace-based' next to Resource Mode.\n7. Select the Subscription for the log analytics workspace in WORKSPACE DETAILS.\n8. Choose the appropriate Log Analytics Workspace.\n9. Proceed to the 'Next:Tags' section and enter Tags as Name, Value pairs.\n10. Review and create by clicking 'Next:Review+Create', then 'Create'.",
+                "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview"
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Application Insights konfiguriert sind",
+                    "risk": "Das Nichtkonfigurieren von Application Insights kann dazu führen, dass Chancen zur Verbesserung der Anwendungsleistung und zur Identifizierung der Quellen potenzieller Vorfälle verpasst werden, was sowohl die Kosteneffizienz als auch die Sicherheit beeinträchtigt.",
+                    "remediation": "So konfigurieren Sie Application Insights im Azure-Portal:\n1. Navigieren Sie zu Application Insights.\n2. Wählen Sie unter der Registerkarte Grundlagen im Abschnitt PROJEKTDETAILS Ihr Abonnement.\n3. Wählen Sie die Ressourcengruppe.\n4. Geben Sie einen Namen in den INSTANZDETAILS ein.\n5. Wählen Sie eine Region.\n6. Wählen Sie neben Ressourcenmodus 'Workspace-basiert'.\n7. Wählen Sie das Abonnement für den Log Analytics-Workspace in den WORKSPACE-DETAILS.\n8. Wählen Sie den entsprechenden Log Analytics-Workspace.\n9. Fahren Sie mit dem Abschnitt 'Next:Tags' fort und geben Sie Tags als Name-Wert-Paare ein.\n10. Überprüfen und erstellen Sie durch Klicken auf 'Next:Review+Create' und dann auf 'Create'."
+                }
+            }
+        },
+        {
+            "name": "resource_logging_enabled",
+            "title": "Ensure that Azure Monitor Resource Logging is Enabled for All Services that Support it",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Lack of resource logging reduces visibility into the data plane, compromising the ability to detect unauthorized access or malicious activities. This can potentially lead to undetected breaches or security incidents.",
+            "severity": "high",
+            "detect": {
+                "manual": "To manually verify if Azure Monitor Resource Logging is enabled:\n1. Log into the Azure Portal.\n2. Navigate to each Azure service that supports logging.\n3. Select the specific resource, then click on 'Diagnostic settings'.\n4. Verify if there's an existing diagnostic setting with logging enabled. If settings are missing or incorrect, logs may not be captured as required.\n5. For a more comprehensive check, use Azure CLI or PowerShell as described in the Audit section to list and verify the logging status for each supported resource.\n6. Ensure logging is configured as per compliance and governance requirements for each type of resource."
+            },
+            "remediation": {
+                "text": "To enable Azure Monitor Resource Logging:\n1. Go to the Azure Portal and navigate to each resource.\n2. Click on 'Diagnostic settings' within the resource menu.\n3. Click 'Add diagnostic setting' and configure the necessary logs and metrics as required.\n4. Ensure logs are being sent to a Storage Account, Event Hub, or Azure Monitor Log Analytics workspace.\n5. Set appropriate retention policies, typically keeping logs readily accessible for at least one year before moving to colder storage if needed.\n6. Save the settings to apply them.",
+                "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/monitor-azure-resource"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/monitor-azure-resource",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass das Azure Monitor-Ressourcenprotokollierung für alle unterstützenden Dienste aktiviert ist",
+                    "risk": "Das Fehlen von Ressourcenprotokollierung reduziert die Sichtbarkeit in der Datenebene und beeinträchtigt die Fähigkeit, unbefugten Zugriff oder böswillige Aktivitäten zu erkennen. Dies kann zu unerkannten Sicherheitsverletzungen oder -vorfällen führen.",
+                    "remediation": "Um die Azure Monitor-Ressourcenprotokollierung zu aktivieren:\n1. Gehen Sie zum Azure-Portal und navigieren Sie zu jeder Ressource.\n2. Klicken Sie in dem Ressourcenmenü auf 'Diagnoseeinstellungen'.\n3. Klicken Sie auf 'Diagnoseeinstellung hinzufügen' und konfigurieren Sie die erforderlichen Protokolle und Metriken.\n4. Stellen Sie sicher, dass Protokolle an ein Speicherkonto, eine Ereignishub oder eine Azure Monitor Log Analytics-Arbeitsumgebung gesendet werden.\n5. Legen Sie angemessene Aufbewahrungsrichtlinien fest, wobei Protokolle typischerweise mindestens ein Jahr lang leicht zugänglich aufbewahrt werden, bevor sie bei Bedarf in kältere Speicherungen verschoben werden.\n6. Speichern Sie die Einstellungen, um sie anzuwenden."
+                }
+            }
+        },
+        {
+            "name": "avoid_basic_consumption_sku_for_production",
+            "title": "Ensure that SKU Basic/Consumption is not used on artifacts that need to be monitored (Particularly for Production Workloads)",
+            "result_kinds": [],
+            "categories": ["compliance", "operational"],
+            "risk": "Using Basic or Free SKUs for production workloads compromises monitoring capabilities and service support, potentially violating service level agreements (SLAs).",
+            "severity": "high",
+            "detect": {
+                "manual": "To manually check if Basic or Consumption SKUs are used on artifacts that need monitoring:\n1. Open Azure Resource Graph Explorer in the Azure Portal.\n2. Click 'New query'.\n3. Paste the following query: 'Resources | where sku contains \"Basic\" or sku contains \"consumption\" | order by type'.\n4. Run the query and evaluate the results to identify resources using unsuitable SKUs."
+            },
+            "remediation": {
+                "text": "To remediate, follow the specific upgrade process for each artifact from Basic to Standard SKUs. This process varies by resource type but generally involves adjusting the SKU settings in the Azure management portal or via Azure CLI commands.",
+                "url": "https://azure.microsoft.com/en-us/support/plans/response/"
+            },
+            "url": "https://azure.microsoft.com/en-us/support/plans",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass keine Basic/Consumption-SKUs für zu überwachende Artefakte verwendet werden (insbesondere für Produktions-Workloads)",
+                    "risk": "Der Einsatz von Basic- oder Free-SKUs für Produktionsworkloads beeinträchtigt die Überwachungsfähigkeiten und den Service-Support, was möglicherweise zu Verstößen gegen Service Level Agreements (SLAs) führt.",
+                    "remediation": "Zur Behebung folgen Sie dem spezifischen Upgrade-Prozess für jedes Artefakt von Basic zu Standard-SKUs. Dieser Prozess variiert je nach Ressourcentyp, umfasst jedoch im Allgemeinen die Anpassung der SKU-Einstellungen im Azure-Verwaltungsportal oder über Azure CLI-Befehle."
+                }
+            }
+        }
+    ]
+}

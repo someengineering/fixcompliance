@@ -1,0 +1,144 @@
+{
+    "provider": "azure",
+    "service": "sql_server",
+    "checks": [
+        {
+            "name": "auditing_on",
+            "title": "Ensure that 'Auditing' is set to 'On' for Azure SQL Servers",
+            "result_kinds": ["azure_sql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Not enabling auditing on Azure SQL servers can lead to a lack of visibility into database activities, making it difficult to detect or investigate unauthorized or malicious activities. Enabling auditing ensures that activities are logged and can be reviewed to maintain regulatory compliance and security monitoring.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_sql_server) and blob_auditing_policy.state=\"Disabled\""
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to SQL servers.\n2. Select the SQL server instance.\n3. Under Security, click on Auditing.\n4. Toggle Enable Azure SQL Auditing to On.\n5. Select an Audit log destination and click Save.\nFrom PowerShell:\nEnable auditing for each SQL Server and set appropriate targets and retention policies:\n$serverList = Get-AzSqlServer\nforeach ($server in $serverList) {\n    Set-AzSqlServerAudit -ResourceGroupName $server.ResourceGroupName -ServerName $server.ServerName -BlobStorageTargetState Enabled -RetentionInDays 90 -LogAnalyticsTargetState Enabled -EventHubTargetState Enabled\n}",
+                "url": "https://docs.microsoft.com/en-us/azure/security-center/security-center-enable-auditing-on-sql-servers"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/security-center/security-center-enable-auditing-on-sql-servers",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die 'Überwachung' für Azure SQL-Server aktiviert ist",
+                    "risk": "Das Nichtaktivieren der Überwachung auf Azure SQL-Servern kann zu einem Mangel an Transparenz bei Datenbankaktivitäten führen, was die Erkennung oder Untersuchung unautorisierte oder bösartige Aktivitäten erschwert. Durch die Aktivierung der Überwachung wird sichergestellt, dass Aktivitäten protokolliert und überprüft werden können, um die Einhaltung von Vorschriften und die Sicherheitsüberwachung zu gewährleisten.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu SQL-Servern.\n2. Wählen Sie die SQL-Serverinstanz aus.\n3. Klicken Sie unter Sicherheit auf Überwachung.\n4. Schalten Sie die Azure SQL-Überwachung auf Ein.\n5. Wählen Sie ein Ziel für das Überwachungsprotokoll und klicken Sie auf Speichern.\nVom PowerShell:\nAktivieren Sie die Überwachung für jeden SQL-Server und setzen Sie geeignete Ziele und Aufbewahrungsrichtlinien:\n$serverList = Get-AzSqlServer\nforeach ($server in $serverList) {\n    Set-AzSqlServerAudit -ResourceGroupName $server.ResourceGroupName -ServerName $server.ServerName -BlobStorageTargetState Enabled -RetentionInDays 90 -LogAnalyticsTargetState Enabled -EventHubTargetState Enabled\n}"
+                }
+            }
+        },
+        {
+            "name": "allow_any_ip",
+            "title": "Ensure no Azure SQL Databases allow ingress from 0.0.0.0/0 (ANY IP)",
+            "result_kinds": ["azure_sql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Allowing unrestricted ingress from any IP to Azure SQL Databases exposes these databases to potential unauthorized access and attacks from any location, increasing the risk of data breaches and compliance issues.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(azure_sql_server_firewall_rule) and start_ip_address==\"0.0.0.0\" and end_ip_address==\"255.255.255.255\" <-- is(azure_sql_server)"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to SQL servers.\n2. For each SQL server, click on Networking.\n3. Uncheck 'Allow Azure services and resources to access this server'.\n4. Remove or modify any firewall rule that allows access from 0.0.0.0.\nFrom Azure CLI:\nRemove inappropriate firewall rules and set more restrictive ones:\naz sql server firewall-rule delete --resource-group <resource group> --server <sql server name> --name \"RuleName\"\naz sql server firewall-rule create --resource-group <resource group> --server <sql server name> --name \"NewRuleName\" --start-ip-address \"<restricted IP start>\" --end-ip-address \"<restricted IP end>\"\nFrom PowerShell:\nAdjust or remove firewall rules accordingly:\nRemove-AzSqlServerFirewallRule -FirewallRuleName \"RuleName\" -ResourceGroupName <resource group name> -ServerName <server name>\nSet-AzSqlServerFirewallRule -ResourceGroupName <resource group name> -ServerName <server name> -FirewallRuleName \"NewRuleName\" -StartIpAddress \"<restricted IP start>\" -EndIpAddress \"<restricted IP end>\"",
+                "url": "https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/configure-a-windows-firewall-for-database-engine-access?view=sql-server-2017"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/sql-database/sql-database-firewall-configure",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass keine Azure SQL-Datenbanken den Zugriff von 0.0.0.0/0 (ALLE IP) erlauben",
+                    "risk": "Das Zulassen von uneingeschränktem Zugriff von jeder IP auf Azure SQL-Datenbanken setzt diese Datenbanken potenziellen unbefugten Zugriffen und Angriffen von jedem Standort aus aus, was das Risiko von Datenverletzungen und Compliance-Problemen erhöht.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu SQL-Servern.\n2. Klicken Sie für jeden SQL-Server auf Netzwerk.\n3. Deaktivieren Sie 'Zugriff von Azure-Diensten und -Ressourcen auf diesen Server erlauben'.\n4. Entfernen oder ändern Sie jede Firewall-Regel, die den Zugriff von 0.0.0.0 erlaubt.\nVom Azure CLI:\nEntfernen Sie unangemessene Firewall-Regeln und setzen Sie restriktivere:\naz sql server firewall-rule delete --resource-group <resource group> --server <sql server name> --name \"RuleName\"\naz sql server firewall-rule create --resource-group <resource group> --server <sql server name> --name \"NewRuleName\" --start-ip-address \"<restricted IP start>\" --end-ip-address \"<restricted IP end>\"\nVom PowerShell:\nPassen Sie die Firewall-Regeln entsprechend an oder entfernen Sie sie:\nRemove-AzSqlServerFirewallRule -FirewallRuleName \"RuleName\" -ResourceGroupName <resource group name> -ServerName <server name>\nSet-AzSqlServerFirewallRule -ResourceGroupName <resource group name> -ServerName <server name> -FirewallRuleName \"NewRuleName\" -StartIpAddress \"<restricted IP start>\" -EndIpAddress \"<restricted IP end>\""
+                }
+            }
+        },
+        {
+            "name": "tde_protector_with_cmk",
+            "title": "Ensure SQL server's Transparent Data Encryption (TDE) protector is encrypted with Customer-managed key",
+            "result_kinds": ["azure_sql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Using Microsoft-managed keys for TDE does not allow organizations the same level of control and compliance assurance as using customer-managed keys. By managing their own keys, organizations can ensure that the encryption keys used for TDE are secured according to their own standards and compliance requirements.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_sql_server) and encryption_protector.server_key_type!=\"AzureKeyVault\""
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to SQL servers.\n2. For the desired server instance, click on Transparent Data Encryption.\n3. Set Transparent Data Encryption to Customer-managed key.\n4. Select an existing key or create a new key in the Azure Key Vault.\n5. Ensure 'Make selected key the default TDE protector' is checked.\nFrom Azure CLI:\nSet the TDE protector to use a customer-managed key using:\naz sql server tde-key set --resource-group <resourceGroupName> --server <serverName> --server-key-type AzureKeyVault --kid <keyIdentifier>\nFrom PowerShell:\nSet the TDE protector with a Customer-managed Key Vault key using:\nSet-AzSqlServerTransparentDataEncryptionProtector -Type AzureKeyVault -KeyId <KeyIdentifier> -ServerName <ServerName> -ResourceGroupName <ResourceGroupName>",
+                "url": "https://docs.microsoft.com/en-us/sql/relational-databases/security/encryption/transparent-data-encryption-byok-azure-sql"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/sql-database/transparent-data-encryption-byok-azure-sql",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der TDE-Schutz des SQL-Servers mit einem vom Kunden verwalteten Schlüssel verschlüsselt ist",
+                    "risk": "Die Verwendung von von Microsoft verwalteten Schlüsseln für TDE bietet Organisationen nicht dasselbe Maß an Kontrolle und Compliance-Sicherheit wie die Verwendung von vom Kunden verwalteten Schlüsseln. Indem sie ihre eigenen Schlüssel verwalten, können Organisationen sicherstellen, dass die für TDE verwendeten Verschlüsselungsschlüssel gemäß ihren eigenen Standards und Compliance-Anforderungen gesichert sind.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu SQL-Servers.\n2. Klicken Sie für die gewünschte Serverinstanz auf Transparent Data Encryption.\n3. Stellen Sie Transparent Data Encryption auf einen vom Kunden verwalteten Schlüssel ein.\n4. Wählen Sie einen vorhandenen Schlüssel aus oder erstellen Sie einen neuen Schlüssel im Azure Key Vault.\n5. Stellen Sie sicher, dass 'Make selected key the default TDE protector' aktiviert ist.\nVom Azure CLI:\nSetzen Sie den TDE-Schutz auf einen vom Kunden verwalteten Schlüssel mit dem Befehl:\naz sql server tde-key set --resource-group <resourceGroupName> --server <serverName> --server-key-type AzureKeyVault --kid <keyIdentifier>\nVom PowerShell:\nSetzen Sie den TDE-Schutz mit einem vom Kunden verwalteten Key Vault-Schlüssel mit dem Befehl:\nSet-AzSqlServerTransparentDataEncryptionProtector -Type AzureKeyVault -KeyId <KeyIdentifier> -ServerName <ServerName> -ResourceGroupName <ResourceGroupName>"
+                }
+            }
+        },
+        {
+            "name": "admin_auth_using_entra",
+            "title": "Ensure that Microsoft Entra authentication is Configured for SQL Servers",
+            "result_kinds": ["azure_sql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Not using Microsoft Entra authentication for SQL Database can lead to less centralized, potentially less secure management of credentials, increasing the risk of unauthorized access.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_sql_server) and server_administrators[*].administrator_type!=\"ActiveDirectory\""
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to SQL servers.\n2. For each SQL server, click on 'Microsoft Entra admin'.\n3. Click on 'Set admin'.\n4. Select an admin from the directory and click 'Save'.\nFrom Azure CLI:\nSet AD Admin for each server:\naz sql server ad-admin create --resource-group <resource group name> --server <server name> --display-name <display name> --object-id <object id of user>\nFrom PowerShell:\nSet Entra ID Admin for each server:\nSet-AzSqlServerActiveDirectoryAdministrator -ResourceGroupName <resource group name> -ServerName <server name> -DisplayName \"<Display name of AD account to set as DB administrator>\"",
+                "url": "https://learn.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-configure"
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-configure",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Microsoft Entra-Authentifizierung für SQL-Server konfiguriert ist",
+                    "risk": "Die Nichtverwendung der Microsoft Entra-Authentifizierung für SQL-Datenbanken kann zu einer weniger zentralisierten und möglicherweise weniger sicheren Verwaltung von Anmeldeinformationen führen, wodurch das Risiko eines unbefugten Zugriffs erhöht wird.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu SQL-Servern.\n2. Klicken Sie für jeden SQL-Server auf 'Microsoft Entra admin'.\n3. Klicken Sie auf 'Admin festlegen'.\n4. Wählen Sie einen Administrator aus dem Verzeichnis aus und klicken Sie auf 'Speichern'.\nVom Azure CLI:\nLegen Sie den AD-Admin für jeden Server fest:\naz sql server ad-admin create --resource-group <Ressourcengruppe> --server <Servername> --display-name <Anzeigename> --object-id <Objekt-ID des Benutzers>\nVom PowerShell:\nLegen Sie den Entra ID Admin für jeden Server fest:\nSet-AzSqlServerActiveDirectoryAdministrator -ResourceGroupName <Ressourcengruppe> -ServerName <Servername> -DisplayName \"<Anzeigename des AD-Kontos, das als DB-Administrator festgelegt werden soll>\""
+                }
+            }
+        },
+        {
+            "name": "db_data_encryption",
+            "title": "Ensure that 'Data encryption' is set to 'On' on a SQL Database",
+            "result_kinds": ["azure_sql_server_database"],
+            "categories": ["security", "compliance"],
+            "risk": "Without Transparent Data Encryption (TDE) enabled, data at rest including databases, backups, and logs remains unencrypted, exposing it to potential threats and breaches. Enabling TDE helps protect data against unauthorized access by encrypting the storage of an entire database, without affecting the daily operations of the database.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_sql_server_database) and transparent_data_encryption_status==Disabled"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to SQL databases.\n2. For each DB instance, click on Transparent data encryption.\n3. Set Data encryption to On.\nFrom Azure CLI:\nEnable TDE for each SQL DB instance:\naz sql db tde set --resource-group <resourceGroup> --server <dbServerName> --database <dbName> --status Enabled\nFrom PowerShell:\nEnable TDE for SQL DB instances:\n$Databases = Get-AzSqlDatabase -ServerName <SQL Server Name> -ResourceGroupName <Resource Group Name> | Where-Object {$_.DatabaseName -ne 'master'}\nforeach ($Db in $Databases) { Set-AzSqlDatabaseTransparentDataEncryption -ResourceGroupName $Db.ResourceGroupName -ServerName $Db.ServerName -DatabaseName $Db.DatabaseName -State 'Enabled' }",
+                "url": "https://docs.microsoft.com/en-us/sql/relational-databases/security/encryption/transparent-data-encryption-with-azure-sql-database"
+            },
+            "url": "https://docs.microsoft.com/en-us/sql/relational-databases/security/encryption/transparent-data-encryption-with-azure-sql-database",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Datenverschlüsselung' auf einem SQL-Datenbank auf 'Ein' gesetzt ist",
+                    "risk": "Ohne aktivierte Transparente Datenverschlüsselung (TDE) bleiben Daten im Ruhezustand, einschließlich Datenbanken, Backups und Protokolle, unverschlüsselt, was sie potenziellen Bedrohungen und Verstößen aussetzt. Durch Aktivieren von TDE wird der Speicher einer gesamten Datenbank verschlüsselt, was den Schutz vor unbefugtem Zugriff verbessert, ohne den täglichen Betrieb der Datenbank zu beeinträchtigen.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu SQL-Datenbanken.\n2. Klicken Sie für jede DB-Instanz auf Transparente Datenverschlüsselung.\n3. Stellen Sie Datenverschlüsselung auf Ein.\nVom Azure CLI:\nAktivieren Sie TDE für jede SQL-DB-Instanz:\naz sql db tde set --resource-group <resourceGroup> --server <dbServerName> --database <dbName> --status Enabled\nVom PowerShell:\nAktivieren Sie TDE für SQL-DB-Instanzen:\n$Databases = Get-AzSqlDatabase -ServerName <SQL Server Name> -ResourceGroupName <Resource Group Name> | Where-Object {$_.DatabaseName -ne 'master'}\nforeach ($Db in $Databases) { Set-AzSqlDatabaseTransparentDataEncryption -ResourceGroupName $Db.ResourceGroupName -ServerName $Db.ServerName -DatabaseName $Db.DatabaseName -State 'Enabled' }"
+                }
+            }
+        },
+        {
+            "name": "audit_retention",
+            "title": "Ensure that 'Auditing' Retention is 'greater than 90 days' on SQL Servers",
+            "result_kinds": ["azure_sql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Audit logs provide a historical record of operations that could help detect security incidents. Insufficient audit log retention may hinder the investigation of past security incidents or breaches.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_sql_server) and blob_auditing_policy.{state!=Enabled or retention_days<90}"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go to SQL servers.\n2. For each server instance, click on Auditing.\n3. If storage is selected, expand Advanced properties.\n4. Set the Retention (days) setting to a value greater than 90 days or to 0 for unlimited retention.\n5. Click Save.\nFrom PowerShell:\nFor each Server, update the retention policy to more than 90 days:\n$Servers = Get-AzSqlServer\nforeach ($Server in $Servers) {\n    Set-AzSqlServerAudit -ResourceGroupName $Server.ResourceGroupName -ServerName $Server.ServerName -RetentionInDays 91\n}",
+                "url": "https://docs.microsoft.com/en-us/azure/sql-database/sql-database-auditing"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/sql-database/sql-database-auditing",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die 'Auditing'-Aufbewahrungsfrist auf SQL-Servern 'mehr als 90 Tage' beträgt",
+                    "risk": "Prüfprotokolle bieten einen historischen Überblick über Operationen, die helfen könnten, Sicherheitsvorfälle zu erkennen. Eine unzureichende Aufbewahrungsfrist von Prüfprotokollen kann die Untersuchung vergangener Sicherheitsvorfälle oder Datenverletzungen behindern.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie zu SQL-Servern.\n2. Klicken Sie bei jeder Serverinstanz auf Auditing.\n3. Wenn Speicher ausgewählt ist, erweitern Sie die erweiterten Eigenschaften.\n4. Stellen Sie die Einstellung für die Aufbewahrungszeit (Tage) auf einen Wert von mehr als 90 Tagen oder auf 0 für unbegrenzte Aufbewahrung ein.\n5. Klicken Sie auf Speichern.\nVom PowerShell:\nAktualisieren Sie für jeden Server die Aufbewahrungsrichtlinie auf mehr als 90 Tage:\n$Servers = Get-AzSqlServer\nforeach ($Server in $Servers) {\n    Set-AzSqlServerAudit -ResourceGroupName $Server.ResourceGroupName -ServerName $Server.ServerName -RetentionInDays 91\n}"
+                }
+            }
+        }
+    ]
+}

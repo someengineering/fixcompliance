@@ -1,0 +1,190 @@
+{
+    "provider": "azure",
+    "service": "postgresql",
+    "checks": [
+        {
+            "name": "enforce_ssl",
+            "title": "Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server",
+            "result_kinds": ["azure_postgresql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Not enforcing SSL connections on PostgreSQL Database Servers can expose data to 'man in the middle' attacks, compromising the security of data in transit between the database server and client applications.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_postgresql_server_configuration) and config.require_secure_transport!=true <-- is(azure_postgresql_server)"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com\n2. Go to Azure Database for PostgreSQL server\n3. For each database, click on Connection security\n4. In SSL settings, click on ENABLED to enforce SSL connections\n5. Click Save\nFrom Azure CLI:\nUse the below command to enforce ssl connection for PostgreSQL Database.\naz postgres server update --resource-group <resourceGroupName> --name <serverName> --ssl-enforcement Enabled\nFrom PowerShell:\nUpdate-AzPostgreSqlServer -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -SslEnforcement Enabled",
+                "url": "https://learn.microsoft.com/en-us/powershell/module/az.postgresql/update-azpostgresqlserver?view=azps-9.2.0#example-1-update-postgresql-server-by-resource-group-and-server-name"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/postgresql/concepts-ssl-connection-security",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die 'SSL-Verbindung erzwingen' für den PostgreSQL-Datenbankserver auf 'AKTIVIERT' eingestellt ist",
+                    "risk": "Das Nichtdurchsetzen von SSL-Verbindungen auf PostgreSQL-Datenbankservern kann Daten 'Man-in-the-Middle'-Angriffen aussetzen und die Sicherheit von Daten, die zwischen dem Datenbankserver und den Client-Anwendungen übertragen werden, gefährden.",
+                    "remediation": "Vom Azure-Portal:\n1. Melden Sie sich beim Azure Portal an unter https://portal.azure.com\n2. Gehen Sie zu Azure Database für PostgreSQL-Server\n3. Klicken Sie für jede Datenbank auf Verbindungssicherheit\n4. In den SSL-Einstellungen, klicken Sie auf AKTIVIERT, um SSL-Verbindungen zu erzwingen\n5. Klicken Sie auf Speichern\nVon Azure CLI:\nVerwenden Sie den untenstehenden Befehl, um die SSL-Verbindung für die PostgreSQL-Datenbank zu erzwingen.\naz postgres server update --resource-group <resourceGroupName> --name <serverName> --ssl-enforcement Enabled\nVon PowerShell:\nUpdate-AzPostgreSqlServer -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -SslEnforcement Enabled"
+                }
+            }
+        },
+        {
+            "name": "log_checkpoints",
+            "title": "Ensure Server Parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server",
+            "result_kinds": ["azure_postgresql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Not enabling log_checkpoints on PostgreSQL servers can result in a lack of detailed logs, hindering the ability to identify, troubleshoot, and repair configuration errors and performance issues effectively.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_postgresql_server_configuration) and config.log_checkpoints!=true <-- is(azure_postgresql_server)"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for log_checkpoints.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update log_checkpoints configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_checkpoints --value on\nFrom PowerShell:\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> --ServerName <ServerName> --Name log_checkpoints -Value on",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Serverparameter 'log_checkpoints' für PostgreSQL-Datenbankserver auf 'EIN' gesetzt ist",
+                    "risk": "Das Nichtaktivieren von log_checkpoints auf PostgreSQL-Servern kann zu einem Mangel an detaillierten Protokollen führen, was die Fähigkeit beeinträchtigt, Konfigurationsfehler und Leistungsprobleme effektiv zu identifizieren, zu diagnostizieren und zu beheben.",
+                    "remediation": "Vom Azure-Portal:\n1. Wählen Sie im Azure-Startmenü das Portalmenü aus.\n2. Gehen Sie zu Azure Database für PostgreSQL-Server.\n3. Klicken Sie für jede Datenbank auf Serverparameter.\n4. Suchen Sie nach log_checkpoints.\n5. Klicken Sie auf EIN und speichern Sie.\nVon Azure CLI:\nVerwenden Sie den folgenden Befehl, um die log_checkpoints-Konfiguration zu aktualisieren.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_checkpoints --value on\nVon PowerShell:\nAktualisieren Sie die AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> --ServerName <ServerName> --Name log_checkpoints -Wert on"
+                }
+            }
+        },
+        {
+            "name": "log_connections",
+            "title": "Ensure server parameter 'log_connections' is set to 'ON' for PostgreSQL Database Server",
+            "result_kinds": ["azure_postgresql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Not enabling log_connections on PostgreSQL servers can result in a lack of logging for connection attempts, both successful and unsuccessful, which is critical for security auditing and identifying potential unauthorized access.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_postgresql_server_configuration) and config.log_connections!=true <-- is(azure_postgresql_server)"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for log_connections.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update log_connections configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_connections --value on\nFrom PowerShell:\nUse the below command to update log_connections configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> --ServerName <ServerName> -Name log_connections -Value on",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Serverparameter 'log_connections' für PostgreSQL-Datenbankserver auf 'EIN' gesetzt ist",
+                    "risk": "Das Nichtaktivieren von log_connections auf PostgreSQL-Servern kann dazu führen, dass keine Protokollierung von Verbindungsversuchen erfolgt, was für die Sicherheitsüberwachung und die Identifizierung potenziell unbefugter Zugriffe entscheidend ist.",
+                    "remediation": "Vom Azure-Portal:\n1. Melden Sie sich beim Azure Portal an unter https://portal.azure.com.\n2. Gehen Sie zu Azure Database für PostgreSQL-Server.\n3. Klicken Sie für jede Datenbank auf Serverparameter.\n4. Suchen Sie nach log_connections.\n5. Klicken Sie auf EIN und speichern Sie.\nVon Azure CLI:\nVerwenden Sie den folgenden Befehl, um die Konfiguration von log_connections zu aktualisieren.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_connections --value on\nVon PowerShell:\nVerwenden Sie den folgenden Befehl, um die Konfiguration von log_connections zu aktualisieren.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> --ServerName <ServerName> -Name log_connections -Value on"
+                }
+            }
+        },
+        {
+            "name": "log_disconnections",
+            "title": "Ensure server parameter 'log_disconnections' is set to 'ON' for PostgreSQL Database Server",
+            "result_kinds": ["azure_postgresql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Failing to enable log_disconnections on PostgreSQL servers may result in missing critical data regarding session terminations, which can be essential for auditing and diagnosing issues related to abrupt or unauthorized disconnections.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_postgresql_server_configuration) and config.log_disconnections!=true <-- is(azure_postgresql_server)"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. From Azure Home select the Portal Menu\n2. Go to Azure Database for PostgreSQL servers\n3. For each database, click on Server parameters\n4. Search for log_disconnections.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update log_disconnections configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_disconnections --value on\nFrom PowerShell:\nUse the below command to update log_disconnections configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name log_disconnections -Value on",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Serverparameter 'log_disconnections' für PostgreSQL-Datenbankserver auf 'EIN' gesetzt ist",
+                    "risk": "Das Nichtaktivieren von log_disconnections auf PostgreSQL-Servern kann dazu führen, dass kritische Daten zu Sitzungsbeendigungen fehlen, was für Audits und die Diagnose von Problemen im Zusammenhang mit abrupten oder unbefugten Trennungen wesentlich ist.",
+                    "remediation": "Vom Azure-Portal:\n1. Wählen Sie im Azure-Startmenü das Portalmenü aus.\n2. Gehen Sie zu Azure Database für PostgreSQL-Server.\n3. Klicken Sie für jede Datenbank auf Serverparameter.\n4. Suchen Sie nach log_disconnections.\n5. Klicken Sie auf EIN und speichern Sie.\nVon Azure CLI:\nVerwenden Sie den folgenden Befehl, um die Konfiguration von log_disconnections zu aktualisieren.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_disconnections --value on\nVon PowerShell:\nVerwenden Sie den folgenden Befehl, um die Konfiguration von log_disconnections zu aktualisieren.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name log_disconnections -Value on"
+                }
+            }
+        },
+        {
+            "name": "connection_throttling",
+            "title": "Ensure server parameter 'connection_throttling' is set to 'ON' for PostgreSQL Database Server",
+            "result_kinds": ["azure_postgresql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Not enabling connection_throttling can expose PostgreSQL databases to potential DoS attacks by allowing an unrestricted number of concurrent connections, potentially degrading system performance or causing system failures.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_postgresql_server_configuration) and config.`connection_throttle.enable`!=true <-- is(azure_postgresql_server)"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for connection_throttling.\n5. Click ON and save.\nFrom Azure CLI:\nUse the below command to update connection_throttling configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name connection_throttling --value on\nFrom PowerShell:\nUse the below command to update connection_throttling configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name connection_throttling -Value on",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Serverparameter 'connection_throttling' für PostgreSQL-Datenbankserver auf 'EIN' gesetzt ist",
+                    "risk": "Das Nichtaktivieren von connection_throttling kann PostgreSQL-Datenbanken potenziellen DoS-Angriffen aussetzen, indem es eine unbegrenzte Anzahl gleichzeitiger Verbindungen zulässt, was die Systemleistung potenziell beeinträchtigen oder Systemausfälle verursachen kann.",
+                    "remediation": "Vom Azure-Portal:\n1. Melden Sie sich beim Azure Portal an unter https://portal.azure.com.\n2. Gehen Sie zu Azure Database für PostgreSQL-Server.\n3. Klicken Sie für jede Datenbank auf Serverparameter.\n4. Suchen Sie nach connection_throttling.\n5. Klicken Sie auf EIN und speichern Sie.\nVon Azure CLI:\nVerwenden Sie den folgenden Befehl, um die Konfiguration von connection_throttling zu aktualisieren.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name connection_throttling --value on\nVon PowerShell:\nVerwenden Sie den folgenden Befehl, um die Konfiguration von connection_throttling zu aktualisieren.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name connection_throttling -Value on"
+                }
+            }
+        },
+        {
+            "name": "log_retention_days",
+            "title": "Ensure Server Parameter 'log_retention_days' is greater than 3 days for PostgreSQL Database Server",
+            "result_kinds": ["azure_postgresql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Not configuring 'log_retention_days' to an appropriate value may lead to inadequate log retention, potentially resulting in the loss of critical historical data needed for auditing and troubleshooting.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_postgresql_server_configuration) and config.`logfiles.retention_days`<4 <-- is(azure_postgresql_server)"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Server parameters.\n4. Search for log_retention_days.\n5. Input a value between 4 and 7 (inclusive) and click Save.\nFrom Azure CLI:\nUse the below command to update log_retention_days configuration.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_retention_days --value <4-7>\nFrom PowerShell:\nUse the below command to update log_retention_days configuration.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name log_retention_days -Value <4-7>",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-configure-server-parameters-using-portal",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Serverparameter 'log_retention_days' für PostgreSQL-Datenbankserver mehr als 3 Tage beträgt",
+                    "risk": "Das Nichtkonfigurieren von 'log_retention_days' auf einen angemessenen Wert kann zu unzureichender Protokollspeicherung führen, was möglicherweise zum Verlust kritischer historischer Daten führt, die für Audits und Fehlerbehebung benötigt werden.",
+                    "remediation": "Vom Azure-Portal:\n1. Wählen Sie im Azure-Startmenü das Portalmenü aus.\n2. Gehen Sie zu Azure Database für PostgreSQL-Server.\n3. Klicken Sie für jede Datenbank auf Serverparameter.\n4. Suchen Sie nach log_retention_days.\n5. Geben Sie einen Wert zwischen 4 und 7 (inklusive) ein und klicken Sie auf Speichern.\nVon Azure CLI:\nVerwenden Sie den folgenden Befehl, um die Konfiguration von log_retention_days zu aktualisieren.\naz postgres server configuration set --resource-group <resourceGroupName> --server-name <serverName> --name log_retention_days --value <4-7>\nVon PowerShell:\nVerwenden Sie den folgenden Befehl, um die Konfiguration von log_retention_days zu aktualisieren.\nUpdate-AzPostgreSqlConfiguration -ResourceGroupName <ResourceGroupName> -ServerName <ServerName> -Name log_retention_days -Value <4-7>"
+                }
+            }
+        },
+        {
+            "name": "disable_access_azure_services",
+            "title": "Ensure 'Allow access to Azure services' for PostgreSQL Database Server is disabled",
+            "result_kinds": ["azure_postgresql_server"],
+            "categories": ["security", "compliance"],
+            "risk": "Enabling 'Allow access to Azure services' allows all Azure resources, including those outside your subscription, to connect to the PostgreSQL Database Server, potentially exposing the server to unauthorized access.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_postgresql_server_firewall_rule) and start_ip_address=\"0.0.0.0\" or end_ip_address=\"0.0.0.0\" <-- is(azure_postgresql_server)"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Login to Azure Portal using https://portal.azure.com.\n2. Go to Azure Database for PostgreSQL servers.\n3. For each database, click on Connection security.\n4. Under Firewall rules, set Allow access to Azure services to No.\n5. Click Save.\nFrom Azure CLI:\nUse the below command to delete the AllowAllWindowsAzureIps rule for PostgreSQL Database.\naz postgres server firewall-rule delete --name AllowAllWindowsAzureIps --resource-group <resourceGroupName> --server-name <serverName>",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-manage-firewall-using-cli"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/postgresql/concepts-firewall-rules",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Zugriff von Azure-Diensten auf den PostgreSQL-Datenbankserver deaktiviert ist",
+                    "risk": "Wenn der Zugriff von Azure-Diensten erlaubt ist, können alle Azure-Ressourcen, einschließlich solcher außerhalb Ihres Abonnements, auf den PostgreSQL-Datenbankserver zugreifen, was den Server potenziellen unbefugten Zugriffen aussetzt.",
+                    "remediation": "Vom Azure-Portal:\n1. Melden Sie sich beim Azure Portal an unter https://portal.azure.com.\n2. Gehen Sie zu Azure Database für PostgreSQL-Server.\n3. Klicken Sie für jede Datenbank auf Verbindungssicherheit.\n4. Stellen Sie unter Firewallregeln ein, dass der Zugriff von Azure-Diensten auf Nein gesetzt ist.\n5. Klicken Sie auf Speichern.\nVon Azure CLI:\nVerwenden Sie den folgenden Befehl, um die Regel AllowAllWindowsAzureIps für die PostgreSQL-Datenbank zu löschen.\naz postgres server firewall-rule delete --name AllowAllWindowsAzureIps --resource-group <resourceGroupName> --server-name <serverName>"
+                }
+            }
+        },
+        {
+            "name": "infrastructure_double_encryption",
+            "title": "Ensure 'Infrastructure double encryption' for PostgreSQL Database Server is 'Enabled'",
+            "result_kinds": [],
+            "categories": ["security", "compliance"],
+            "risk": "Not enabling infrastructure double encryption exposes the PostgreSQL database to potential risks if network or default encryption is compromised, as it allows data interception and unauthorized access to sensitive information in transit and at rest.",
+            "severity": "high",
+            "detect": {
+                "manual": "From Azure Portal:\n1. From Azure Home, click on more services.\n2. Click on Databases.\n3. Click on Azure Database for PostgreSQL servers.\n4. Select the database by clicking on its name.\n5. Under Security, click Data encryption.\n6. Ensure that 'Infrastructure encryption enabled' is displayed and is 'checked'.\nFrom Azure CLI:\nVerify that Infrastructure encryption is enabled with the command: az postgres server configuration show --name <servername> --resource-group <resourcegroup> --query 'properties.infrastructureEncryption' -o tsv"
+            },
+            "remediation": {
+                "text": "From Azure Portal:\n1. Go through the normal process of database creation.\n2. On step 2 titled 'Additional settings' ensure that 'Infrastructure double encryption enabled' is 'checked'.\n3. Acknowledge that you understand this will impact database performance.\n4. Finish database creation as normal.\nFrom Azure CLI:\nCreate a new PostgreSQL server with infrastructure double encryption enabled using the command: az postgres server create --resource-group <resourcegroup> --name <servername> --location <location> --admin-user <adminusername> --admin-password <server_admin_password> --sku-name GP_Gen4_2 --version 11 --infrastructure-encryption Enabled",
+                "url": "https://docs.microsoft.com/en-us/azure/postgresql/howto-double-encryption"
+            },
+            "url": "https://docs.microsoft.com/en-us/azure/postgresql/concepts-data-encryption-postgresql",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Doppelte Infrastrukturverschlüsselung' für PostgreSQL-Datenbankserver 'aktiviert' ist",
+                    "risk": "Das Nichtaktivieren der doppelten Infrastrukturverschlüsselung setzt die PostgreSQL-Datenbank potenziellen Risiken aus, falls die Netzwerk- oder Standardverschlüsselung kompromittiert wird, da es den unbefugten Zugriff auf sensible Informationen im Transit und in Ruhe ermöglicht.",
+                    "remediation": "Vom Azure-Portal:\n1. Gehen Sie durch den normalen Prozess der Datenbankerstellung.\n2. Stellen Sie im Schritt 2 mit dem Titel 'Zusätzliche Einstellungen' sicher, dass 'Doppelte Infrastrukturverschlüsselung aktiviert' angekreuzt ist.\n3. Bestätigen Sie, dass Sie verstehen, dass dies die Datenbankleistung beeinträchtigt.\n4. Beenden Sie die Datenbankerstellung wie gewohnt.\nVon Azure CLI:\nErstellen Sie einen neuen PostgreSQL-Server mit aktivierter doppelter Infrastrukturverschlüsselung mit dem Befehl: az postgres server create --resource-group <resourcegroup> --name <servername> --location <location> --admin-user <adminusername> --admin-password <server_admin_password> --sku-name GP_Gen4_2 --version 11 --infrastructure-encryption Enabled"
+                }
+            }
+        }
+    ]
+}
