@@ -1,5 +1,5 @@
 {
-    "provider": "azure",
+    "provider": "microsoft",
     "service": "entra",
     "checks": [
         {

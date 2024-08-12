@@ -1,6 +1,6 @@
 {
     "provider": "azure",
-    "service": "postgresql",
+    "service": "mysql",
     "checks": [
         {
             "name": "enforce_ssl",
