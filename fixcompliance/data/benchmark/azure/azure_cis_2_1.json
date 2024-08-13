@@ -62,12 +62,11 @@
                     "checks": [
                         "azure_security_defender_for_servers_enabled",
                         "azure_security_defender_for_app_services_enabled",
-                        "azure_security_defender_for_storage_accounts",
+                        "azure_security_defender_for_storage",
                         "azure_security_defender_for_sql_databases_enabled",
                         "azure_security_defender_for_sql_servers_on_machines_enabled",
                         "azure_security_defender_for_open_source_databases_enabled",
                         "azure_security_defender_for_azure_cosmos_db_enabled",
-                        "azure_security_defender_for_storage_enabled",
                         "azure_security_defender_for_key_vault_enabled",
                         "azure_security_defender_for_resource_manager_enabled"
                     ]
