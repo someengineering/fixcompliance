@@ -148,7 +148,7 @@
             "internal_notes": "TODO: apply this role to all resources (once we collect them)."
         },
         {
-            "name": "defender_for_storage_enabled",
+            "name": "defender_for_storage",
             "title": "Ensure That Microsoft Defender for Storage Is Enabled",
             "result_kinds": ["azure_storage_account"],
             "categories": ["security", "compliance"],
