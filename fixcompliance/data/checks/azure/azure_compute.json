@@ -10,7 +10,7 @@
             "risk": "Not using Azure Bastion can expose virtual machines to security risks by requiring direct public IP access for Remote Desktop Protocol (RDP) or Secure Shell (SSH). Azure Bastion provides a more secure, seamless RDP/SSH experience directly through Azure Portal over SSL.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_virtual_machine_base) <-[2]- is(azure_subscription) with(empty, -[2]-> is(azure_bastion_host))"
+                "fix": "is(azure_virtual_machine_base) <-[2]- is(azure_subscription) with(empty, -[2]-> is(azure_network_bastion_host))"
             },
             "remediation": {
                 "text": "To manually enable Azure Bastion in each region:\nFrom Azure Portal:\n1. Click on Bastions\n2. Select the Subscription\n3. Select the Resource group\n4. Type a Name for the new Bastion host\n5. Select a Region\n6. Choose Standard next to Tier\n7. Set the Instance count\n8. Select or Create a new Virtual network and specify the Subnet named AzureBastionSubnet using a /26 CIDR range\n9. Choose the appropriate Public IP address option\n10. Click Create\nFrom Azure CLI:\nUse `az network bastion create --location <location> --name <name> --public-ip-address <public IP address name or ID> --resource-group <resource group name> --vnet-name <virtual network name> --sku Standard`",
@@ -28,12 +28,12 @@
         {
             "name": "vms_use_managed_disks",
             "title": "Ensure Virtual Machines are utilizing Managed Disks",
-            "result_kinds": ["azure_virtual_machine"],
+            "result_kinds": ["azure_compute_virtual_machine"],
             "categories": ["security", "compliance"],
             "risk": "Using unmanaged disks can lead to higher costs and lower resilience. Managed disks offer better management features, including automatic encryption and redundancy to ensure data durability and availability.",
             "severity": "medium",
             "detect": {
-                "fix": "is(azure_virtual_machine) with(empty, --> is(azure_disk))"
+                "fix": "is(azure_compute_virtual_machine) with(empty, --> is(azure_compute_disk))"
             },
             "remediation": {
                 "text": "From Azure Portal:\n1. Using the search feature, go to Virtual Machines.\n2. Select the virtual machine you would like to convert.\n3. Select Disks in the menu for the VM.\n4. At the top select Migrate to managed disks.\n5. Follow the prompts to convert the disk and finish by selecting Migrate to start the process.\nNote: VMs will be stopped and restarted after migration is complete.\nFrom PowerShell:\nRun: Stop-AzVM -ResourceGroupName $rgName -Name $vmName -Force\nConvertTo-AzVMManagedDisk -ResourceGroupName $rgName -VMName $vmName\nStart-AzVM -ResourceGroupName $rgName -Name $vmName",
@@ -51,12 +51,12 @@
         {
             "name": "disks_encrypted_with_cmk",
             "title": "Ensure that 'OS and Data' disks are encrypted with Customer Managed Key (CMK)",
-            "result_kinds": ["azure_disk"],
+            "result_kinds": ["azure_compute_disk"],
             "categories": ["security", "compliance"],
             "risk": "Not using Customer Managed Keys (CMK) for disk encryption reduces control over key management and limits the ability to apply organizational policies to key usage and lifecycle. This potentially exposes sensitive data at rest to higher risk of unauthorized access.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_disk) and disk_encryption.type==EncryptionAtRestWithPlatformKey"
+                "fix": "is(azure_compute_disk) and disk_encryption.type==EncryptionAtRestWithPlatformKey"
             },
             "remediation": {
                 "text": "To change the encryption for disks to use CMK:\nFrom Azure Portal:\n1. Go to Virtual machines\n2. Select the virtual machine you wish to convert\n3. Select Disks from the menu\n4. Detach the disk that needs encryption change\n5. Search for Disks in the portal and select the disk\n6. Click on Encryption, change the type to use your encryption, select your key\n7. Save the changes\n8. Re-attach the disk to the VM\nFrom PowerShell:\nStop the VM with `Stop-AzVM -ResourceGroupName $rgName -Name $vmName -Force`, then convert with `Set-AzVMDiskEncryptionExtension` and start the VM again with `Start-AzVM`.",
@@ -122,12 +122,12 @@
         {
             "name": "ensure_trusted_launch_enabled",
             "title": "Ensure Trusted Launch is enabled on Virtual Machines",
-            "result_kinds": ["azure_virtual_machine"],
+            "result_kinds": ["azure_compute_virtual_machine"],
             "categories": ["security", "compliance"],
             "risk": "Not enabling Trusted Launch on Azure VMs may expose them to various boot-level attacks such as rootkits and bootkits, which can compromise the VM's integrity and data security.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_virtual_machine) and virtual_machine_security_profile.uefi_settings.{v_tpm_enabled=false or secure_boot_enabled=false}"
+                "fix": "is(azure_compute_virtual_machine) and virtual_machine_security_profile.uefi_settings.{v_tpm_enabled=false or secure_boot_enabled=false}"
             },
             "remediation": {
                 "text": "From Azure Portal:\n1. Go to Virtual Machines.\n2. For each VM, under Settings, click on Configuration.\n3. Under Security Type, select 'Trusted Launch Virtual Machines'.\n4. Check 'Enable Secure Boot' & 'Enable vTPM'.\n5. Click Apply.\nNote: Trusted launch is not supported on Azure Generation 1 VMs.",
