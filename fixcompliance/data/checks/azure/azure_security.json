@@ -5,12 +5,12 @@
         {
             "name": "defender_for_servers_enabled",
             "title": "Ensure That Microsoft Defender for Servers Is Enabled",
-            "result_kinds": ["azure_virtual_machine_base"],
+            "result_kinds": ["azure_compute_virtual_machine_base"],
             "categories": ["security", "compliance"],
             "risk": "Without Microsoft Defender for Servers enabled, servers lack advanced threat detection and protection capabilities provided by the Microsoft Security Response Center (MSRC), increasing the risk of undetected security incidents.",
             "severity": "medium",
             "detect": {
-                "fix": "is(azure_subscription) with(any, --> is(azure_security_pricing) and name==VirtualMachines and pricing_tier!=Standard) -[2]-> is(azure_virtual_machine_base)"
+                "fix": "is(azure_subscription) with(any, --> is(azure_security_pricing) and name==VirtualMachines and pricing_tier!=Standard) -[2]-> is(azure_compute_virtual_machine_base)"
             },
             "remediation": {
                 "text": "To enable Microsoft Defender for Servers:\nFrom Azure Portal:\n1. Go to Microsoft Defender for Cloud.\n2. Select Environment Settings.\n3. Click on the subscription name.\n4. Select Defender plans.\n5. Set Server Status to On.\n6. Select Save.\n\nFrom Azure CLI:\nRun the following command:\naz security pricing create -n VirtualMachines --tier 'standard'\n\nFrom PowerShell:\nRun the following command:\nSet-AzSecurityPricing -Name 'VirtualMachines' -PricingTier 'Standard'.",
@@ -246,12 +246,12 @@
         {
             "name": "ensure_system_updates_applied",
             "title": "Ensure that Microsoft Defender Recommendation for 'Apply system updates' status is 'Completed'",
-            "result_kinds": ["azure_virtual_machine_base"],
+            "result_kinds": ["azure_compute_virtual_machine_base"],
             "categories": ["security", "compliance"],
             "risk": "Without applying the latest OS patches, virtual machines are vulnerable to security threats and bugs, which can lead to system instability and potential security incidents.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_security_assessment) and name~\"^System updates should be installed on your machines\" --> is(azure_virtual_machine_base)"
+                "fix": "is(azure_security_assessment) and name~\"^System updates should be installed on your machines\" --> is(azure_compute_virtual_machine_base)"
             },
             "remediation": {
                 "text": "To apply system updates:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Defender for Cloud.\n3. Go to the Recommendations blade.\n4. Follow the recommendations to apply system updates.\n\nFrom Azure CLI:\nRun the following command to apply updates:\naz vm update -g <resource_group> -n <vm_name> --apply-updates\n\nFrom PowerShell:\nUse the below command to apply updates to a VM:\nUpdate-AzVM -ResourceGroupName <resource_group> -VMName <vm_name> -ApplyUpdates",

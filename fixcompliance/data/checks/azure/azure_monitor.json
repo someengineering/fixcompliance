@@ -148,7 +148,7 @@
             "risk": "Without monitoring create policy assignment events, unsolicited changes may go unnoticed, potentially compromising Azure policy configurations.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Authorization/policyAssignments/write\"})"
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_monitor_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Authorization/policyAssignments/write\"})"
             },
             "remediation": {
                 "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Select Alert rule.\n4. Apply the condition for Create policy assignment and set up an action group to notify appropriate personnel.",
@@ -171,7 +171,7 @@
             "risk": "Not monitoring delete policy assignment events can delay detection of unsolicited changes, potentially exposing Azure environments to compliance risks and unauthorized modifications.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Authorization/policyAssignments/delete\"})"
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_monitor_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Authorization/policyAssignments/delete\"})"
             },
             "remediation": {
                 "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete policy assignment and set up an action group to notify appropriate personnel.",
@@ -194,7 +194,7 @@
             "risk": "Not monitoring Create or Update Network Security Group events can delay detection of suspicious network configuration changes, potentially exposing Azure environments to security risks.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/networkSecurityGroups/write\"})"
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_monitor_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/networkSecurityGroups/write\"})"
             },
             "remediation": {
                 "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create or Update Network Security Group and set up an action group to notify appropriate personnel.",
@@ -217,7 +217,7 @@
             "risk": "Not monitoring Delete Network Security Group events can delay the detection of unauthorized network changes, potentially leading to security breaches.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals in [\"Microsoft.Network/networkSecurityGroups/delete\", \"Microsoft.ClassicNetwork/networkSecurityGroups/delete\"]})"
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_monitor_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals in [\"Microsoft.Network/networkSecurityGroups/delete\", \"Microsoft.ClassicNetwork/networkSecurityGroups/delete\"]})"
             },
             "remediation": {
                 "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete Network Security Group and set up an action group to notify appropriate personnel.",
@@ -240,7 +240,7 @@
             "risk": "Not monitoring Create or Update Security Solution events may delay the detection of unauthorized changes to security solutions, potentially leading to vulnerabilities.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Security/securitySolutions/write\"})"
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_monitor_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Security/securitySolutions/write\"})"
             },
             "remediation": {
                 "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create or Update Security Solutions and set up an action group to notify appropriate personnel.",
@@ -263,7 +263,7 @@
             "risk": "Not monitoring Delete Security Solution events may delay the detection of unauthorized changes to security measures, potentially leaving the system vulnerable.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Security/securitySolutions/delete\"})"
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_monitor_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Security/securitySolutions/delete\"})"
             },
             "remediation": {
                 "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete Security Solutions and set up an action group to notify appropriate personnel.",
@@ -286,7 +286,7 @@
             "risk": "Not monitoring Create or Update SQL Server Firewall Rule events can delay the detection of unauthorized network access changes, potentially exposing the SQL Server to external threats.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Sql/servers/firewallRules/write\"})"
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_monitor_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Sql/servers/firewallRules/write\"})"
             },
             "remediation": {
                 "text": "To create an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create/Update server firewall rule and set up an action group to notify appropriate personnel.",
@@ -309,7 +309,7 @@
             "risk": "Not monitoring Delete SQL Server Firewall Rule events can lead to delayed detection of unauthorized changes to SQL Server network access, increasing the risk of security breaches.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Sql/servers/firewallRules/delete\"})"
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_monitor_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Sql/servers/firewallRules/delete\"})"
             },
             "remediation": {
                 "text": "To set up an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Delete server firewall rule and set up an action group to notify appropriate personnel.",
@@ -332,7 +332,7 @@
             "risk": "Not monitoring Create or Update Public IP Address events can lead to delayed detection of unauthorized network access changes, increasing the risk of security breaches.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/publicIPAddresses/write\"})"
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_monitor_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/publicIPAddresses/write\"})"
             },
             "remediation": {
                 "text": "To set up an alert in Azure Portal:\n1. Navigate to Monitor blade.\n2. Click on Alerts, then Create.\n3. Apply the condition for Create or Update Public IP Address and set up an action group to notify appropriate personnel.",
@@ -355,7 +355,7 @@
             "risk": "Not monitoring Delete Public IP Address events can obscure visibility into network access changes, potentially delaying the detection of suspicious activity.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/publicIPAddresses/delete\"})"
+                "fix": "is(azure_subscription) with (empty, -[2]-> is(azure_monitor_activity_log_alert) and enabled=true and log_alert_condition.all_of[*].{field=operationName and equals=\"Microsoft.Network/publicIPAddresses/delete\"})"
             },
             "remediation": {
                 "text": "To set up an alert in Azure Portal:\n1. Navigate to the Monitor blade.\n2. Select Alerts.\n3. Select Create.\n4. Select Alert rule.\n5. Choose a subscription.\n6. Select Apply.\n7. Select the Condition tab.\n8. Click See all signals.\n9. Select Delete Public IP Address.\n10. Click Apply.\n11. Select the Actions tab.\n12. Click Select action groups to select an existing action group, or Create action group to create a new one.\n13. Follow the prompts to choose or create an action group.\n14. Select the Details tab.\n15. Select a Resource group, provide an Alert rule name and an optional description.\n16. Click Review + create.\n17. Click Create.",
