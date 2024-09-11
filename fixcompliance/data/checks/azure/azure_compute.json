@@ -10,7 +10,7 @@
             "risk": "Not using Azure Bastion can expose virtual machines to security risks by requiring direct public IP access for Remote Desktop Protocol (RDP) or Secure Shell (SSH). Azure Bastion provides a more secure, seamless RDP/SSH experience directly through Azure Portal over SSL.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_virtual_machine_base) <-[2]- is(azure_subscription) with(empty, -[2]-> is(azure_network_bastion_host))"
+                "fix": "is(azure_compute_virtual_machine_base) <-[2]- is(azure_subscription) with(empty, -[2]-> is(azure_network_bastion_host))"
             },
             "remediation": {
                 "text": "To manually enable Azure Bastion in each region:\nFrom Azure Portal:\n1. Click on Bastions\n2. Select the Subscription\n3. Select the Resource group\n4. Type a Name for the new Bastion host\n5. Select a Region\n6. Choose Standard next to Tier\n7. Set the Instance count\n8. Select or Create a new Virtual network and specify the Subnet named AzureBastionSubnet using a /26 CIDR range\n9. Choose the appropriate Public IP address option\n10. Click Create\nFrom Azure CLI:\nUse `az network bastion create --location <location> --name <name> --public-ip-address <public IP address name or ID> --resource-group <resource group name> --vnet-name <virtual network name> --sku Standard`",
