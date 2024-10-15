@@ -1,0 +1,75 @@
+{
+    "provider": "azure",
+    "service": "cosmosdb",
+    "checks": [
+        {
+            "name": "network_whitelisting",
+            "title": "Ensure That 'Firewalls & Networks' Is Limited to Use Selected Networks Instead of All Networks",
+            "result_kinds": ["azure_cosmos_db_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Limiting your Cosmos DB to only communicate on whitelisted networks lowers its attack footprint.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_cosmos_db_account) and is_virtual_network_filter_enabled=false"
+            },
+            "remediation": {
+                "text": "From Azure Portal: \n1. Open the portal menu. \n2. Select the Azure Cosmos DB blade. \n3. Select a Cosmos DB account to audit. \n4. Select Networking. \n5. Under Public network access, select Selected networks. \n6. Under Virtual networks, select + Add existing virtual network or + Add a new virtual network. \n7. For existing networks, select subscription, virtual network, subnet and click Add. \nFor new networks, provide a name, update the default values if required, and click Create. \n8. Click Save.",
+                "url": "https://docs.microsoft.com/en-us/azure/cosmos-db/how-to-configure-private-endpoints"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-network-security#ns-2-secure-cloud-native-services-with-network-controls",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass 'Firewalls & Netzwerke' auf ausgewählte Netzwerke beschränkt ist, anstatt auf alle Netzwerke",
+                    "risk": "Die Beschränkung Ihrer Cosmos DB, nur auf whitelisted Netzwerken zu kommunizieren, verringert die Angriffsfläche.",
+                    "remediation": "Vom Azure-Portal: \n1. Öffnen Sie das Portalmenü. \n2. Wählen Sie die Azure Cosmos DB Blade aus. \n3. Wählen Sie ein Cosmos DB-Konto zur Überprüfung. \n4. Wählen Sie Networking. \n5. Wählen Sie unter 'Public network access' die Option 'Selected networks'. \n6. Wählen Sie unter 'Virtual networks' '+ Add existing virtual network' oder '+ Add a new virtual network'. \n7. Für bestehende Netzwerke wählen Sie Abonnement, virtuelles Netzwerk, Subnetz und klicken auf 'Add'. \nFür neue Netzwerke geben Sie einen Namen an, aktualisieren Sie die Standardwerte bei Bedarf und klicken auf 'Create'. \n8. Klicken Sie auf 'Save'."
+                }
+            }
+        },
+        {
+            "name": "private_endpoints",
+            "title": "Ensure That Private Endpoints Are Used Where Possible",
+            "result_kinds": ["azure_cosmos_db_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Private endpoints limit network traffic to approved sources, providing enhanced security by allowing granular control over service communication.",
+            "severity": "high",
+            "detect": {
+                "fix": "is(azure_cosmos_db_account) and public_network_access=Enabled"
+            },
+            "remediation": {
+                "text": "From Azure Portal: \n1. Open the portal menu. \n2. Select the Azure Cosmos DB blade. \n3. Select the Azure Cosmos DB account. \n4. Select Networking. \n5. Select Private access. \n6. Click + Private Endpoint. \n7. Provide a Name. \n8. Click Next. \n9. From the Resource type drop down, select Microsoft.AzureCosmosDB/databaseAccounts. \n10. From the Resource drop down, select the Cosmos DB account. \n11. Click Next. \n12. Provide appropriate Virtual Network details. \n13. Click Next. \n14. Provide appropriate DNS details. \n15. Click Next. \n16. Optionally provide Tags. \n17. Click Next : Review + create. \n18. Click Create.",
+                "url": "https://docs.microsoft.com/en-us/azure/cosmos-db/how-to-configure-private-endpoints"
+            },
+            "url": "https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-network-security#ns-2-secure-cloud-native-services-with-network-controls",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass private Endpunkte wo möglich verwendet werden",
+                    "risk": "Private Endpunkte beschränken den Netzwerkverkehr auf genehmigte Quellen und bieten durch die granulare Steuerung der Kommunikation mit Diensten eine erhöhte Sicherheit.",
+                    "remediation": "Vom Azure-Portal: \n1. Öffnen Sie das Portalmenü. \n2. Wählen Sie die Azure Cosmos DB Blade aus. \n3. Wählen Sie ein Azure Cosmos DB-Konto. \n4. Wählen Sie Networking. \n5. Wählen Sie Private Zugang. \n6. Klicken Sie auf + Privater Endpunkt. \n7. Geben Sie einen Namen an. \n8. Klicken Sie auf Weiter. \n9. Wählen Sie aus dem Dropdown-Menü 'Resource type' Microsoft.AzureCosmosDB/databaseAccounts aus. \n10. Wählen Sie aus dem Dropdown-Menü 'Resource' das Cosmos DB-Konto. \n11. Klicken Sie auf Weiter. \n12. Geben Sie geeignete Details zum virtuellen Netzwerk an. \n13. Klicken Sie auf Weiter. \n14. Geben Sie geeignete DNS-Details an. \n15. Klicken Sie auf Weiter. \n16. Geben Sie optional Tags an. \n17. Klicken Sie auf Weiter: Überprüfen + erstellen. \n18. Klicken Sie auf Erstellen."
+                }
+            }
+        },
+        {
+            "name": "client_authentication",
+            "title": "Use Entra ID Client Authentication and Azure RBAC where possible",
+            "result_kinds": ["azure_cosmos_db_account"],
+            "categories": ["security", "compliance"],
+            "risk": "Using Entra ID for client authentication in Cosmos DB enhances security by leveraging Azure RBAC and allowing for multifactor authentication and centralized management.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(azure_cosmos_db_account) and disable_local_auth!=true"
+            },
+            "remediation": {
+                "text": "Map all resources currently accessing the Azure Cosmos DB with keys or tokens. Create an Entra ID identity for each resource, assigning minimal necessary permissions. For Azure resources, opt for managed identities. For non-Azure resources, set up an Entra ID identity directly. Update Cosmos DB settings to disable local authentication by setting 'disableLocalAuth' to true using Azure CLI. Ensure all changes propagate and validate functionality.",
+                "url": "https://learn.microsoft.com/en-us/azure/cosmos-db/role-based-access-control"
+            },
+            "url": "https://learn.microsoft.com/en-us/azure/cosmos-db/role-based-access-control",
+            "localizations": {
+                "de": {
+                    "title": "Verwenden Sie die Entra ID-Clientauthentifizierung und Azure RBAC, wo möglich",
+                    "risk": "Die Verwendung von Entra ID für die Clientauthentifizierung in Cosmos DB erhöht die Sicherheit, indem Azure RBAC genutzt wird und Mehrfaktorauthentifizierung sowie zentrales Management ermöglicht werden.",
+                    "remediation": "Ordnen Sie alle Ressourcen zu, die derzeit mit Schlüsseln oder Tokens auf Azure Cosmos DB zugreifen. Erstellen Sie für jede Ressource eine Entra ID-Identität und weisen Sie die minimal notwendigen Berechtigungen zu. Für Azure-Ressourcen wählen Sie verwaltete Identitäten. Für Nicht-Azure-Ressourcen richten Sie eine direkte Entra ID-Identität ein. Aktualisieren Sie die Cosmos DB-Einstellungen, um die lokale Authentifizierung zu deaktivieren, indem Sie 'disableLocalAuth' auf true setzen, mittels Azure CLI. Stellen Sie sicher, dass alle Änderungen übernommen werden und validieren Sie die Funktionalität."
+                }
+            }
+        }
+    ]
+}

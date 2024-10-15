@@ -144,6 +144,9 @@
                     "title": "4.5 Cosmos DB",
                     "description": "This subsection provides guidelines for securing Cosmos DB, emphasizing the use of firewall rules and virtual networks to enhance data security in Azure's globally distributed database service.",
                     "checks": [
+                        "azure_cosmosdb_network_whitelisting",
+                        "azure_cosmosdb_private_endpoints",
+                        "azure_cosmosdb_client_authentication"
                     ]
                 }
             ]
