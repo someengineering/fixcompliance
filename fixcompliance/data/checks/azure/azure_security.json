@@ -251,7 +251,7 @@
             "risk": "Without applying the latest OS patches, virtual machines are vulnerable to security threats and bugs, which can lead to system instability and potential security incidents.",
             "severity": "high",
             "detect": {
-                "fix": "is(azure_security_assessment) and name~\"^System updates should be installed on your machines\" --> is(azure_compute_virtual_machine_base)"
+                "fix": "is(azure_compute_virtual_machine_base) and /metadata.assessments[*].{provider=azure_security_assessment and findings[*].title~\"^System updates should be installed\"}"
             },
             "remediation": {
                 "text": "To apply system updates:\nFrom Azure Portal:\n1. From Azure Home select the Portal Menu.\n2. Select Microsoft Defender for Cloud.\n3. Go to the Recommendations blade.\n4. Follow the recommendations to apply system updates.\n\nFrom Azure CLI:\nRun the following command to apply updates:\naz vm update -g <resource_group> -n <vm_name> --apply-updates\n\nFrom PowerShell:\nUse the below command to apply updates to a VM:\nUpdate-AzVM -ResourceGroupName <resource_group> -VMName <vm_name> -ApplyUpdates",
